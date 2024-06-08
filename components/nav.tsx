@@ -13,16 +13,76 @@ const Nav = () => {
   };
   return (
     <nav
-      className="fixed top-1 left-[5vw] z-10 mt-3 px-8 py-10 flex justify-between items-center w-[90vw] mx-auto h-[4rem] 
-     bg-purple-100 rounded-3xl [background-image:radial-gradient(88%_100%_at_top,rgba(255,255,255,0.2),rgba(255,255,255,0))]
-    "
+      className={`fixed top-3 left-[5vw] z-10 px-8 w-[90vw] mx-auto h-[${
+        !isOpen ? "5rem" : "20rem"
+      }] 
+     bg-purple-100 rounded-3xl [background-image:radial-gradient(88%_100%_at_top,rgba(255,255,255,0.4),rgba(255,255,255,0))]
+    `}
     >
-      <div className="w-[15%] -mt-5">
-        <Image src="/logo.png" alt="logo" width={150} height={100} />
+      <div className="flex justify-between items-center md:-mt-6">
+        <Image
+          className="md:hidden !w-24 -mt-5 -ml-5"
+          src="/logo.svg"
+          alt="logo"
+          width={24}
+          height={30}
+        />
+
+        <Image
+          src="/logo.svg"
+          alt="logo"
+          width={30}
+          height={30}
+          className="hidden md:block w-0 md:!w-40 md:-mt-5"
+        />
+
+        <div className="flex items-center -mt-5 md:-ml-30">
+          <div className="hidden md:flex items-center justify-between gap-4 w-full">
+            <ul className="md:flex md:gap-10 md:ml-36">
+              <li className="hover:text-gray-400 cursor-pointer">
+                <Link href="#features">Pricing</Link>
+              </li>
+              <li className="hover:text-gray-400 cursor-pointer">
+                <Link href="#features">Blog</Link>
+              </li>
+              <li className="hover:text-gray-400 cursor-pointer">
+                <Link href="#features">Contact</Link>
+              </li>
+            </ul>
+            <div className="flex gap-5">
+              <Button
+                variant="outline"
+                className="invisible md:visible rounded-3xl"
+              >
+                Log In
+              </Button>
+              <Button
+                variant="destructive"
+                className="invisible md:visible rounded-3xl bg-green-500"
+              >
+                Sign Up
+              </Button>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-6 md:hidden -mt-5">
+          {/* <Button variant="destructive">Sign In</Button> */}
+          {!isOpen ? (
+            <HamburgerMenuIcon
+              className="text-3xl cursor-pointer"
+              onClick={toggleMenu}
+            />
+          ) : (
+            <Cross1Icon
+              className="text-3xl cursor-pointer"
+              onClick={toggleMenu}
+            />
+          )}
+        </div>
       </div>
-      <div className="flex items-center w-[85%] -mt-5">
-        <div className="flex items-center justify-between gap-4 w-full">
-          <ul className="flex gap-10 ml-36">
+      {isOpen ? (
+        <div>
+          <ul className="flex flex-col items-end gap-5">
             <li className="hover:text-gray-400 cursor-pointer">
               <Link href="#features">Pricing</Link>
             </li>
@@ -32,37 +92,18 @@ const Nav = () => {
             <li className="hover:text-gray-400 cursor-pointer">
               <Link href="#features">Contact</Link>
             </li>
-          </ul>
-          <div className="flex gap-5">
-            <Button
-              variant="outline"
-              className="invisible md:visible rounded-3xl"
-            >
+            <Button variant="outline" className="rounded-3xl w-24">
               Log In
             </Button>
             <Button
               variant="destructive"
-              className="invisible md:visible rounded-3xl bg-green-500"
+              className="rounded-3xl bg-green-500 w-24"
             >
               Sign Up
             </Button>
-          </div>
+          </ul>
         </div>
-      </div>
-      <div className="flex items-center gap-6 md:hidden -mt-5">
-        <Button variant="destructive">Sign In</Button>
-        {!isOpen ? (
-          <HamburgerMenuIcon
-            className="text-3xl cursor-pointer"
-            onClick={toggleMenu}
-          />
-        ) : (
-          <Cross1Icon
-            className="text-3xl cursor-pointer"
-            onClick={toggleMenu}
-          />
-        )}
-      </div>
+      ) : null}
     </nav>
   );
 };

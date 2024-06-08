@@ -2,17 +2,19 @@ import React from "react";
 import { Spotlight } from "./ui/spotlight";
 import Image from "next/image";
 import { ContainerScroll } from "./ui/container-scroll-animation";
+import { BackgroundBeams } from "./ui/background-beams";
 
 const Hero = () => {
   return (
-    <div className="flex items-center justify-around w-full h-[100vh]">
+    <div className="mt-[12vh] md:mt-0 flex flex-col md:flex-row justify-center md:items-center md:justify-around w-full h-[100vh]">
+      <BackgroundBeams />
       <Spotlight
         className="-top-10 left-0 2xl:left-10 2xl:-top-20"
         fill="white"
       />
-      <div className="md:max-w-[40vw] 2xl:max-w-[40vw] p-4 ml-16">
+      <div className="md:max-w-[40vw] 2xl:max-w-[40vw] p-8 md:p-4 md:ml-16">
         <h1
-          className="text-lg md:text-5xl 2xl:text-7xl  bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-600  
+          className="text-4xl md:text-5xl 2xl:text-7xl  bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-600  
         text-center font-sans font-bold"
         >
           Your AI Job Application Tracker
