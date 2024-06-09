@@ -1,9 +1,36 @@
 import Google from "next-auth/providers/google";
 import type { NextAuthConfig } from "next-auth";
+import { storeRefresh } from "./actions/auth/refreshToken";
 
 export default {
+  callbacks: {
+    async signIn({ account }) {
+      if (account?.access_token && account?.refresh_token) {
+        await storeRefresh(account.refresh_token, account.providerAccountId);
+      }
+      return true;
+    },
+    async session({ session, token }) {
+      if (session && token && session.user && token.sub) {
+        session.user.id = token.sub;
+      }
+      return session;
+    },
+  },
   providers: [
-    Google,
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      authorization: {
+        params: {
+          access_type: "offline",
+          prompt: "consent",
+          response_type: "code",
+          scope:
+            "openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/gmail.readonly",
+        },
+      },
+    }),
     {
       id: "yahoo", // signIn("my-provider") and will be part of the callback URL
       name: "Yahoo", // optional, used on the default login page as the button text.

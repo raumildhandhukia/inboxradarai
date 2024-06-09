@@ -110,7 +110,7 @@ const TheForm = () => {
 const SignUpForm = () => {
   return (
     <div>
-      <Card headerLabel="Sign Up">
+      <Card>
         <TheForm />
       </Card>
     </div>
