@@ -11,20 +11,15 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Header } from "@/components/auth/header";
 interface CardProps {
-  headerLabel: string;
   isModal?: boolean;
   children: React.ReactNode;
 }
 
-const CardWrapper: React.FC<CardProps> = ({
-  headerLabel,
-  isModal = false,
-  children,
-}) => {
+const CardWrapper: React.FC<CardProps> = ({ isModal = false, children }) => {
   return (
     <Card className="w-[400px] shadow-md">
       <CardHeader>
-        <Header label={headerLabel} />
+        <Header />
       </CardHeader>
       <CardContent>{children}</CardContent>
     </Card>
