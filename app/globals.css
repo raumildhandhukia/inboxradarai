@@ -73,4 +73,13 @@
   body {
     @apply bg-background text-foreground;
   }
+  .ThemeText {
+    @apply bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-600  
+        text-center font-sans font-bold;
+  }
 }
+
+/* .BackdropBlur {
+  -webkit-backdrop-filter: blur(5px) !important;
+  backdrop-filter: blur(5px) !important;
+} */
