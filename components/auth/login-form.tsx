@@ -7,7 +7,7 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 const LoginForm = () => {
   return (
-    <Card headerLabel="Login">
+    <Card headerLabel="">
       <div className="flex flex-col gap-y-5 w-full">
         <div className="flex justify-center items-center w-full gap-9">
           <Button
@@ -21,19 +21,7 @@ const LoginForm = () => {
           >
             Google
           </Button>
-          <Button
-            variant="secondary"
-            className="w-[45%]"
-            onClick={() => {
-              signIn("yahoo", {
-                callbackUrl: DEFAULT_LOGIN_REDIRECT,
-              });
-            }}
-          >
-            Yahoo
-          </Button>
         </div>
-        <Button variant="secondary">Outlook</Button>
       </div>
     </Card>
   );
