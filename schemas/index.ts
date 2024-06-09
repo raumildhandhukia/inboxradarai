@@ -1,5 +1,7 @@
 import * as z from "zod";
 
+// If ever development for Credential Login/Register will be executed.
+
 export const RegisterSchema = z
   .object({
     name: z.string().min(3, {

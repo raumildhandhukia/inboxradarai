@@ -13,16 +13,12 @@ import { Header } from "@/components/auth/header";
 interface CardProps {
   headerLabel: string;
   isModal?: boolean;
-  backToLabel: string;
-  backToHref: string;
   children: React.ReactNode;
 }
 
 const CardWrapper: React.FC<CardProps> = ({
   headerLabel,
   isModal = false,
-  backToLabel,
-  backToHref,
   children,
 }) => {
   return (
@@ -31,11 +27,6 @@ const CardWrapper: React.FC<CardProps> = ({
         <Header label={headerLabel} />
       </CardHeader>
       <CardContent>{children}</CardContent>
-      <CardFooter>
-        <Button variant="link" className="w-full" asChild>
-          <Link href={backToHref}>{backToLabel}</Link>
-        </Button>
-      </CardFooter>
     </Card>
   );
 };
