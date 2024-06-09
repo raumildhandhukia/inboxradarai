@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import Nav from "@/components/nav";
+import { BackgroundBeams } from "@/components/ui/background-beams";
 const poppins = Poppins({
   weight: ["100", "300", "500", "700"],
   subsets: ["latin"],
@@ -27,12 +28,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="bg-neutral-950">
-            <header className="">
-              <Nav />
-            </header>
-            {children}
-          </div>
+          <div className="bg-neutral-950">{children}</div>
         </ThemeProvider>
       </body>
     </html>
