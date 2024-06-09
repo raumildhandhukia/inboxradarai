@@ -110,11 +110,7 @@ const TheForm = () => {
 const SignUpForm = () => {
   return (
     <div>
-      <Card
-        headerLabel="Sign Up"
-        backToLabel="Already have an account?"
-        backToHref="/auth/login"
-      >
+      <Card headerLabel="Sign Up">
         <TheForm />
       </Card>
     </div>

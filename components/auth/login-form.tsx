@@ -21,7 +21,15 @@ const LoginForm = () => {
           >
             Google
           </Button>
-          <Button variant="secondary" className="w-[45%]">
+          <Button
+            variant="secondary"
+            className="w-[45%]"
+            onClick={() => {
+              signIn("yahoo", {
+                callbackUrl: DEFAULT_LOGIN_REDIRECT,
+              });
+            }}
+          >
             Yahoo
           </Button>
         </div>
