@@ -11,6 +11,8 @@ export default {
       issuer: "https://api.login.yahoo.com", // to infer the .well-known/openid-configuration URL
       clientId: process.env.AUTH_YAHOO_CLIENT_ID, // from the provider's dashboard
       clientSecret: process.env.AUTH_YAHOO_SECRET, // from the provider's dashboard
+      userinfo: "https://api.login.yahoo.com/openid/v1/userinfo", // URL to fetch the user profile
+      token: "https://api.login.yahoo.com/oauth2/get_token", // URL to get an access token
     },
   ],
 } satisfies NextAuthConfig;
