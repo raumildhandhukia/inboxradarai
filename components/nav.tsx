@@ -97,7 +97,7 @@ const Nav: React.FC<NavProps> = ({ type }) => {
                 >
                   Log In
                 </Button>
-                <Button
+                {/* <Button
                   variant="destructive"
                   className="invisible md:visible rounded-3xl bg-green-500"
                   onClick={() => {
@@ -105,7 +105,7 @@ const Nav: React.FC<NavProps> = ({ type }) => {
                   }}
                 >
                   Sign Up
-                </Button>
+                </Button> */}
               </div>
             </div>
           )}
@@ -156,7 +156,7 @@ const Nav: React.FC<NavProps> = ({ type }) => {
             >
               Log In
             </Button>
-            <Button
+            {/* <Button
               variant="destructive"
               className="rounded-3xl bg-green-500 w-24"
               onClick={() => {
@@ -164,7 +164,7 @@ const Nav: React.FC<NavProps> = ({ type }) => {
               }}
             >
               Sign Up
-            </Button>
+            </Button> */}
           </ul>
         </div>
       ) : null}
