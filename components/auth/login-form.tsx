@@ -25,7 +25,7 @@ const LoginForm = () => {
             <p className="text-xl">Log In with Google</p>
           </div>
         </Button>
-        <div>
+        {/* <div>
           <p className="ThemeText text-xl">Or</p>
         </div>
         <Button
@@ -41,7 +41,7 @@ const LoginForm = () => {
             <FaYahoo className="w-10 h-10 " />
             <p className=" text-xl">Log In with Yahoo</p>
           </div>
-        </Button>
+        </Button> */}
       </div>
     </Card>
   );
