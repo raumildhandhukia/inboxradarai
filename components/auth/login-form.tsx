@@ -13,7 +13,7 @@ const LoginForm = () => {
       <div className="flex flex-col gap-y-5 w-full">
         <Button
           variant="outline"
-          className="z-20 w-full h-max bg-gradient-to-br from-[rgba(255,255,255,0.1)] to-[rgba(255,255,255,0.2)]"
+          className="z-20 w-full h-max bg-gradient-to-br from-[rgba(255,255,255,0.67)] to-[rgba(255,255,255,0.2)]"
           onClick={() => {
             signIn("google", {
               callbackUrl: DEFAULT_LOGIN_REDIRECT,
@@ -30,7 +30,7 @@ const LoginForm = () => {
         </div>
         <Button
           variant="secondary"
-          className="w-full h-max bg-gradient-to-b from-cyan-500 to-blue-500"
+          className="z-20 w-full h-max bg-gradient-to-b from-cyan-500 to-blue-500"
           onClick={() => {
             signIn("yahoo", {
               callbackUrl: DEFAULT_LOGIN_REDIRECT,
