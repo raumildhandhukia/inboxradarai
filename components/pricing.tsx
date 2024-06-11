@@ -19,7 +19,7 @@ const Pricing = () => {
             className="rounded-[22px] max-w-sm p-4 sm:p-10 bg-white dark:bg-zinc-900"
             type="free"
           >
-            <div className="relative pricing-card bg-white dark:bg-zinc-900 p-6 rounded-lg shadow-lg min-h-[48vh] md:min-h-[64vh]">
+            <div className="relative pricing-card bg-white dark:bg-zinc-900 p-6 rounded-lg shadow-lg min-h-[48vh] md:min-h-[64vh] 2xl:min-h-[44vh]">
               <h3 className="ThemeText text-3xl !text-left mb-4">Free</h3>
               <p className="text-neutral-600 dark:text-neutral-400 mb-6">
                 Perfect for getting started
@@ -65,7 +65,7 @@ const Pricing = () => {
             type="pro"
             className="rounded-[22px] max-w-sm p-4 sm:p-10 bg-white dark:bg-zinc-900 "
           >
-            <div className="relative pricing-card bg-white dark:bg-zinc-900 p-6 rounded-lg shadow-lg min-h-[48vh] md:min-h-[64vh]">
+            <div className="relative pricing-card bg-white dark:bg-zinc-900 p-6 rounded-lg shadow-lg min-h-[48vh] md:min-h-[64vh] 2xl:min-h-[44vh]">
               <h3 className="text-3xl font-bold text-black dark:text-indigo-200 mb-4">
                 Pro
               </h3>
@@ -113,7 +113,7 @@ const Pricing = () => {
             type="max"
             className="rounded-[22px] max-w-sm p-4 sm:p-10 bg-white dark:bg-zinc-900"
           >
-            <div className="relative pricing-card bg-white dark:bg-zinc-900 p-6 rounded-lg shadow-lg min-h-[48vh] md:min-h-[64vh]">
+            <div className="relative pricing-card bg-white dark:bg-zinc-900 p-6 rounded-lg shadow-lg min-h-[48vh] md:min-h-[64vh] 2xl:min-h-[44vh]">
               <h3 className="text-3xl font-bold text-black dark:text-yellow-300 mb-4">
                 Max
               </h3>

@@ -26,11 +26,11 @@ export const BackgroundGradient = ({
   const getColor = (type: string | undefined) => {
     switch (type) {
       case "free":
-        return "green";
+        return "bg-[radial-gradient(circle_farthest-side_at_0_100%,green,transparent),radial-gradient(circle_farthest-side_at_100%_0,#7b61ff,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#ffc414,transparent),radial-gradient(circle_farthest-side_at_0_0,#1ca0fb,#141316)]";
       case "pro":
-        return "red";
+        return "bg-[radial-gradient(circle_farthest-side_at_0_100%,red,transparent),radial-gradient(circle_farthest-side_at_100%_0,#7b61ff,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#ffc414,transparent),radial-gradient(circle_farthest-side_at_0_0,#1ca0fb,#141316)]";
       case "max":
-        return "yellow";
+        return "bg-[radial-gradient(circle_farthest-side_at_0_100%,yellow,transparent),radial-gradient(circle_farthest-side_at_100%_0,#7b61ff,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#ffc414,transparent),radial-gradient(circle_farthest-side_at_0_0,#1ca0fb,#141316)]";
       default:
         return "#1ca0fb";
     }
@@ -83,9 +83,7 @@ export const BackgroundGradient = ({
         }}
         className={cn(
           "absolute inset-0 rounded-3xl z-1 will-change-transform",
-          `bg-[radial-gradient(circle_farthest-side_at_0_100%,${getColor(
-            type
-          )},transparent),radial-gradient(circle_farthest-side_at_100%_0,#7b61ff,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#ffc414,transparent),radial-gradient(circle_farthest-side_at_0_0,#1ca0fb,#141316)]`
+          `${getColor(type)}`
         )}
       />
 
