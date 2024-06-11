@@ -1,6 +1,6 @@
 import Hero from "@/components/hero";
 import Nav from "@/components/nav";
-import PricingSection from "@/components/pricing";
+import Pricing from "@/components/pricing";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
       </header>
       <main>
         <Hero />
-        <PricingSection />
+        <Pricing />
       </main>
     </>
   );
