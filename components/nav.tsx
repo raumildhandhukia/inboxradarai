@@ -69,14 +69,14 @@ const Nav: React.FC<NavProps> = ({ type }) => {
           {type === "dashboard" ? null : (
             <div className="hidden md:flex items-center justify-between gap-4 w-full">
               <ul className="md:flex md:gap-10 md:ml-36">
-                <li className="hover:text-gray-400 cursor-pointer">
-                  <Link href="#features">Pricing</Link>
+                <li className="text-gray-300 hover:text-gray-400 cursor-pointer">
+                  <Link href="#pricing">Pricing</Link>
                 </li>
-                <li className="hover:text-gray-400 cursor-pointer">
-                  <Link href="#features">Contact</Link>
+                <li className="text-gray-300 hover:text-gray-400 cursor-pointer">
+                  <Link href="#contact">Contact</Link>
                 </li>
-                <li className="hover:text-gray-400 cursor-pointer">
-                  <Link href="#features">Blog</Link>
+                <li className="text-gray-300 hover:text-gray-400 cursor-pointer">
+                  <Link href="#blog">Blog</Link>
                 </li>
               </ul>
               <div className="flex gap-5">
