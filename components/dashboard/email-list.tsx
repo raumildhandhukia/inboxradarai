@@ -6,7 +6,7 @@ interface EmailListProps {
 
 const EmailList: React.FC<EmailListProps> = ({ emails }) => {
   return (
-    <div className="email-list-container p-6 bg-gray-900 rounded-lg shadow-lg">
+    <div className="w-full p-6 bg-gray-900 rounded-lg shadow-lg">
       <h1 className="text-3xl font-bold mb-4 text-white">Your Emails</h1>
       <div className="email-list space-y-4">
         {emails.length > 0 ? (

@@ -51,29 +51,21 @@ const Nav: React.FC<NavProps> = ({ type }) => {
         backdropFilter: "blur(10px)",
       }}
       className={`fixed top-0 z-10 px-8 w-[100vw] mx-auto ${
-        !isOpen ? "max-h-[5rem]" : "min-h-[100vh]"
+        !isOpen ? "md:min-h-[5rem] min-h-[3rem]" : "min-h-[100vh]"
       }
      bg-purple-100 [background-image:radial-gradient(88%_100%_at_top,rgba(255,255,255,0.4),rgba(255,255,255,0))]
     `}
     >
-      <div className="flex justify-between items-center md:-mt-6">
-        <Image
-          className="md:hidden !w-24 -mt-5 -ml-5"
-          src="/logo.svg"
-          alt="logo"
-          width={24}
-          height={30}
-        />
-
+      <div className="flex justify-between items-center">
         <Image
           src="/logo.svg"
           alt="logo"
-          width={30}
+          width={50}
           height={30}
-          className="hidden md:block w-0 md:!w-40 md:-mt-5"
+          className="mt-2 md:mt-1 w-20 md:!w-40"
         />
 
-        <div className="flex items-center -mt-5 md:-ml-30">
+        <div className="flex items-center md:-ml-30">
           {type === "dashboard" ? null : (
             <div className="hidden md:flex items-center justify-between gap-4 w-full">
               <ul className="md:flex md:gap-10 md:ml-36">
@@ -81,21 +73,21 @@ const Nav: React.FC<NavProps> = ({ type }) => {
                   <Link href="#features">Pricing</Link>
                 </li>
                 <li className="hover:text-gray-400 cursor-pointer">
-                  <Link href="#features">Blog</Link>
+                  <Link href="#features">Contact</Link>
                 </li>
                 <li className="hover:text-gray-400 cursor-pointer">
-                  <Link href="#features">Contact</Link>
+                  <Link href="#features">Blog</Link>
                 </li>
               </ul>
               <div className="flex gap-5">
                 <Button
                   variant="outline"
-                  className="invisible md:visible rounded-3xl"
+                  className="invisible md:visible rounded-3xl bg-green-500 ml-3"
                   onClick={() => {
                     Router.push("/auth/login");
                   }}
                 >
-                  Log In
+                  Sign In
                 </Button>
                 {/* <Button
                   variant="destructive"
@@ -119,7 +111,7 @@ const Nav: React.FC<NavProps> = ({ type }) => {
             Log Out
           </Button>
         ) : (
-          <div className="flex items-center gap-6 md:hidden -mt-5">
+          <div className="flex items-center gap-6 md:hidden">
             {/* <Button variant="destructive">Sign In</Button> */}
             {!isOpen ? (
               <HamburgerMenuIcon
@@ -142,19 +134,19 @@ const Nav: React.FC<NavProps> = ({ type }) => {
               <Link href="#features">Pricing</Link>
             </li>
             <li className="hover:text-gray-400 cursor-pointer">
-              <Link href="#features">Blog</Link>
+              <Link href="#features">Contact</Link>
             </li>
             <li className="hover:text-gray-400 cursor-pointer">
-              <Link href="#features">Contact</Link>
+              <Link href="#features">Blog</Link>
             </li>
             <Button
               variant="outline"
-              className="rounded-3xl w-24"
+              className="rounded-3xl w-24 bg-green-500"
               onClick={() => {
                 Router.push("/auth/login");
               }}
             >
-              Log In
+              Sign In
             </Button>
             {/* <Button
               variant="destructive"
