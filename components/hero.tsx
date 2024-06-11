@@ -24,7 +24,7 @@ const Hero = () => {
           </p>
         </div>
 
-        <div className="flex flex-col overflow-hidden z-0">
+        <div className="flex flex-col overflow-hidden z-0 -mt-36 md:mt-0">
           <ContainerScroll
             titleComponent={
               <>
