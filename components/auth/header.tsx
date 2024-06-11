@@ -4,14 +4,14 @@ interface HeaderProps {}
 
 export const Header: React.FC<HeaderProps> = ({}) => {
   return (
-    <div className="h-[10vh]">
-      <div className="w-full flex flex-col items-center justify-center relative">
+    <div className="h-[10vh] md:h-[12vh]">
+      <div className="w-full flex flex-col items-center justify-center">
         <Image
-          className="absolute -top-24"
+          className="w-40 md:w-44"
           src="/logo.svg"
           alt="logo"
-          width={250}
-          height={1}
+          width={1} // why vercel? why? atleast stop giving me an error !!!
+          height={1} // why vercel? why? atleast stop giving me an error !!!
         />
       </div>
     </div>
