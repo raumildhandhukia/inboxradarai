@@ -5,7 +5,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import Image from "next/image";
 
 import React from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { logout } from "@/actions/auth/logout";
 
 interface AsideProps {

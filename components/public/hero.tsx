@@ -1,11 +1,11 @@
 import React from "react";
-import { Spotlight } from "./ui/spotlight";
+import { Spotlight } from "../ui/spotlight";
 import Image from "next/image";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 
 const Hero = () => {
   return (
-    <div>
+    <div className="-mb-44 md:mb-0">
       <div className="mt-[12vh] md:mt-0 flex flex-col md:flex-row justify-center md:items-center md:justify-around w-full h-[100vh]">
         <Spotlight
           className="-top-10 left-0 2xl:left-10 2xl:-top-20"

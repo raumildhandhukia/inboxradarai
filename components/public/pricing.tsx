@@ -9,12 +9,12 @@ import { Button } from "@/components/ui/button";
 
 const Pricing = () => {
   return (
-    <div>
-      <div className="font-bold text-4xl md:text-5xl text-center mb-20 -mt-44 md:mt-0">
+    <div id="pricing" className="pb-20">
+      <div className="font-bold text-4xl md:text-5xl text-center mb-20">
         <p className="text-purple">Pricing</p>
       </div>
-      <div className="flex flex-col items-center gap-y-3 md:flex-row justify-center md:gap-x-3">
-        <div className="max-w-sm w-[80%] md:w-[30%] h-[90%]">
+      <div className="flex flex-col items-center gap-y-10 md:flex-row justify-center md:gap-x-6">
+        <div className="max-w-sm w-[80%] md:w-[28%] h-[90%]">
           <BackgroundGradient
             className="rounded-[22px] max-w-sm p-4 sm:p-10 bg-white dark:bg-zinc-900"
             type="free"
@@ -60,7 +60,7 @@ const Pricing = () => {
           </BackgroundGradient>
         </div>
 
-        <div className="max-w-sm w-[80%] md:w-[30%] h-[90%]">
+        <div className="max-w-sm w-[80%] md:w-[28%] h-[80%]">
           <BackgroundGradient
             type="pro"
             className="rounded-[22px] max-w-sm p-4 sm:p-10 bg-white dark:bg-zinc-900 "
@@ -108,7 +108,7 @@ const Pricing = () => {
             </div>
           </BackgroundGradient>
         </div>
-        <div className="max-w-sm w-[80%] md:w-[30%] h-[90%]">
+        <div className="max-w-sm w-[80%] md:w-[28%] h-[90%]">
           <BackgroundGradient
             type="max"
             className="rounded-[22px] max-w-sm p-4 sm:p-10 bg-white dark:bg-zinc-900"

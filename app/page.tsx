@@ -1,6 +1,7 @@
-import Hero from "@/components/hero";
-import Nav from "@/components/nav";
-import Pricing from "@/components/pricing";
+import Hero from "@/components/public/hero";
+import Nav from "@/components/public/nav";
+import Pricing from "@/components/public/pricing";
+import Footer from "@/components/public/footer/footer";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <main>
         <Hero />
         <Pricing />
+        <Footer />
       </main>
     </>
   );

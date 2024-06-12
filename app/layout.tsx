@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import Nav from "@/components/nav";
+import Nav from "@/components/public/nav";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 const poppins = Poppins({
   weight: ["100", "300", "500", "700"],
