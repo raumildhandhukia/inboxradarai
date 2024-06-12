@@ -1,5 +1,5 @@
 import { getInboxData } from "@/actions/auth/inbox/email";
-import Aside, { SideBarItem } from "@/components/aside";
+import Aside, { SideBarItem } from "@/components/dashboard/aside";
 import EmailList from "@/components/dashboard/email-list";
 import TempBanner from "@/components/dashboard/temp";
 import { IconHome, IconMessage, IconUser } from "@tabler/icons-react";
