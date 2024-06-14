@@ -35,7 +35,7 @@ const Pricing = () => {
               <ul className="text-neutral-600 dark:text-neutral-400 mb-6">
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="#D3D3D3" />
-                  25 Email Analyses
+                  100 Email analysis
                 </li>
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <AiFillCloseCircle color="gray" />
@@ -84,7 +84,7 @@ const Pricing = () => {
               <ul className="text-neutral-600 dark:text-neutral-400 mb-6">
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="#D3D3D3" />
-                  1000 Email Analyses
+                  1000 Email analysis
                 </li>
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="#D3D3D3" />
@@ -132,7 +132,7 @@ const Pricing = () => {
               <ul className="text-neutral-600 dark:text-neutral-400 mb-6">
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="#D3D3D3" />
-                  5000 Email Analyses
+                  5000 Email analysis
                 </li>
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="#D3D3D3" />

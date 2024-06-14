@@ -1,13 +1,37 @@
 import Google from "next-auth/providers/google";
 import type { NextAuthConfig } from "next-auth";
-import { storeRefresh } from "./actions/auth/refreshToken";
+import { storeRefresh } from "@/actions/auth/refreshToken";
+import { populateUser } from "@/actions/auth/populateUser";
+import { db } from "@/lib/db";
 
 export default {
+  pages: {
+    signIn: "/auth/login",
+    error: "/auth/error",
+    newUser: "/new-user",
+  },
+  events: {
+    async linkAccount({ user }) {
+      const dbUser = await db.user.findUnique({
+        where: {
+          id: user.id,
+        },
+      });
+      if (dbUser && dbUser.email && !dbUser?.emailVerified) {
+        try {
+          await populateUser(dbUser.id, dbUser.email);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    },
+  },
   callbacks: {
-    async signIn({ account }) {
+    async signIn({ account, user }) {
       if (account?.access_token && account?.refresh_token) {
         await storeRefresh(account.refresh_token, account.providerAccountId);
       }
+
       return true;
     },
     async session({ session, token }) {

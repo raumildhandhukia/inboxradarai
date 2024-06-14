@@ -10,7 +10,13 @@ import { cn } from "@/utils/cn";
 import Link from "next/link";
 import { Nav } from "@/components/public/nav";
 
-export const FloatingNav = ({ className }: { className?: string }) => {
+export const FloatingNav = ({
+  className,
+  type,
+}: {
+  className?: string;
+  type?: string;
+}) => {
   const { scrollYProgress } = useScroll();
 
   const [visible, setVisible] = useState(true);
@@ -26,6 +32,8 @@ export const FloatingNav = ({ className }: { className?: string }) => {
       }
     }
   });
+  if (type === "inbox") {
+  }
 
   return (
     <AnimatePresence mode="wait">
