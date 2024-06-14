@@ -68,23 +68,34 @@ export async function listEmails(auth: any, page: string | null) {
         (header: any) => header.name === "Date"
       )?.value;
       const labelIds = email.data.labelIds;
+      const parts = email.data.payload?.parts || [];
+      let plainText = "";
+      let htmlText = "";
 
-      const emailBody1 =
-        email.data.payload?.parts && email.data.payload?.parts[1]?.body?.data;
-      const emailBody0 =
-        email.data.payload?.parts && email.data.payload?.parts[0]?.body?.data;
+      parts.forEach((part: any) => {
+        if (part.mimeType === "text/plain") {
+          plainText = Buffer.from(part.body.data, "base64").toString("utf-8");
+        } else if (part.mimeType === "text/html") {
+          htmlText = Buffer.from(part.body.data, "base64").toString("utf-8");
+        }
+      });
 
-      let body0, body1;
-      if (!emailBody0) {
-        body0 = snippet;
-      } else {
-        body0 = Buffer.from(emailBody0, "base64").toString("utf8");
-      }
-      if (!emailBody1) {
-        body1 = snippet;
-      } else {
-        body1 = Buffer.from(emailBody1, "base64").toString("utf8");
-      }
+      // const emailBody1 =
+      //   email.data.payload?.parts && email.data.payload?.parts[1]?.body?.data;
+      // const emailBody0 =
+      //   email.data.payload?.parts && email.data.payload?.parts[0]?.body?.data;
+
+      // let body0, body1;
+      // if (!emailBody0) {
+      //   body0 = snippet;
+      // } else {
+      //   body0 = Buffer.from(emailBody0, "base64").toString("utf8");
+      // }
+      // if (!emailBody1) {
+      //   body1 = snippet;
+      // } else {
+      //   body1 = Buffer.from(emailBody1, "base64").toString("utf8");
+      // }
       return {
         id,
         labelIds,
@@ -92,7 +103,7 @@ export async function listEmails(auth: any, page: string | null) {
         subject,
         from,
         date,
-        body: [body0, body1],
+        body: [plainText, htmlText],
         AILabel: {
           text: "reject",
           color: "red",

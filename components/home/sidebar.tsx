@@ -17,14 +17,18 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarItems }) => {
   const { activeItem, setActiveItem } = useContext(SideBarItemContext);
   return (
     <Aside>
-      {sidebarItems.map((item) => (
-        <SideBarItem
-          key={item.id}
-          {...item}
-          active={item.text === activeItem}
-          setActiveItem={setActiveItem}
-        />
-      ))}
+      <div className="flex flex-col h-full">
+        <div className="flex-1">
+          {sidebarItems.map((item) => (
+            <SideBarItem
+              key={item.id}
+              {...item}
+              active={item.text === activeItem}
+              setActiveItem={setActiveItem}
+            />
+          ))}
+        </div>
+      </div>
     </Aside>
   );
 };

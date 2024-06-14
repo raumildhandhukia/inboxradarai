@@ -1,13 +1,15 @@
 "use client";
 import { useContext, createContext, Dispatch, SetStateAction } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
 import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import React from "react";
 import { Button } from "../ui/button";
 import { logout } from "@/actions/auth/logout";
 import { TbLogout2 } from "react-icons/tb";
+import Settings from "@/components/home/settings";
+import Profile from "./profile";
+("@/components/home/profile");
 
 interface AsideProps {
   children: React.ReactNode;
@@ -73,8 +75,6 @@ const Aside: React.FC<AsideProps> = ({ children }) => {
   const handleLogout = () => {
     logout();
   };
-  const user = useCurrentUser();
-  const avatarFallback = user?.name ? user.name[0] : "NA";
 
   return (
     <aside className="h-[calc[100dvh]]">
@@ -102,30 +102,19 @@ const Aside: React.FC<AsideProps> = ({ children }) => {
           <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
         <div className="border-t flex p-3">
-          <Avatar>
-            <AvatarImage
-              src={
-                user?.image ||
-                `https://avatars.dicebear.com/api/avataaars/username.svg`
-              }
-            />
-            <AvatarFallback>{avatarFallback}</AvatarFallback>
-          </Avatar>
+          <Profile />
           <div
-            className={`flex justify-between items-center w-52 ml-3 overflow-hidden transition-all ${
+            className={`flex justify-end items-center gap-3 w-52 ml-3 overflow-hidden transition-all ${
               expanded ? "w-full" : "!w-0"
             }`}
           >
-            <div className="leading-4">
-              <h4 className="text-gray-600">{user?.name}</h4>
-              <span className="text-xs text-gray-600">{user?.email}</span>
-            </div>
+            <Settings />
             <Button
               variant="destructive"
-              className="rounded-xl bg-green-500"
+              className="rounded-xl bg-red-500"
               onClick={handleLogout}
             >
-              <TbLogout2 color="black" />
+              <TbLogout2 color="black" className="scale-[1.5]" />
             </Button>
           </div>
         </div>
