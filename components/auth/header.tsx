@@ -1,11 +1,24 @@
 import Image from "next/image";
 
-interface HeaderProps {}
+interface HeaderProps {
+  position?: "left" | "center" | "right";
+}
 
-export const Header: React.FC<HeaderProps> = ({}) => {
+export const Header: React.FC<HeaderProps> = ({ position }) => {
+  if (!position) {
+    position = "center";
+  }
   return (
     <div className="h-[10vh] md:h-[12vh]">
-      <div className="w-full flex flex-col items-center justify-center">
+      <div
+        className={`w-full flex flex-col justify-center ${
+          position === "left"
+            ? "items-start"
+            : position === "right"
+            ? "items-end"
+            : "items-center"
+        }`}
+      >
         <Image
           className="w-40 md:w-44"
           src="/logo.svg"

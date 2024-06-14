@@ -37,4 +37,4 @@ export const apiAuthPrefix = "/api/auth";
  * The default redirect path after login
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
+export const DEFAULT_LOGIN_REDIRECT = "/inbox";

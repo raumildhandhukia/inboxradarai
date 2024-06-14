@@ -30,3 +30,22 @@ export const LoginSchema = z.object({
     message: "Minimum 6 characters required",
   }),
 });
+
+export const TagSchema = z.object({
+  label: z
+    .string()
+    .min(3, {
+      message: "Name should be minimum 3 characters",
+    })
+    .max(20, {
+      message: "Name should not exceed 20 characters",
+    }),
+  description: z
+    .string()
+    .min(20, {
+      message: "Description should be minimum 20 characters",
+    })
+    .max(120, {
+      message: "Description should not exceed 120 characters",
+    }),
+});

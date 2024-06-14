@@ -2,24 +2,64 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
- 
+
 generator client {
   provider = "prisma-client-js"
 }
- 
-model User {
-  id            String          @id @default(cuid())
-  name          String?
-  password      String?
-  email         String          @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+enum Plan {
+  FREE
+  PRO
+  MAX
 }
- 
+
+model Tag {
+  id          String   @id @default(cuid())
+  userId      String
+  label        String
+  description String?
+  color       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  processedEmails ProcessedEmails[]
+}
+
+model ProcessedEmails {
+  id        String   @id @default(cuid())
+  emailId   String
+  tagId     String
+  createdAt DateTime @default(now())
+
+  tag Tag @relation(fields: [tagId], references: [id])
+}
+
+model User {
+  id                    String                  @id @default(cuid())
+  username              String?                 @unique
+  name                  String?
+  password              String?
+  email                 String                  @unique
+  emailVerified         DateTime?
+  image                 String?
+  
+  plan                      String?
+  emailProcessed            Int?                     @map("email_processed")
+  
+  stripeSubscriptionId      String?                 @unique @map("stripe_subscription_id")
+  stripePriceId             String?                 @unique @map("stripe_price_id")
+  stripeCurrentPeriodEnd    DateTime?               @map("stripe_current_period_end")
+  stripeCustomerId          String?                 @unique @map("stripe_customer_id")
+
+  accounts              Account[]
+
+  tags                  Tag[]
+  
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+}
+
 model Account {
   userId            String
   type              String
@@ -31,20 +71,19 @@ model Account {
   token_type        String?
   scope             String?
   id_token          String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
 
- 
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }

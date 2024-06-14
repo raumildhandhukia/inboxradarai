@@ -1,39 +1,47 @@
 "use client";
-import { useContext, createContext } from "react";
+import { useContext, createContext, Dispatch, SetStateAction } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import { FiMoreVertical } from "react-icons/fi";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import Image from "next/image";
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React from "react";
 import { Button } from "../ui/button";
 import { logout } from "@/actions/auth/logout";
+import { TbLogout2 } from "react-icons/tb";
 
 interface AsideProps {
   children: React.ReactNode;
 }
 
 interface SideBarItemProps {
+  id: number;
   icon: React.ReactNode;
   text: string;
+  setActiveItem: Dispatch<SetStateAction<String>>;
   active?: boolean;
   alert?: boolean;
 }
 
 export const SideBarItem: React.FC<SideBarItemProps> = ({
+  id,
   icon,
   text,
+  setActiveItem,
   active,
   alert,
 }) => {
   const { expanded } = useContext(SidebarContext);
   return (
     <li
+      onClick={() => {
+        setActiveItem(text);
+      }}
       className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
         expanded ? "w-[95vw]" : "w-max"
       } md:w-max ${
         active
-          ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-          : "hover:bg-gray-50 text-gray-800"
+          ? "bg-gradient-to-tr from-[rgba(255,255,255,0.4)] to-[rgba(255,255,255,0.1)] text-gray-200"
+          : "hover:bg-[rgba(255,255,255,0.1)] text-gray-400"
       }`}
     >
       {icon}
@@ -65,10 +73,12 @@ const Aside: React.FC<AsideProps> = ({ children }) => {
   const handleLogout = () => {
     logout();
   };
+  const user = useCurrentUser();
+  const avatarFallback = user?.name ? user.name[0] : "NA";
 
   return (
     <aside className="h-[calc[100dvh]]">
-      <nav className="h-full flex flex-col bg-black-100 border-r shadow-sm">
+      <nav className="h-full flex flex-col bg-neutral-950 border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <div
             className={`overflow-hidden transition-all ${
@@ -78,7 +88,7 @@ const Aside: React.FC<AsideProps> = ({ children }) => {
             <Image src="/logo.svg" alt="logo" width={150} height={32} />
           </div>
           <button
-            className="p-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg"
+            className="p-1.5 bg-[rgba(255,255,255,0.8)] hover:bg-[rgba(255,255,255,0.5)] rounded-lg transition-all"
             onClick={() => setExpanded(!expanded)}
           >
             {expanded ? (
@@ -92,28 +102,30 @@ const Aside: React.FC<AsideProps> = ({ children }) => {
           <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
         <div className="border-t flex p-3">
-          <Image
-            src="https://avatars.dicebear.com/api/avataaars/username.svg"
-            alt="avatar"
-            width={32}
-            height={32}
-            className="rounded-full"
-          />
+          <Avatar>
+            <AvatarImage
+              src={
+                user?.image ||
+                `https://avatars.dicebear.com/api/avataaars/username.svg`
+              }
+            />
+            <AvatarFallback>{avatarFallback}</AvatarFallback>
+          </Avatar>
           <div
             className={`flex justify-between items-center w-52 ml-3 overflow-hidden transition-all ${
               expanded ? "w-full" : "!w-0"
             }`}
           >
             <div className="leading-4">
-              <h4 className="text-gray-600">John Doe</h4>
-              <span className="text-xs text-gray-600">johndoe@gmail.com</span>
+              <h4 className="text-gray-600">{user?.name}</h4>
+              <span className="text-xs text-gray-600">{user?.email}</span>
             </div>
             <Button
               variant="destructive"
-              className="rounded-3xl bg-green-500"
+              className="rounded-xl bg-green-500"
               onClick={handleLogout}
             >
-              Log Out
+              <TbLogout2 color="black" />
             </Button>
           </div>
         </div>
