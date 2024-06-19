@@ -48,6 +48,7 @@ const Profile = () => {
         <DropdownMenuItem className="hover:cursor-pointer">
           Upgrade
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
       </DropdownMenuContent>
     </DropdownMenu>
   );

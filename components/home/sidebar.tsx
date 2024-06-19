@@ -2,6 +2,7 @@
 import React, { useContext } from "react";
 import Aside, { SideBarItem } from "./aside";
 import { SideBarItemContext } from "@/context/side-bar-context";
+import { useRouter } from "next/navigation";
 
 interface SidebarProps {
   sidebarItems: {
@@ -14,7 +15,12 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ sidebarItems }) => {
+  const router = useRouter();
   const { activeItem, setActiveItem } = useContext(SideBarItemContext);
+  const handleSidebarItemClick = (text: string) => {
+    setActiveItem(text);
+    router.push(`/inbox?type=${text.toLowerCase()}`);
+  };
   return (
     <Aside>
       <div className="flex flex-col h-full">
@@ -24,7 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarItems }) => {
               key={item.id}
               {...item}
               active={item.text === activeItem}
-              setActiveItem={setActiveItem}
+              onClick={handleSidebarItemClick}
             />
           ))}
         </div>

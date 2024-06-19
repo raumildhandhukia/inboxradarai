@@ -17,7 +17,7 @@ interface SideBarItemContextProviderProps {
 }
 
 const Context: React.FC<SideBarItemContextProviderProps> = ({ children }) => {
-  const [activeItem, setActiveItem] = useState<String>("Home");
+  const [activeItem, setActiveItem] = useState<String>("Primary");
   return (
     <SideBarItemContext.Provider
       value={{

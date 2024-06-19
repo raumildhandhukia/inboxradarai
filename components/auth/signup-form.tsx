@@ -23,7 +23,6 @@ const TheForm = () => {
   const [success, setSuccess] = useState<String>("");
 
   const onSubmit = (values: any) => {
-    console.log(values);
     startTransition(async () => {
       const prom = new Promise<void>((resolve, reject) => {
         setTimeout(() => {

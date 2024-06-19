@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FancyButton from "@/components/ui/fancy-button";
 import { Social } from "@/components/public/footer/social";
+import { Button } from "@/components/ui/button";
 
 export const BuyMeCoffee = () => {
   return (
@@ -15,14 +16,14 @@ export const BuyMeCoffee = () => {
             width={150}
             height={150}
             alt="mbc_qr"
-            className="invert"
+            className="rounded-lg"
           />
         </div>
         <Link href="https://buymeacoffee.com/raumildhandhukia" target="_blank">
-          <FancyButton className="px-8">
+          <Button variant="hacker" className="px-8 rounded-none">
             <span className="text-lg">buy me a coffee</span>
             <span className="ml-4 text-2xl">☕</span>
-          </FancyButton>
+          </Button>
         </Link>
         <Social />
       </div>

@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import {
   Sheet,
   SheetContent,
@@ -7,22 +7,85 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Checkbox } from "@/components/ui/checkbox";
 import { IoMdSettings } from "react-icons/io";
+import { sidebarItems } from "@/data";
+import { getAILabels } from "@/actions/inbox/labels";
+
+interface Label {
+  id: string;
+  label: string | null;
+  color: string | null;
+  description: string | null;
+}
 
 const Settings = ({}: {}) => {
+  const [aiLabels, setAILabels] = React.useState<Label[]>([]);
+  useEffect(() => {
+    console.log("Settings mounted");
+    const get = async () => {
+      const res = await fetch("/api/mail/labels", {
+        cache: "no-store",
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAILabels(data);
+      } else {
+        console.error("Error fetching AI Labels");
+      }
+    };
+    get();
+  }, []);
+
   return (
     <Sheet>
-      <SheetTrigger className="flex justify-center items-center h-9 w-11 bg-green-600 rounded-xl hover:bg-green-600/50">
-        <IoMdSettings color="black" className="scale-[1.5]" />
+      <SheetTrigger className="flex justify-center items-center h-9 w-11 bg-white hover:bg-black hover:text-white border rounded-none">
+        <IoMdSettings className="scale-[1.5]" />
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Are you absolutely sure?</SheetTitle>
-          <SheetDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </SheetDescription>
+          <SheetTitle>Settings</SheetTitle>
+          <SheetDescription>Customize your AI Inbox Settings</SheetDescription>
         </SheetHeader>
+        <div className="flex flex-col gap-5">
+          <h3 className="text-lg font-semibold mt-5">Inbox Categories</h3>
+          <div className="flex justify-between flex-wrap gap-x-5 gap-y-4">
+            {sidebarItems.map((item) => (
+              <div
+                key={item.text}
+                className="flex items-center space-x-2 w-[40%]"
+              >
+                <Checkbox id={item.text} />
+                <label htmlFor={item.text} className="text-sm font-medium ">
+                  {item.text}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-col gap-5">
+          <h3 className="text-lg font-semibold mt-5">AI Labels</h3>
+          <div className="flex justify-between flex-wrap gap-x-5 gap-y-4">
+            {aiLabels.map((label) => (
+              <div
+                key={label.id}
+                className="flex items-center space-x-2 w-[40%]"
+              >
+                <Checkbox id={label.label || ""} />
+                <label
+                  htmlFor={label.label || ""}
+                  className="text-sm font-medium "
+                >
+                  {label.label}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
       </SheetContent>
     </Sheet>
   );

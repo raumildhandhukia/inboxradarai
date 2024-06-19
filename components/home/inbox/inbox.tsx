@@ -1,24 +1,37 @@
 "use client";
-import React from "react";
+import { InboxContext } from "@/context/inbox-context";
+import React, { useContext, useTransition } from "react";
 import EmailList from "@/components/home/inbox/email-list";
-import Pagination from "@/components/home/inbox/pagination";
-import { SkeletonLoader } from "@/components/home/inbox/skeleton";
+import Paginations from "@/components/home/inbox/pagination";
+import { EmailListSkeleton } from "@/components/home/inbox/skeleton";
 
 import { useState, useEffect } from "react";
+import {
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { start } from "repl";
 
-interface InboxProps {}
-const Inbox: React.FC<InboxProps> = ({}) => {
+interface InboxProps {
+  type: string | null;
+}
+const Inbox: React.FC<InboxProps> = ({ type }) => {
+  const [refreshEmails, setRefreshEmails] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const [pageTokens, setPageTokens] = useState<string[] | [null]>([null]);
-  const [data, setData] = useState<any[]>([]);
-  const [isLoading, setLoading] = useState<boolean>(true);
+  const { emails, setEmails } = useContext(InboxContext);
+  const [isLoading, startTransition] = useTransition();
+
+  const handleRefresh = () => {
+    setRefreshEmails(true);
+  };
 
   useEffect(() => {
     const getData = async () => {
       const res = await fetch(
-        `/api/mail?page=${pageTokens[Math.max(page - 1, 0)]}`,
+        `/api/mail?page=${pageTokens[Math.max(page - 1, 0)]}&type=${type}`,
         {
-          cache: "no-store",
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -26,27 +39,57 @@ const Inbox: React.FC<InboxProps> = ({}) => {
         }
       );
       const data = await res.json();
-      setData(data.emails);
+      setEmails(data.emails);
       setPageTokens((prev) => {
         prev[page] = data.nextPageToken;
         return prev;
       });
-      setLoading(false);
     };
+    if (refreshEmails) {
+      startTransition(async () => {
+        await getData();
+      });
+      setRefreshEmails(false);
+    }
     getData();
-  }, [page, pageTokens]);
+  }, [page, pageTokens, setEmails, refreshEmails, type]);
+  const Prev = () => (
+    <button
+      disabled={page === 1}
+      className={`${page === 1 ? "text-muted-foreground cursot-default" : ""}`}
+      onClick={() => {
+        setPage((prev) => Math.max(prev - 1, 1));
+      }}
+    >
+      <PaginationPrevious noHover={page === 1} />
+    </button>
+  );
+  const Current = () => <PaginationLink noHover>{page}</PaginationLink>;
+  const Next = () => (
+    <button
+      disabled={pageTokens[page] === undefined}
+      className={`${
+        pageTokens[page] === undefined ? "text-muted cursot-default" : ""
+      }`}
+      onClick={() => {
+        setPage((prev) => prev + 1);
+      }}
+    >
+      <PaginationNext noHover={pageTokens[page] === undefined} />
+    </button>
+  );
 
   return (
     <div>
       {isLoading ? (
-        <SkeletonLoader />
+        <EmailListSkeleton />
       ) : (
-        <EmailList emails={data} setEmails={setData}>
-          <Pagination
-            page={page}
-            setPage={setPage}
-            noNext={pageTokens[page] === undefined}
-          />
+        <EmailList
+          emails={emails}
+          setEmails={setEmails}
+          refresh={handleRefresh}
+        >
+          <Paginations prev={<Prev />} current={<Current />} next={<Next />} />
         </EmailList>
       )}
     </div>

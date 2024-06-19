@@ -3,6 +3,11 @@ import React, { use, useEffect } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
+const getRandomColor = () => {
+  const colors = ["red", "green", "yellow", "blue", "purple"];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
+
 export const BackgroundBeams = React.memo(
   ({ className }: { className?: string }) => {
     const paths = [
@@ -126,10 +131,14 @@ export const BackgroundBeams = React.memo(
                   delay: Math.random() * 10,
                 }}
               >
-                <stop stopColor="#18CCFC" stopOpacity="0"></stop>
-                <stop stopColor="#18CCFC"></stop>
-                <stop offset="32.5%" stopColor="#6344F5"></stop>
-                <stop offset="100%" stopColor="#AE48FF" stopOpacity="0"></stop>
+                <stop stopColor={getRandomColor()} stopOpacity="0"></stop>
+                <stop stopColor={getRandomColor()}></stop>
+                <stop offset="32.5%" stopColor={getRandomColor()}></stop>
+                <stop
+                  offset="100%"
+                  stopColor={getRandomColor()}
+                  stopOpacity="0"
+                ></stop>
               </motion.linearGradient>
             ))}
 
@@ -141,9 +150,9 @@ export const BackgroundBeams = React.memo(
               gradientUnits="userSpaceOnUse"
               gradientTransform="translate(352 34) rotate(90) scale(555 1560.62)"
             >
-              <stop offset="0.0666667" stopColor="var(--neutral-300)"></stop>
-              <stop offset="0.243243" stopColor="var(--neutral-300)"></stop>
-              <stop offset="0.43594" stopColor="white" stopOpacity="0"></stop>
+              <stop offset="0.96666" stopColor="black"></stop>
+              <stop offset="0.843243" stopColor="red"></stop>
+              <stop offset="0.73594" stopColor="red" stopOpacity="0"></stop>
             </radialGradient>
           </defs>
         </svg>

@@ -1,4 +1,9 @@
 import { IconHome, IconMessage, IconUser } from "@tabler/icons-react";
+import { FaStar } from "react-icons/fa";
+import { MdOutlineUpdate } from "react-icons/md";
+
+import { BsPeopleFill } from "react-icons/bs";
+
 export const socialMedia = [
   {
     id: 1,
@@ -18,10 +23,8 @@ export const socialMedia = [
 ];
 
 export const sidebarItems = [
-  { id: 1, icon: <IconHome size={20} />, text: "Home" },
-  { id: 2, icon: <IconHome size={20} />, text: "Acknowledgement" },
-  { id: 3, icon: <IconHome size={20} />, text: "Reject" },
-  { id: 4, icon: <IconHome size={20} />, text: "Next-Steps" },
-  { id: 5, icon: <IconHome size={20} />, text: "Offers" },
-  { id: 6, icon: <IconHome size={20} />, text: "Uncategorized" },
+  { id: 1, icon: <IconHome size={20} />, text: "Primary" },
+  { id: 2, icon: <FaStar size={20} />, text: "Promotions" },
+  { id: 3, icon: <BsPeopleFill size={20} />, text: "Social" },
+  { id: 4, icon: <MdOutlineUpdate size={20} />, text: "Updates" },
 ];

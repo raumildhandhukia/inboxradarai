@@ -8,11 +8,11 @@ import { auth } from "@/auth";
 export default async function Home() {
   return (
     <>
-      <BackgroundBeams />
+      <BackgroundBeams className="" />
       <header className="">
         <Nav />
       </header>
-      <main>
+      <main className="">
         <Hero />
         <Pricing />
         <Footer />

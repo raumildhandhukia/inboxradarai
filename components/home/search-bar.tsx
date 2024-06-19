@@ -18,9 +18,9 @@ const SearchBar = () => {
           onSubmit={() => {}}
         />
       </div>
-      <FancyButton className="text-lg">From</FancyButton>
-      <FancyButton className="text-lg">To</FancyButton>
-      <FancyButton className="text-lg">Date</FancyButton>
+      <FancyButton className="text-[13px]">From</FancyButton>
+      <FancyButton className="text-[13px]">To</FancyButton>
+      <FancyButton className="text-[13px]">Date</FancyButton>
     </div>
   );
 };

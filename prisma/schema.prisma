@@ -13,12 +13,28 @@ enum Plan {
   MAX
 }
 
+model UserSettings {
+  id          String   @id @default(cuid())
+  userId      String
+  emailNotify Boolean @default(true) @map("email_notify")
+  inboxPrimary Boolean @default(true) @map("inbox_primary")
+  inboxSocial  Boolean @default(false) @map("inbox_social")
+  inboxPromo   Boolean @default(false) @map("inbox_promo")
+  inboxUpdate  Boolean @default(false) @map("inbox_update")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+}
+
 model Tag {
   id          String   @id @default(cuid())
   userId      String
   label        String
   description String?
   color       String?
+  isActive    Boolean @default(true) @map ("is_active")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -55,6 +71,8 @@ model User {
   accounts              Account[]
 
   tags                  Tag[]
+
+  setting               UserSettings[]
   
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt

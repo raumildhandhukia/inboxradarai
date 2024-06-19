@@ -13,14 +13,14 @@ const Hero = () => {
         />
         <div className="md:min-w-[45vw] 2xl:max-w-[40vw] p-8 md:p-4 md:ml-16">
           <h1
-            className="text-4xl md:text-6xl 2xl:text-7xl  bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-600  
-        text-center font-sans font-bold"
+            className="text-4xl md:text-5xl 2xl:text-7xl  bg-clip-text ThemeText  
+        text-center font-bold"
           >
-            Your AI Job Application Tracker
+            Let AI Manage Your Gmail Inbox
           </h1>
-          <p className="text-neutral-500 my-2 text-sm 2xl:text-lg text-center ">
-            Welcome to Inbox Radar, the AI-powered job application tracker that
-            helps you keep track of your job applications and interviews.
+          <p className="text-neutral-900  font-medium my-2 text-sm  2xl:text-lg text-center ">
+            Welcome to Inbox Radar, the AI-powered Inbox organizer. Customize AI
+            Labels, automate email categorization, and manage your Gmail inbox.
           </p>
         </div>
 
@@ -28,11 +28,11 @@ const Hero = () => {
           <ContainerScroll
             titleComponent={
               <>
-                <h1 className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-600 ">
+                <h1 className="text-xl font-semibold bg-clip-text ThemeText">
                   Unleash the power of AI
                   <br />
                   <span className="text-xl md:text-[2rem] font-bold mt-1 leading-none">
-                    to organize your job applications
+                    to organize your emails
                   </span>
                 </h1>
               </>

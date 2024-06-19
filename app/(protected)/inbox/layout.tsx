@@ -1,9 +1,11 @@
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
+
 import { SessionProvider } from "next-auth/react";
 import SideBarCotextProvider from "@/context/side-bar-context-provider";
 import Sidebar from "@/components/home/sidebar";
 import { sidebarItems } from "@/data";
 import SearchBar from "@/components/home/search-bar";
+import InboxContextProvider from "@/context/inbox-context-provider";
 
 interface DashboardLayoutProps {
   params: {
@@ -18,17 +20,23 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 }) => {
   return (
     <SessionProvider>
-      <SideBarCotextProvider>
-        <div className="flex justify-start max-w-screen h-[calc(100dvh)]">
-          <Sidebar sidebarItems={sidebarItems} />
-          <div className="flex-1 w-full">
-            <div className="flex flex-col w-full">
-              <SearchBar />
-              <div className="flex-1 mt-[10vh]">{children}</div>
+      <InboxContextProvider>
+        <SideBarCotextProvider>
+          <div className="flex justify-start max-w-screen h-screen bg-white dark:bg-neutral-950">
+            <Sidebar sidebarItems={sidebarItems} />
+            <div className="flex-1 w-full h-full">
+              <div className="flex flex-col w-full h-full">
+                <SearchBar />
+                <div className="flex-grow h-full mt-[10vh] overflow-y-auto">
+                  <Suspense fallback={<div>Loading...</div>}>
+                    {children}
+                  </Suspense>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </SideBarCotextProvider>
+        </SideBarCotextProvider>
+      </InboxContextProvider>
     </SessionProvider>
   );
 };
