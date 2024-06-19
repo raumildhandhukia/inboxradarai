@@ -27,6 +27,11 @@ export async function populateUser(userId: string, userEmail: string) {
         emailVerified: new Date(),
       },
     });
+    await db.userSettings.create({
+      data: {
+        userId,
+      },
+    });
   } catch (error) {
     throw new Error("Failed to populate user.");
   }

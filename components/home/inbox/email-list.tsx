@@ -21,19 +21,23 @@ import {
   From,
   AILabel,
 } from "@/components/home/inbox/email";
+import { useRouter } from "next/navigation";
 
 interface EmailListProps {
   emails: any[];
   setEmails: Dispatch<SetStateAction<any[]>>;
+  refresh: () => void;
   children?: React.ReactNode;
 }
 
 const EmailList: React.FC<EmailListProps> = ({
   emails,
   setEmails,
+  refresh,
   children,
 }) => {
   const [selectedEmails, setSelectedEmails] = React.useState<string[]>([]);
+  const router = useRouter();
 
   const handleEmailSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, value } = e.target;
@@ -44,12 +48,16 @@ const EmailList: React.FC<EmailListProps> = ({
     }
   };
 
+  const handleEmailClick = (emailId: string) => {
+    router.push("/inbox/email/" + emailId);
+  };
+
   return (
     <div className="p-5">
       <div className="flex items-start justify-between h-12">
         <div className="flex items-start gap-5">
           {selectedEmails.length === 0 ? (
-            <FancyButton>
+            <FancyButton onClick={refresh}>
               <div className="flex gap-3">
                 <IoMdRefreshCircle className="scale-[1.5] mt-[5px]" />
                 <p className="">Reload</p>
@@ -81,23 +89,32 @@ const EmailList: React.FC<EmailListProps> = ({
         </div>
         <div>{children}</div>
       </div>
-      <div className="overflow-y-scroll max-h-[77vh] pr-3">
+      <div className="">
         <Table>
           <TableBody>
             {emails.map((email) => {
               return (
-                <TableRow key={email.id}>
+                <TableRow
+                  className="cursor-pointer transition-colors"
+                  key={email.id}
+                  onClick={() => {
+                    handleEmailClick(email.id);
+                  }}
+                >
                   <TableCell>
                     <input
                       type="checkbox"
                       {...{ checked: selectedEmails.includes(email.id) }}
                       value={email.id}
                       onChange={handleEmailSelect}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
                     />
                   </TableCell>
                   <TableCell>
                     <AILabel bgColor={`${email.AILabel.color}`}>
-                      {email.AILabel.text}
+                      {email.AILabel.label}
                     </AILabel>
                   </TableCell>
                   <TableCell className="max-w-[15vw]">

@@ -14,19 +14,19 @@ import Link from "next/link";
 
 const LoginForm = () => {
   return (
-    <div className="">
+    <div className="shadow-7xl">
       <div className=" w-full relative max-w-xs">
-        <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] bg-red-500 rounded-full blur-3xl" />
-        <div className="relative shadow-xl bg-gray-900 border border-gray-800  px-4 py-8 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
+        <div className="absolute inset-0 h-full w-full rounded-full blur-3xl" />
+        <div className="relative shadow-xl dark:bg-gray-900 border border-gray-800  px-4 py-8 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
           <div className="flex flex-col gap-y-5 w-full">
             <Header />
-            <Highlight className="text-black dark:text-white">
+            {/* <Highlight className="text-black dark:text-white">
               Google verification pending !!!
-            </Highlight>
+            </Highlight> */}
 
             <Button
-              variant="outline"
-              className="z-20 w-full h-max bg-gradient-to-br from-[rgba(103,162,178,0.67)] to-[rgba(110,93,237,0.2)]"
+              variant="hacker"
+              className="z-20 w-full h-max "
               onClick={() => {
                 signIn("google", {
                   callbackUrl: DEFAULT_LOGIN_REDIRECT,

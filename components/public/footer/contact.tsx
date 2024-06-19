@@ -2,13 +2,9 @@
 import { useRef, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import FancyButton from "@/components/ui/fancy-button";
 import { BeatLoader } from "react-spinners";
-import { socialMedia } from "@/data";
-import { CgWebsite } from "react-icons/cg";
-import { SiGmail } from "react-icons/si";
-import Link from "next/link";
-import Image from "next/image";
+
+import { Button } from "@/components/ui/button";
 
 const Loader = () => {
   return (
@@ -55,7 +51,6 @@ export const ContactForm = () => {
           },
           body: JSON.stringify({ fname, lname, email, message }),
         });
-        console.log(res);
         if (!res.ok) {
           setErrorMessage("An error occurred. Please try again later.");
         }
@@ -120,9 +115,13 @@ export const ContactForm = () => {
             <Loader />
           ) : (
             <div className="mt-2">
-              <FancyButton submit className="px-8">
+              <Button
+                className="px-8 rounded-none"
+                variant="hacker"
+                type="submit"
+              >
                 Send
-              </FancyButton>
+              </Button>
             </div>
           )}
         </div>

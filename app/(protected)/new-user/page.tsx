@@ -105,7 +105,6 @@ const Conf: React.FC = () => {
 
   const deleteLabel = (id: number) => {
     if (labels.length === 1) {
-      console.log("Cannot delete last label");
       return;
     }
     setLabels((prev) => prev.filter((label) => label.id !== id));

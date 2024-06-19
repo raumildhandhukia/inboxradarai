@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Anonymous_Pro, Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 const poppins = Poppins({
   weight: ["100", "300", "500", "700"],
   subsets: ["latin"],
+});
+const pro = Anonymous_Pro({
+  weight: ["400", "700"],
+  subsets: ["greek"],
 });
 
 export const metadata: Metadata = {
@@ -19,14 +23,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className}`}>
+      <body className={`${pro.className} ${poppins.className}`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
-          <div className="bg-neutral-950">{children}</div>
+          <div className="bg-white dark:bg-neutral-950">{children}</div>
         </ThemeProvider>
       </body>
     </html>

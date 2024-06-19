@@ -10,10 +10,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export function SkeletonLoader() {
-  const dummy = Array.from({ length: 16 });
+export function EmailListSkeleton() {
+  const dummy = Array.from({ length: 50 });
   return (
-    <div className="p-5">
+    <div className="p-5 ">
       <div className="flex items-start justify-between h-12">
         <div className="flex items-start gap-5">
           <Skeleton className="h-7 w-20 rounded-full" />
@@ -25,7 +25,7 @@ export function SkeletonLoader() {
           <Skeleton className="h-7 w-20 rounded-xl" />
         </div>
       </div>
-      <div className="overflow-y-scroll max-h-[77vh] pr-3">
+      <div className="pr-3">
         <Table>
           <TableBody>
             {dummy.map((dum, index) => {
@@ -51,6 +51,46 @@ export function SkeletonLoader() {
             })}
           </TableBody>
         </Table>
+      </div>
+    </div>
+  );
+}
+export function EmailSkeleton() {
+  const dummy = Array.from({ length: 50 });
+  return (
+    <div className="p-5 ">
+      <div className="flex items-start justify-between h-12">
+        <div className="flex items-start gap-5">
+          <Skeleton className="h-7 w-20 rounded-full" />
+          <Skeleton className="h-7 w-20 rounded-full" />
+        </div>
+        <div className="flex gap-3">
+          <Skeleton className="h-7 w-20 rounded-xl" />
+          <Skeleton className="h-7 w-10 rounded-md" />
+          <Skeleton className="h-7 w-20 rounded-xl" />
+        </div>
+      </div>
+      <div className="pr-3 border-t rounded-2xl p-5">
+        <div className="ml-20">
+          <Skeleton className="h-8 w-96 rounded-full" />
+        </div>
+        <div className="flex justify-between mt-8">
+          <div className="flex gap-5 ">
+            <div>
+              <Skeleton className="h-16 w-16 rounded-full" />
+            </div>
+            <div className="flex flex-col gap-1 justify-center">
+              <Skeleton className="h-5 w-32 rounded-full" />
+              <Skeleton className="h-5 w-20 rounded-full" />
+            </div>
+          </div>
+          <div>
+            <Skeleton className="h-5 w-52 rounded-full mt-2" />
+          </div>
+        </div>
+      </div>
+      <div className="flex justify-center">
+        <Skeleton className="h-96 w-[60%] mt-5 rounded-2xl" />
       </div>
     </div>
   );

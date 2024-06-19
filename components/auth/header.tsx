@@ -1,3 +1,4 @@
+import Logo from "@/public/Logo";
 import Image from "next/image";
 
 interface HeaderProps {
@@ -19,13 +20,7 @@ export const Header: React.FC<HeaderProps> = ({ position }) => {
             : "items-center"
         }`}
       >
-        <Image
-          className="w-40 md:w-44"
-          src="/logo.svg"
-          alt="logo"
-          width={1} // why vercel? why? atleast stop giving me an error !!!
-          height={1} // why vercel? why? atleast stop giving me an error !!!
-        />
+        <Logo color="black" className="w-40 md:w-44" />
       </div>
     </div>
   );
