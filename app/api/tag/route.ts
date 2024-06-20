@@ -1,8 +1,14 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { TagSchema } from "@/schemas";
-import { Label } from "@/types";
+import { RgbaColor } from "react-colorful";
 
+export interface Label {
+  id: string;
+  label: string;
+  description: string;
+  color: RgbaColor;
+}
 export async function POST(request: Request) {
   const session = await auth();
   const user = session?.user;

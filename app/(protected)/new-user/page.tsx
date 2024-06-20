@@ -8,8 +8,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { MdDeleteOutline } from "react-icons/md";
 import { TagSchema } from "@/schemas"; // Ensure this path is correct
-import { Label } from "@/types";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+
+interface Label {
+  id: number;
+  label: string;
+  description: string;
+  color: RgbaColor;
+  error: string;
+}
 
 interface CreateLabelInputsProps {
   labelData: Label;

@@ -12,8 +12,10 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.2.0",
     "@google-cloud/local-auth": "^2.1.0",
+    "@google/generative-ai": "^0.13.0",
     "@hookform/resolvers": "^3.6.0",
     "@prisma/client": "^5.15.0",
+    "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
@@ -27,7 +29,7 @@
     "dompurify": "3.1.5",
     "framer-motion": "^11.2.10",
     "googleapis": "^105.0.0",
-    "html-to-text": "^7.0.0",
+    "html-to-text": "9.0.5",
     "mini-svg-data-uri": "^1.4.4",
     "next": "14.2.3",
     "next-auth": "^5.0.0-beta.19",
@@ -47,6 +49,7 @@
   },
   "devDependencies": {
     "@types/dompurify": "^3.0.5",
+    "@types/html-to-text": "^9.0.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

@@ -1,4 +1,4 @@
-import { getAILabels } from "@/actions/inbox/labels";
+import { getAILabels } from "@/actions/genAI/dbOperations";
 export async function GET(request: Request) {
   try {
     const data = await getAILabels();

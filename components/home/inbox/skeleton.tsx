@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 export function EmailListSkeleton() {
   const dummy = Array.from({ length: 50 });
@@ -31,8 +32,9 @@ export function EmailListSkeleton() {
             {dummy.map((dum, index) => {
               return (
                 <TableRow key={index}>
-                  <TableCell>
-                    <Skeleton className="h-4 w-4 max-w-4" />
+                  <TableCell className="py-3">
+                    <ChevronDownIcon />
+                    {/* <Skeleton className="h-4 w-4 max-w-4" /> */}
                   </TableCell>
                   <TableCell>
                     <Skeleton className="h-4 w-20 max-w-20" />
@@ -58,7 +60,7 @@ export function EmailListSkeleton() {
 export function EmailSkeleton() {
   const dummy = Array.from({ length: 50 });
   return (
-    <div className="p-5 ">
+    <div className="p-5">
       <div className="flex items-start justify-between h-12">
         <div className="flex items-start gap-5">
           <Skeleton className="h-7 w-20 rounded-full" />
@@ -71,7 +73,10 @@ export function EmailSkeleton() {
         </div>
       </div>
       <div className="pr-3 border-t rounded-2xl p-5">
-        <div className="ml-20">
+        <div className="mx-10">
+          <Skeleton className="h-28 w-full rounded-3xl" />
+        </div>
+        <div className="ml-20 mt-5">
           <Skeleton className="h-8 w-96 rounded-full" />
         </div>
         <div className="flex justify-between mt-8">

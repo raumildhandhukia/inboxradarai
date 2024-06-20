@@ -1,4 +1,4 @@
-import { getInboxData } from "@/actions/inbox/email";
+import { getInboxData } from "@/actions/mail/email";
 import { Email } from "@/types";
 
 interface ReturnType {

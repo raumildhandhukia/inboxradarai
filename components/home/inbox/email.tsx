@@ -4,12 +4,15 @@ import { Badge } from "@/components/ui/badge";
 export function AILabel({
   children,
   bgColor,
+  className,
 }: {
   children: string;
   bgColor?: string;
+  className?: string;
 }) {
   return (
     <Badge
+      className={`${className} !max-h-5`}
       style={{
         backgroundColor: bgColor,
       }}
@@ -18,16 +21,28 @@ export function AILabel({
     </Badge>
   );
 }
-export const From = ({ from, type }: { from: string; type?: string }) => {
+export const From = ({
+  from,
+  type,
+  className,
+}: {
+  from: string;
+  type?: string;
+  className?: string;
+}) => {
   // from will have this format Raumil D <raumild@gmail.com> we want to extract the name not email
   if (type === "email") {
-    return <div>{from.split("<")[1].split(">")[0]}</div>;
+    return (
+      <div className={`${className}`}>{from.split("<")[1].split(">")[0]}</div>
+    );
   }
   if (type === "full") {
-    return <div>{from}</div>;
+    return <div className={`${className}`}>{from}</div>;
   }
   return (
-    <div className="text-gray-800 dark:text-white">{from.split("<")[0]}</div>
+    <div className={`${className} text-gray-800 dark:text-white`}>
+      {from.split("<")[0]}
+    </div>
   );
 };
 export const To = ({ to, type }: { to: string; type?: string }) => {

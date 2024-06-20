@@ -3,15 +3,11 @@ import React, { createContext } from "react";
 interface InboxContextType {
   emails: any[];
   setEmails: React.Dispatch<React.SetStateAction<any[]>>;
-  test: any[];
-  setTest: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 const InboxContextDefault: InboxContextType = {
   emails: [],
   setEmails: () => {},
-  test: [],
-  setTest: () => {},
 };
 export const InboxContext = createContext(InboxContextDefault);
 interface InboxContextProviderProps {
@@ -19,9 +15,8 @@ interface InboxContextProviderProps {
 }
 const Context: React.FC<InboxContextProviderProps> = ({ children }) => {
   const [emails, setEmails] = React.useState<any[]>([]);
-  const [test, setTest] = React.useState<any[]>(["ka naga"]);
   return (
-    <InboxContext.Provider value={{ emails, setEmails, test, setTest }}>
+    <InboxContext.Provider value={{ emails, setEmails }}>
       {children}
     </InboxContext.Provider>
   );
