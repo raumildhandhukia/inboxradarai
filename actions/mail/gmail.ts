@@ -3,7 +3,12 @@ import { db } from "@/lib/db";
 import { authenticate } from "@google-cloud/local-auth";
 import { google } from "googleapis";
 import { auth } from "@/auth";
-import { Email } from "@/types";
+import { Email, EmailAnalysis } from "@/types";
+import { getAnalysis } from "../genAI/dbOperations";
+
+interface ReturnType extends Email {
+  analysis?: EmailAnalysis;
+}
 
 export const getGoogleApiHandler = async (refresh_token: string) => {
   const session = await auth();
@@ -38,7 +43,7 @@ export async function getEmail(auth: any, id: string, body?: boolean) {
   const labelIds = email.data.labelIds;
   const parts = email.data.payload?.parts || [];
 
-  const mail = {
+  const mail: ReturnType = {
     id,
     labelIds,
     snippet,
@@ -47,10 +52,6 @@ export async function getEmail(auth: any, id: string, body?: boolean) {
     to,
     date,
     body: "",
-    AILabel: {
-      label: "reject",
-      color: "red",
-    },
   };
 
   if (body) {
@@ -69,6 +70,11 @@ export async function getEmail(auth: any, id: string, body?: boolean) {
     }
     mail.body = body;
   }
+  const analysis: EmailAnalysis[] | null = await getAnalysis([id]);
+  if (analysis && analysis.length > 0) {
+    mail.analysis = analysis[0];
+  }
+
   return mail;
 }
 

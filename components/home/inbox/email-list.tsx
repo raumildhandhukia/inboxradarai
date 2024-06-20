@@ -4,38 +4,16 @@ import { TbAnalyze } from "react-icons/tb";
 import { MdDeselect } from "react-icons/md";
 import { IoMdRefreshCircle } from "react-icons/io";
 import FancyButton from "@/components/ui/fancy-button";
-
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  DateTime,
-  Message,
-  From,
-  AILabel,
-} from "@/components/home/inbox/email";
+import EmailListItem from "@/components/home/inbox/email-list-item";
 import { useRouter } from "next/navigation";
 
 interface EmailListProps {
   emails: any[];
-  setEmails: Dispatch<SetStateAction<any[]>>;
   refresh: () => void;
   children?: React.ReactNode;
 }
 
-const EmailList: React.FC<EmailListProps> = ({
-  emails,
-  setEmails,
-  refresh,
-  children,
-}) => {
+const EmailList: React.FC<EmailListProps> = ({ emails, refresh, children }) => {
   const [selectedEmails, setSelectedEmails] = React.useState<string[]>([]);
   const router = useRouter();
 
@@ -89,49 +67,17 @@ const EmailList: React.FC<EmailListProps> = ({
         </div>
         <div>{children}</div>
       </div>
-      <div className="">
-        <Table>
-          <TableBody>
-            {emails.map((email) => {
-              return (
-                <TableRow
-                  className="cursor-pointer transition-colors"
-                  key={email.id}
-                  onClick={() => {
-                    handleEmailClick(email.id);
-                  }}
-                >
-                  <TableCell>
-                    <input
-                      type="checkbox"
-                      {...{ checked: selectedEmails.includes(email.id) }}
-                      value={email.id}
-                      onChange={handleEmailSelect}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <AILabel bgColor={`${email.AILabel.color}`}>
-                      {email.AILabel.label}
-                    </AILabel>
-                  </TableCell>
-                  <TableCell className="max-w-[15vw]">
-                    <From from={email.from} />
-                  </TableCell>
-                  <TableCell className="max-w-[40vw]">
-                    <Message sub={email.subject} body={email.snippet} />
-                  </TableCell>
-                  <TableCell className="min-w-[7vw] text-right !text-[13px]">
-                    <DateTime date={email.date} />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </div>
+
+      {emails.map((email) => (
+        <EmailListItem
+          email={email}
+          key={email.id}
+          selectedEmails={selectedEmails}
+          setSelectedEmails={setSelectedEmails}
+          handleEmailClick={handleEmailClick}
+          handleEmailSelect={handleEmailSelect}
+        />
+      ))}
     </div>
   );
 };

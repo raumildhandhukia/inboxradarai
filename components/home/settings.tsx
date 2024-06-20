@@ -10,8 +10,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { IoMdSettings } from "react-icons/io";
 import { sidebarItems } from "@/data";
-import { getAILabels } from "@/actions/inbox/labels";
-
 interface Label {
   id: string;
   label: string | null;

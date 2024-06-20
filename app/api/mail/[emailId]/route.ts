@@ -1,28 +1,16 @@
-import { getEmail, getGoogleApiHandler } from "@/actions/inbox/gmail";
-import { auth } from "@/auth";
-import { getRefresh } from "@/actions/auth/refreshToken";
 import { Email } from "@/types";
+import { getEmailData } from "@/actions/mail/email";
 
 export async function GET(
   request: Request,
   { params }: { params: { emailId: string } }
 ) {
   try {
-    const session = await auth();
-    const user = session?.user;
-    if (!user || !user.id) {
+    const data: Email | null = await getEmailData(params.emailId);
+    if (!data) {
       return new Response("Unauthorized", { status: 401 });
     }
-    const refresh = await getRefresh(user.id);
-    if (!refresh) {
-      return new Response("Unauthorized", { status: 401 });
-    }
-    const { refresh_token } = refresh;
-
-    const handler = await getGoogleApiHandler(refresh_token);
-    const data: Email = await getEmail(handler, params.emailId, true);
-
-    return Response.json(data);
+    return Response.json(data, { status: 200 });
   } catch (e) {
     return new Response("Error", { status: 500 });
   }

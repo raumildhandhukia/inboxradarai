@@ -1,11 +1,25 @@
 import { RgbaColor } from "react-colorful";
 
 export interface Label {
-  id: number;
-  label: string;
-  description: string;
-  color: RgbaColor;
-  error: string;
+  id: string;
+  label: string | null | undefined;
+  description: string | null | undefined;
+  color: string | null | undefined;
+}
+
+export interface Tag {
+  id: string;
+  label: string | null | undefined;
+  description: string | null | undefined;
+  color: string | null | undefined;
+}
+
+export interface EmailAnalysis {
+  emailId: string;
+  summary: string | null | undefined;
+  isImportant: boolean | null | undefined;
+  actions: string[] | null | undefined;
+  tag: Tag | null | undefined;
 }
 
 export interface Email {
@@ -17,8 +31,4 @@ export interface Email {
   to: string | null | undefined;
   date: string | null | undefined;
   body: string | null | undefined;
-  AILabel: {
-    label: string;
-    color: string;
-  };
 }

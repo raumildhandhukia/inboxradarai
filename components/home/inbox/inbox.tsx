@@ -11,7 +11,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { start } from "repl";
 
 interface InboxProps {
   type: string | null;
@@ -38,12 +37,14 @@ const Inbox: React.FC<InboxProps> = ({ type }) => {
           },
         }
       );
-      const data = await res.json();
-      setEmails(data.emails);
-      setPageTokens((prev) => {
-        prev[page] = data.nextPageToken;
-        return prev;
-      });
+      if (res.ok) {
+        const data = await res.json();
+        setEmails(data.emails);
+        setPageTokens((prev) => {
+          prev[page] = data.nextPageToken;
+          return prev;
+        });
+      }
     };
     if (refreshEmails) {
       startTransition(async () => {
@@ -84,11 +85,7 @@ const Inbox: React.FC<InboxProps> = ({ type }) => {
       {isLoading ? (
         <EmailListSkeleton />
       ) : (
-        <EmailList
-          emails={emails}
-          setEmails={setEmails}
-          refresh={handleRefresh}
-        >
+        <EmailList emails={emails} refresh={handleRefresh}>
           <Paginations prev={<Prev />} current={<Current />} next={<Next />} />
         </EmailList>
       )}

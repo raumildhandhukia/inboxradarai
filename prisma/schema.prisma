@@ -44,11 +44,17 @@ model Tag {
 
 model ProcessedEmails {
   id        String   @id @default(cuid())
-  emailId   String
-  tagId     String
+  emailId   String   @unique
+  userId    String
+  tagId     String?
+  summary   String?
+  actions   String[]
+  isImportant Boolean @default(false) @map("is_important")
   createdAt DateTime @default(now())
 
-  tag Tag @relation(fields: [tagId], references: [id])
+  tag Tag? @relation(fields: [tagId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
 }
 
 model User {
@@ -73,6 +79,8 @@ model User {
   tags                  Tag[]
 
   setting               UserSettings[]
+
+  processedEmails       ProcessedEmails[]
   
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
