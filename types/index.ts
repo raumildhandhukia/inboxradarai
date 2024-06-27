@@ -2,25 +2,56 @@ import { RgbaColor } from "react-colorful";
 
 export interface Label {
   id: string;
-  label: string | null | undefined;
-  description: string | null | undefined;
-  color: string | null | undefined;
+  label: string;
+  description: string;
+  color: string;
+  predefinedId?: number;
+  isActive: boolean;
 }
 
 export interface Tag {
   id: string;
-  label: string | null | undefined;
-  description: string | null | undefined;
-  color: string | null | undefined;
+  label: string;
+  description: string;
+  color: string;
 }
 
 export interface EmailAnalysis {
+  summary: string;
+  isImportant: boolean;
+  actions: string[];
+  tag: Tag;
   emailId: string;
-  summary: string | null | undefined;
-  isImportant: boolean | null | undefined;
-  actions: string[] | null | undefined;
-  tag: Tag | null | undefined;
 }
+
+export interface AnalysisTypeBase {
+  success: boolean;
+}
+
+export interface AnalysisSuccess extends AnalysisTypeBase {
+  success: true;
+  analysis: EmailAnalysis;
+}
+
+export interface AnalysisFailure extends AnalysisTypeBase {
+  success: false;
+  analysis?: undefined;
+}
+
+export type AnalysisType = AnalysisSuccess | AnalysisFailure;
+
+export interface FailureResponseType extends AnalysisFailure {
+  emailId: string;
+  limitExceeded?: boolean;
+  timeLeft?: number;
+  emailsLeft?: number;
+}
+
+export interface SuccessResponseType extends AnalysisSuccess {
+  emailId: string;
+}
+
+export type AnalysisResponseType = SuccessResponseType | FailureResponseType;
 
 export interface Email {
   id: string;

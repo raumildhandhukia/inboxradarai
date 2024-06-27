@@ -85,9 +85,15 @@ const Inbox: React.FC<InboxProps> = ({ type }) => {
       {isLoading ? (
         <EmailListSkeleton />
       ) : (
-        <EmailList emails={emails} refresh={handleRefresh}>
-          <Paginations prev={<Prev />} current={<Current />} next={<Next />} />
-        </EmailList>
+        <div className="mx-5 border-t rounded-3xl shadow-lg">
+          <EmailList emails={emails} refresh={handleRefresh}>
+            <Paginations
+              prev={<Prev />}
+              current={<Current />}
+              next={<Next />}
+            />
+          </EmailList>
+        </div>
       )}
     </div>
   );

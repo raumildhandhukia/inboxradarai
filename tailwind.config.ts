@@ -17,6 +17,13 @@ const config = {
     "./data/**/*.{ts,tsx}",
   ],
   prefix: "",
+  variants: {
+    extend: {
+      animation: ["hover"],
+      scale: ["hover"],
+      transform: ["hover"],
+    },
+  },
   theme: {
     container: {
       center: true,
@@ -154,8 +161,13 @@ const config = {
             transform: "translate(calc(-50% - 0.5rem))",
           },
         },
+        spin360: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
       },
       animation: {
+        spin360: "spin360 4s linear infinite",
         "meteor-effect": "meteor 5s linear infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",

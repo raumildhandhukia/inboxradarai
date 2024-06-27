@@ -1,7 +1,13 @@
-import { getAILabels } from "@/actions/genAI/dbOperations";
+import { getAILabels } from "@/data/AIOperations";
+import { auth } from "@/auth";
 export async function GET(request: Request) {
+  const session = await auth();
+  const user = session?.user;
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   try {
-    const data = await getAILabels();
+    const data = await getAILabels(user);
     if (!data) {
       return new Response("Unauthorized", { status: 401 });
     }

@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import Link from "next/link";
 
 const Profile = () => {
   const user = useCurrentUser();
@@ -38,16 +39,16 @@ const Profile = () => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="hover:cursor-pointer">
-          AI Labels
+          <button>
+            <Link href="/label-settings">AI Labels</Link>
+          </button>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="hover:cursor-pointer">
           Subscription
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="hover:cursor-pointer">
-          Upgrade
-        </DropdownMenuItem>
+
         <DropdownMenuSeparator />
       </DropdownMenuContent>
     </DropdownMenu>

@@ -3,12 +3,13 @@ import type { NextAuthConfig } from "next-auth";
 import { storeRefresh } from "@/actions/auth/refreshToken";
 import { populateUser } from "@/actions/auth/populateUser";
 import { db } from "@/lib/db";
+import { userInfo } from "./actions/auth/getUserInfo";
 
 export default {
   pages: {
     signIn: "/auth/login",
     error: "/auth/error",
-    newUser: "/new-user",
+    newUser: "/label-settings",
   },
   events: {
     async linkAccount({ user }) {
@@ -36,7 +37,9 @@ export default {
     },
     async session({ session, token }) {
       if (session && token && session.user && token.sub) {
+        const user = await userInfo(token.sub);
         session.user.id = token.sub;
+        session.user.plan = user?.plan;
       }
       return session;
     },

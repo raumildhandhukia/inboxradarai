@@ -1,5 +1,6 @@
-import { getInboxData } from "@/actions/mail/email";
+import { getInboxData } from "@/data/email";
 import { Email } from "@/types";
+import { auth } from "@/auth";
 
 interface ReturnType {
   emails: Email[];
@@ -7,11 +8,16 @@ interface ReturnType {
 }
 
 export async function GET(request: Request) {
+  const session = await auth();
+  const user = session?.user;
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   try {
     const { searchParams } = new URL(request.url);
     const page = searchParams.get("page");
     const type = searchParams.get("type");
-    const data: ReturnType | null = await getInboxData(page, type);
+    const data: ReturnType | null = await getInboxData(page, type, user);
     if (!data) {
       return new Response("Unauthorized", { status: 401 });
     }

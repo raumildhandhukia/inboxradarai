@@ -100,3 +100,28 @@ export function EmailSkeleton() {
     </div>
   );
 }
+export const EmailListItemSkeleton = () => {
+  return (
+    <div className="w-full flex gap-10">
+      <div>
+        <Skeleton className="ml-3 h-8 w-7 rounded-xl bg-primary/10" />
+      </div>
+      <div className="w-[12vw] flex flex-col gap-1 -ml-5">
+        <Skeleton className="h-4 w-full rounded-md bg-primary/10" />
+        <div className="flex gap-2">
+          <Skeleton className="h-4 w-12 rounded-md bg-primary/10" />
+          <Skeleton className="h-4 w-16 rounded-md bg-primary/10" />
+        </div>
+      </div>
+      <div className="w-[20vw] flex-1 ml-1">
+        <div className="flex flex-col gap-1">
+          <Skeleton className="h-4 w-full rounded-md bg-primary/10" />
+          <Skeleton className="h-4 w-[75%] rounded-md bg-primary/10" />
+        </div>
+      </div>
+      <div className="">
+        <Skeleton className="h-4 w-[10vw] rounded-md bg-primary/10" />
+      </div>
+    </div>
+  );
+};

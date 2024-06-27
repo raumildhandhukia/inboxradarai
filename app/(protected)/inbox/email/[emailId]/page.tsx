@@ -30,6 +30,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { EmailAnalysis } from "@/types";
+import LimitExceeded from "@/components/home/inbox/limit-exceeded";
 
 interface EmailListProps {
   params: { emailId: string };
@@ -40,11 +42,25 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
   const router = useRouter();
   const { emails } = useContext(InboxContext);
   const [email, setEmail] = React.useState<Email>();
-  const [emailAnalysis, setEmailAnalysis] = React.useState<any>({});
+  const [emailAnalysis, setEmailAnalysis] =
+    React.useState<EmailAnalysis | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [isAnalyzing, startAnalysis] = useTransition();
   const [paginationActive, setPaginationActive] =
     React.useState<boolean>(false);
+  const [cooldown, setCooldown] = React.useState<number>(0);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (cooldown > 0) {
+      interval = setInterval(() => {
+        setCooldown(cooldown - 1);
+      }, 1000);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [cooldown]);
 
   useEffect(() => {
     const getEmail = async () => {
@@ -80,11 +96,16 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
           emailIDs: [emailId],
         }),
       });
+
       if (res.ok) {
         const data = await res.json();
         const emailAnalysis = data[0];
         if (emailAnalysis.success) {
           setEmailAnalysis(emailAnalysis.analysis);
+        }
+        if (emailAnalysis.limitExceeded) {
+          setEmailAnalysis(null);
+          setCooldown(emailAnalysis.timeLeft);
         }
       }
     });
@@ -97,8 +118,33 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
   };
 
   const handleBack = () => {
-    router.push("/inbox");
+    router.back();
   };
+  const renderCooldown = () => (
+    <div className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl">
+      <div className="p-5">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+            <AccordionTrigger className="font-bold text-black text-xl">
+              Upgrade Your Plan
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="flex justify-start items-center gap-5 px-2">
+                <LimitExceeded
+                  timer={cooldown}
+                  handleAnalyze={handleAnalyze}
+                  setCooldown={() => {
+                    setCooldown(0);
+                  }}
+                  emailsLeft={true}
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </div>
+  );
 
   const renderEmail = () => (
     <div className="p-5">
@@ -110,21 +156,23 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
               <p className="">Back</p>
             </div>
           </FancyButton>
-          <FancyButton onClick={handleAnalyze}>
-            <div className="flex gap-3">
-              <TbAnalyze className="scale-[1.5] mt-[5px]" />
-              <p className="">Analyze</p>
-            </div>
-          </FancyButton>
+          {!isAnalyzing && (
+            <FancyButton onClick={handleAnalyze}>
+              <div className="flex gap-3">
+                <TbAnalyze className="scale-[1.5] mt-[5px]" />
+                <p className="">Analyze</p>
+              </div>
+            </FancyButton>
+          )}
         </div>
         {paginationActive && <Pagination emailId={emailId} emails={emails} />}
       </div>
-      <div className="pr-3 w-full border-t rounded-2xl shadow-lg p-5">
+      <div
+        className="pr-3 w-full border-t rounded-2xl shadow-lg p-5"
+        onClick={handleClickOnAI}
+      >
         {emailAnalysis && !isAnalyzing ? (
-          <div
-            className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl"
-            onClick={handleClickOnAI}
-          >
+          <div className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl">
             <div className="p-5">
               <Accordion type="single" collapsible>
                 <AccordionItem value="item-1">
@@ -134,9 +182,13 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
                   <AccordionContent>
                     <div className="">
                       <div className="flex gap-5">
-                        {emailAnalysis?.tag && (
-                          <AILabel bgColor={emailAnalysis?.tag?.color}>
-                            {emailAnalysis?.tag?.label}
+                        {emailAnalysis?.tag && emailAnalysis?.tag?.label && (
+                          <AILabel
+                            bgColor={
+                              emailAnalysis?.tag?.color || "rgba(0,0,0,0.1)"
+                            }
+                          >
+                            <span>{emailAnalysis?.tag?.label}</span>
                           </AILabel>
                         )}
 
@@ -172,6 +224,8 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
               </Accordion>
             </div>
           </div>
+        ) : cooldown > 0 ? (
+          renderCooldown()
         ) : (
           renderSkeleton()
         )}
@@ -270,7 +324,7 @@ const renderSkeleton = () => (
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger className="font-bold text-black text-xl">
-            AI Insights
+            Getting your email insights using AI
           </AccordionTrigger>
           <AccordionContent>
             <div className="">
@@ -296,4 +350,5 @@ const renderSkeleton = () => (
     </div>
   </div>
 );
+
 export default EmailDetail;
