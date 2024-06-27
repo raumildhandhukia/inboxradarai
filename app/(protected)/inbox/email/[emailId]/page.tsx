@@ -51,7 +51,7 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
 
   const [cooldown, setCooldown] = React.useState<boolean>(false);
   const [cooldownTime, setCooldownTime] = React.useState<number>(0);
-  const [emailsLeft, setEmailsLeft] = React.useState<number>(0);
+  const [emailsLeft, setEmailsLeft] = React.useState<boolean>(true);
 
   useEffect(() => {
     const getEmail = async () => {
@@ -97,6 +97,7 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
         if (emailAnalysis.limitExceeded) {
           setEmailAnalysis(null);
           setCooldown(emailAnalysis.timeLeft);
+          setEmailsLeft(emailAnalysis.emailsLeft > 0);
         }
       }
     });
@@ -111,29 +112,59 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
   const handleBack = () => {
     router.back();
   };
-  const renderCooldown = () => (
-    <div className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl">
-      <div className="p-5">
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="font-bold text-black text-xl">
-              Upgrade Your Plan
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="flex justify-start items-center gap-5 px-2">
-                <LimitExceeded
-                  timer={cooldownTime}
-                  handleAnalyze={handleAnalyze}
-                  setCooldown={() => {
-                    setCooldown(false);
-                  }}
-                  emailsLeft={true}
-                />
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+
+  const getAccordianTitle = () => {
+    if (cooldown) {
+      return "Upgrade Your Plan";
+    } else {
+      if (isAnalyzing) {
+        return "Getting your email insights using AI";
+      }
+      return "AI Insights";
+    }
+  };
+  const renderEmailAnalysis = () => {
+    return (
+      <div className="">
+        <div className="flex gap-5">
+          {emailAnalysis?.tag && emailAnalysis?.tag?.label && (
+            <AILabel bgColor={emailAnalysis?.tag?.color || "rgba(0,0,0,0.1)"}>
+              <span>{emailAnalysis?.tag?.label}</span>
+            </AILabel>
+          )}
+
+          <span className="italic font-bold ml-1">
+            {emailAnalysis &&
+              (emailAnalysis?.isImportant ? " Important" : " Not Important")}
+          </span>
+        </div>
+        <h2 className="mt-2 ml-1">{emailAnalysis?.summary}</h2>
+        <div className="flex flex-col gap-1 ml-1 mt-2">
+          {emailAnalysis?.actions && emailAnalysis?.actions.length > 0 && (
+            <>
+              <span className="font-bold">Suggested Actions:</span>
+              {emailAnalysis?.actions?.map((action: string, index: number) => (
+                <span key={index}>
+                  {`${index + 1}) `}
+                  {action}
+                </span>
+              ))}
+            </>
+          )}
+        </div>
       </div>
+    );
+  };
+  const renderCooldown = () => (
+    <div className="flex justify-start items-center gap-5 px-2">
+      <LimitExceeded
+        timer={cooldownTime}
+        handleAnalyze={handleAnalyze}
+        setCooldown={() => {
+          setCooldown(false);
+        }}
+        emailsLeft={emailsLeft}
+      />
     </div>
   );
 
@@ -162,66 +193,27 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
         className="pr-3 w-full border-t rounded-2xl shadow-lg p-5"
         onClick={handleClickOnAI}
       >
-        {!isAnalyzing ? (
-          emailAnalysis ? (
-            <div className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl">
-              <div className="p-5">
-                <Accordion type="single" collapsible>
-                  <AccordionItem value="item-1">
-                    <AccordionTrigger className="font-bold text-black text-xl">
-                      AI Insights
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="">
-                        <div className="flex gap-5">
-                          {emailAnalysis?.tag && emailAnalysis?.tag?.label && (
-                            <AILabel
-                              bgColor={
-                                emailAnalysis?.tag?.color || "rgba(0,0,0,0.1)"
-                              }
-                            >
-                              <span>{emailAnalysis?.tag?.label}</span>
-                            </AILabel>
-                          )}
-
-                          <span className="italic font-bold ml-1">
-                            {emailAnalysis &&
-                              (emailAnalysis?.isImportant
-                                ? " Important"
-                                : " Not Important")}
-                          </span>
-                        </div>
-                        <h2 className="mt-2 ml-1">{emailAnalysis?.summary}</h2>
-                        <div className="flex flex-col gap-1 ml-1 mt-2">
-                          {emailAnalysis?.actions &&
-                            emailAnalysis?.actions.length > 0 && (
-                              <>
-                                <span className="font-bold">
-                                  Suggested Actions:
-                                </span>
-                                {emailAnalysis?.actions?.map(
-                                  (action: string, index: number) => (
-                                    <span key={index}>
-                                      {`${index + 1}) `}
-                                      {action}
-                                    </span>
-                                  )
-                                )}
-                              </>
-                            )}
-                        </div>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </div>
-            </div>
-          ) : (
-            renderCooldown()
-          )
-        ) : (
-          <EmailDetailsSkeleton />
-        )}
+        <div className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl">
+          <div className="p-5">
+            <Accordion type="single" collapsible>
+              <AccordionItem value="item-1">
+                <AccordionTrigger className="font-bold text-black text-xl">
+                  {getAccordianTitle()}
+                </AccordionTrigger>
+                <AccordionContent>
+                  {" "}
+                  {cooldown ? (
+                    renderCooldown()
+                  ) : isAnalyzing ? (
+                    <EmailDetailsSkeleton />
+                  ) : (
+                    renderEmailAnalysis()
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        </div>
 
         <h2 className="text-3xl font-bold ml-20 mt-5">{email?.subject}</h2>
 
