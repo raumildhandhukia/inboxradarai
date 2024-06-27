@@ -37,7 +37,7 @@ const EmailList: React.FC<EmailListProps> = ({ emails, refresh, children }) => {
           {selectedEmails.length === 0 ? (
             <FancyButton onClick={refresh}>
               <div className="flex gap-3">
-                <IoMdRefreshCircle className="scale-[1.5] mt-[5px]" />
+                <IoMdRefreshCircle className="scale-[1.5] mt-[5px] hover:animate-spin360" />
                 <p className="">Reload</p>
               </div>
             </FancyButton>

@@ -34,6 +34,7 @@ model Tag {
   label        String
   description String?
   color       String?
+  predefinedId Int?
   isActive    Boolean @default(true) @map ("is_active")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -68,7 +69,7 @@ model User {
   
   plan                      String?
   emailProcessed            Int?                     @map("email_processed")
-  
+  nextAPITime           DateTime?                @map("next_ai_analysys")
   stripeSubscriptionId      String?                 @unique @map("stripe_subscription_id")
   stripePriceId             String?                 @unique @map("stripe_price_id")
   stripeCurrentPeriodEnd    DateTime?               @map("stripe_current_period_end")

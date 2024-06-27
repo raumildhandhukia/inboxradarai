@@ -12,11 +12,11 @@ const SearchBar = () => {
   return (
     <div className="fixed ml-10 h-[10vh] flex items-center justify-center gap-4">
       <div className=" w-[50vw]">
-        <PlaceholdersAndVanishInput
+        {/* <PlaceholdersAndVanishInput
           placeholders={placeholders}
           onChange={() => {}}
           onSubmit={() => {}}
-        />
+        /> */}
       </div>
       <FancyButton className="text-[13px]">From</FancyButton>
       <FancyButton className="text-[13px]">To</FancyButton>

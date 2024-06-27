@@ -1,3 +1,4 @@
+"use server";
 import { db } from "@/lib/db";
 import { generateFromEmail } from "unique-username-generator";
 

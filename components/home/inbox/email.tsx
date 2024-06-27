@@ -1,23 +1,39 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
+import { MdClose } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 
 export function AILabel({
   children,
   bgColor,
   className,
+  deleteLabel,
+  isActive,
 }: {
-  children: string;
+  children: React.ReactNode;
   bgColor?: string;
   className?: string;
+  deleteLabel?: () => void;
+  isActive?: boolean;
 }) {
   return (
     <Badge
-      className={`${className} !max-h-5`}
+      className={`${className} !max-h-5 ${
+        isActive ? "shadow-xl transform translate-y-[-5px] scale-[105%]" : ""
+      }`}
       style={{
         backgroundColor: bgColor,
       }}
     >
-      {children}
+      <div className="flex gap-2 leading-3 text-black">
+        {children}
+        {deleteLabel && (
+          <MdClose
+            onClick={deleteLabel}
+            className="cursor-pointer text-red-900"
+          />
+        )}
+      </div>
     </Badge>
   );
 }

@@ -4,18 +4,14 @@ import { authenticate } from "@google-cloud/local-auth";
 import { google } from "googleapis";
 import { auth } from "@/auth";
 import { Email, EmailAnalysis } from "@/types";
-import { getAnalysis } from "../genAI/dbOperations";
+import { getAnalysis } from "./AIOperations";
+import { User } from "next-auth";
 
 interface ReturnType extends Email {
   analysis?: EmailAnalysis;
 }
 
 export const getGoogleApiHandler = async (refresh_token: string) => {
-  const session = await auth();
-  const user = session?.user;
-  if (!user || !user.id) {
-    return null;
-  }
   const token = {
     type: "authorized_user",
     client_id: process.env.AUTH_GOOGLE_ID,
@@ -26,7 +22,12 @@ export const getGoogleApiHandler = async (refresh_token: string) => {
   return google.auth.fromJSON(token);
 };
 
-export async function getEmail(auth: any, id: string, body?: boolean) {
+export async function getEmail(
+  auth: any,
+  id: string,
+  user: User,
+  body?: boolean
+) {
   const gmail = google.gmail({ version: "v1", auth });
   const email = await gmail.users.messages.get({
     userId: "me",
@@ -70,7 +71,7 @@ export async function getEmail(auth: any, id: string, body?: boolean) {
     }
     mail.body = body;
   }
-  const analysis: EmailAnalysis[] | null = await getAnalysis([id]);
+  const analysis: EmailAnalysis[] | null = await getAnalysis([id], user);
   if (analysis && analysis.length > 0) {
     mail.analysis = analysis[0];
   }
@@ -81,7 +82,8 @@ export async function getEmail(auth: any, id: string, body?: boolean) {
 export async function listEmails(
   auth: any,
   page: string | null,
-  type: string | null
+  type: string | null,
+  user: User
 ) {
   const gmail = google.gmail({ version: "v1", auth });
   let res;
@@ -119,7 +121,7 @@ export async function listEmails(
   const nextPageToken = res.data.nextPageToken;
   const emails: Email[] = await Promise.all(
     messages.map(async (message: any) => {
-      return await getEmail(auth, message.id);
+      return await getEmail(auth, message.id, user);
     })
   );
 

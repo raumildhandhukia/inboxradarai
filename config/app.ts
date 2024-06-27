@@ -3,10 +3,11 @@ export const PLANS = [
     id: 1,
     name: "Free",
     plan: "FREE",
-    emailsAllowed: 100,
-    insights: false,
+    emailsAllowed: 101,
     processLimit: true,
-    customTag: false,
+    autoProcess: false,
+    customTag: 3,
+    totalTags: 6,
     price: {
       amount: 0,
       priceIds: {
@@ -19,10 +20,11 @@ export const PLANS = [
     id: 3,
     name: "Pro",
     plan: "PRO",
-    emailsAllowed: 100,
-    insights: true,
-    processLimit: true,
-    customTag: false,
+    emailsAllowed: 1000,
+    processLimit: false,
+    autoProcess: true,
+    customTag: 8,
+    totalTags: 12,
     price: {
       amount: 1.99,
       priceIds: {
@@ -36,9 +38,10 @@ export const PLANS = [
     name: "Max",
     plan: "MAX",
     emailsAllowed: 5000,
-    insights: true,
     processLimit: false,
-    customTag: true,
+    autoProcess: true,
+    customTag: 20,
+    totalTags: 25,
     price: {
       amount: 4.99,
       priceIds: {
@@ -48,3 +51,5 @@ export const PLANS = [
     },
   },
 ];
+
+export const REQUEST_COOL_DOWN = 1000 * 60 * 1; // 1 minutes

@@ -10,12 +10,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { IoMdSettings } from "react-icons/io";
 import { sidebarItems } from "@/data";
-interface Label {
-  id: string;
-  label: string | null;
-  color: string | null;
-  description: string | null;
-}
+import { Label } from "@/types";
 
 const Settings = ({}: {}) => {
   const [aiLabels, setAILabels] = React.useState<Label[]>([]);
