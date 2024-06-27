@@ -1,3 +1,4 @@
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -125,3 +126,35 @@ export const EmailListItemSkeleton = () => {
     </div>
   );
 };
+export const EmailDetailsSkeleton = () => (
+  <div className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl">
+    <div className="p-5">
+      <Accordion type="single" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger className="font-bold text-black text-xl">
+            Getting your email insights using AI
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="">
+              <div className="flex gap-5 ml-1">
+                <Skeleton className="w-16 h-4" />
+
+                <Skeleton className="w-24 h-4" />
+              </div>
+              <div className="mt-2 ml-1">
+                <Skeleton className="w-full h-4" />
+                <Skeleton className="w-[65%] h-4 mt-1" />
+              </div>
+              <div className="flex flex-col gap-1 ml-1 mt-2">
+                <Skeleton className="w-36 h-4" />
+
+                <Skeleton className="w-20 h-4" />
+                <Skeleton className="w-24 h-4" />
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
+  </div>
+);

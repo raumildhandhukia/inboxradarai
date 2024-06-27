@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Email } from "@/types";
 import { EmailSkeleton } from "@/components/home/inbox/skeleton";
 import { decodeAndSanitizeHTML } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
+import { EmailDetailsSkeleton } from "@/components/home/inbox/skeleton";
 import {
   Accordion,
   AccordionContent,
@@ -48,19 +48,10 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
   const [isAnalyzing, startAnalysis] = useTransition();
   const [paginationActive, setPaginationActive] =
     React.useState<boolean>(false);
-  const [cooldown, setCooldown] = React.useState<number>(0);
 
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (cooldown > 0) {
-      interval = setInterval(() => {
-        setCooldown(cooldown - 1);
-      }, 1000);
-    }
-    return () => {
-      clearInterval(interval);
-    };
-  }, [cooldown]);
+  const [cooldown, setCooldown] = React.useState<boolean>(false);
+  const [cooldownTime, setCooldownTime] = React.useState<number>(0);
+  const [emailsLeft, setEmailsLeft] = React.useState<number>(0);
 
   useEffect(() => {
     const getEmail = async () => {
@@ -131,10 +122,10 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
             <AccordionContent>
               <div className="flex justify-start items-center gap-5 px-2">
                 <LimitExceeded
-                  timer={cooldown}
+                  timer={cooldownTime}
                   handleAnalyze={handleAnalyze}
                   setCooldown={() => {
-                    setCooldown(0);
+                    setCooldown(false);
                   }}
                   emailsLeft={true}
                 />
@@ -171,63 +162,65 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
         className="pr-3 w-full border-t rounded-2xl shadow-lg p-5"
         onClick={handleClickOnAI}
       >
-        {emailAnalysis && !isAnalyzing ? (
-          <div className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl">
-            <div className="p-5">
-              <Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
-                  <AccordionTrigger className="font-bold text-black text-xl">
-                    AI Insights
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="">
-                      <div className="flex gap-5">
-                        {emailAnalysis?.tag && emailAnalysis?.tag?.label && (
-                          <AILabel
-                            bgColor={
-                              emailAnalysis?.tag?.color || "rgba(0,0,0,0.1)"
-                            }
-                          >
-                            <span>{emailAnalysis?.tag?.label}</span>
-                          </AILabel>
-                        )}
-
-                        <span className="italic font-bold ml-1">
-                          {emailAnalysis &&
-                            (emailAnalysis?.isImportant
-                              ? " Important"
-                              : " Not Important")}
-                        </span>
-                      </div>
-                      <h2 className="mt-2 ml-1">{emailAnalysis?.summary}</h2>
-                      <div className="flex flex-col gap-1 ml-1 mt-2">
-                        {emailAnalysis?.actions &&
-                          emailAnalysis?.actions.length > 0 && (
-                            <>
-                              <span className="font-bold">
-                                Suggested Actions:
-                              </span>
-                              {emailAnalysis?.actions?.map(
-                                (action: string, index: number) => (
-                                  <span key={index}>
-                                    {`${index + 1}) `}
-                                    {action}
-                                  </span>
-                                )
-                              )}
-                            </>
+        {!isAnalyzing ? (
+          emailAnalysis ? (
+            <div className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl">
+              <div className="p-5">
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger className="font-bold text-black text-xl">
+                      AI Insights
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="">
+                        <div className="flex gap-5">
+                          {emailAnalysis?.tag && emailAnalysis?.tag?.label && (
+                            <AILabel
+                              bgColor={
+                                emailAnalysis?.tag?.color || "rgba(0,0,0,0.1)"
+                              }
+                            >
+                              <span>{emailAnalysis?.tag?.label}</span>
+                            </AILabel>
                           )}
+
+                          <span className="italic font-bold ml-1">
+                            {emailAnalysis &&
+                              (emailAnalysis?.isImportant
+                                ? " Important"
+                                : " Not Important")}
+                          </span>
+                        </div>
+                        <h2 className="mt-2 ml-1">{emailAnalysis?.summary}</h2>
+                        <div className="flex flex-col gap-1 ml-1 mt-2">
+                          {emailAnalysis?.actions &&
+                            emailAnalysis?.actions.length > 0 && (
+                              <>
+                                <span className="font-bold">
+                                  Suggested Actions:
+                                </span>
+                                {emailAnalysis?.actions?.map(
+                                  (action: string, index: number) => (
+                                    <span key={index}>
+                                      {`${index + 1}) `}
+                                      {action}
+                                    </span>
+                                  )
+                                )}
+                              </>
+                            )}
+                        </div>
                       </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
             </div>
-          </div>
-        ) : cooldown > 0 ? (
-          renderCooldown()
+          ) : (
+            renderCooldown()
+          )
         ) : (
-          renderSkeleton()
+          <EmailDetailsSkeleton />
         )}
 
         <h2 className="text-3xl font-bold ml-20 mt-5">{email?.subject}</h2>
@@ -317,38 +310,5 @@ const Pagination = ({ emailId, emails }: PaginationProps) => {
     </div>
   );
 };
-
-const renderSkeleton = () => (
-  <div className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl">
-    <div className="p-5">
-      <Accordion type="single" collapsible>
-        <AccordionItem value="item-1">
-          <AccordionTrigger className="font-bold text-black text-xl">
-            Getting your email insights using AI
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="">
-              <div className="flex gap-5 ml-1">
-                <Skeleton className="w-16 h-4" />
-
-                <Skeleton className="w-24 h-4" />
-              </div>
-              <div className="mt-2 ml-1">
-                <Skeleton className="w-full h-4" />
-                <Skeleton className="w-[65%] h-4 mt-1" />
-              </div>
-              <div className="flex flex-col gap-1 ml-1 mt-2">
-                <Skeleton className="w-36 h-4" />
-
-                <Skeleton className="w-20 h-4" />
-                <Skeleton className="w-24 h-4" />
-              </div>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </div>
-  </div>
-);
 
 export default EmailDetail;
