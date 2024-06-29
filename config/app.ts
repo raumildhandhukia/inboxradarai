@@ -3,7 +3,7 @@ export const PLANS = [
     id: 1,
     name: "Free",
     plan: "FREE",
-    emailsAllowed: 102,
+    emailsAllowed: 100,
     processLimit: true,
     autoProcess: false,
     customTag: 3,

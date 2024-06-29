@@ -12,7 +12,7 @@ import { MdClose, MdEdit, MdSave } from "react-icons/md";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { TagSchema } from "@/schemas";
-import { AILabel } from "./inbox/email";
+import { AILabel } from "./inbox/email-detail/email";
 
 interface LabelListProps {
   predefined?: boolean;
