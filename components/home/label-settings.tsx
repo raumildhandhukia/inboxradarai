@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AILabel } from "@/components/home/inbox/email";
+import { AILabel } from "@/components/home/inbox/email-detail/email";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import FancyButton from "@/components/ui/fancy-button";
 import { ToastAction } from "@/components/ui/toast";
