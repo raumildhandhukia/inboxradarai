@@ -4,7 +4,7 @@ import { PlaceholdersAndVanishInput } from "@/components/ui/vanish-input";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
 import { Label } from "@/types";
-import { AILabel } from "./inbox/email";
+import { AILabel } from "./inbox/email-detail/email";
 import { ScrollArea } from "../ui/scroll-area";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { PLANS } from "@/config/app";

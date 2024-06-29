@@ -4,7 +4,7 @@ import { TbAnalyze } from "react-icons/tb";
 import { MdDeselect } from "react-icons/md";
 import { IoMdRefreshCircle } from "react-icons/io";
 import FancyButton from "@/components/ui/fancy-button";
-import EmailListItem from "@/components/home/inbox/email-list-item";
+import EmailListItem from "@/components/home/inbox/email-list/email-list-item";
 import { useRouter } from "next/navigation";
 
 interface EmailListProps {

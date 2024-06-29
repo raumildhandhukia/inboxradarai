@@ -1,7 +1,7 @@
 "use client";
 import { InboxContext } from "@/context/inbox-context";
 import React, { useContext, useTransition } from "react";
-import EmailList from "@/components/home/inbox/email-list";
+import EmailList from "@/components/home/inbox/email-list/email-list";
 import Paginations from "@/components/home/inbox/pagination";
 import { EmailListSkeleton } from "@/components/home/inbox/skeleton";
 

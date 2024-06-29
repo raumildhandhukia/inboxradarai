@@ -5,25 +5,27 @@ import { TbAnalyze } from "react-icons/tb";
 interface LimitExceededProps {
   timer: number;
   handleAnalyze: (getExisting: boolean) => void;
-  setCooldown: () => void;
+  removeCooldown: () => void;
   emailsLeft: boolean;
 }
 
 const LimitExceeded: React.FC<LimitExceededProps> = ({
   timer,
   handleAnalyze,
-  setCooldown,
+  removeCooldown,
   emailsLeft,
 }) => {
-  const [timeLeft, setTimeLeft] = useState(timer);
+  const [timeLeft, setTimeLeft] = useState<number>(timer || 0);
   useEffect(() => {
     if (timeLeft > 0) {
       setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    } else {
+      if (emailsLeft) {
+        removeCooldown();
+      }
     }
-    if (timeLeft <= 0 && emailsLeft) {
-      setCooldown();
-    }
-  }, [emailsLeft, setCooldown, timeLeft]);
+  }, [emailsLeft, removeCooldown, timeLeft]);
+  debugger;
 
   return (
     <div className="flex justify-center items-center gap-5 px-2">

@@ -1,37 +1,12 @@
 "use client";
-import React, { useContext, useTransition, useEffect } from "react";
-import { InboxContext } from "@/context/inbox-context";
-import { TbAnalyze } from "react-icons/tb";
-import { MdArrowBack } from "react-icons/md";
-import FancyButton from "@/components/ui/fancy-button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Email } from "@/types";
+import React, { useContext, useEffect } from "react";
 import { EmailSkeleton } from "@/components/home/inbox/skeleton";
 import { decodeAndSanitizeHTML } from "@/lib/utils";
-import { EmailDetailsSkeleton } from "@/components/home/inbox/skeleton";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
-  DateTime,
-  Message,
-  From,
-  To,
-  AILabel,
-} from "@/components/home/inbox/email";
 import { useRouter } from "next/navigation";
-import Paginations from "@/components/home/inbox/pagination";
-import { Button } from "@/components/ui/button";
-import {
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { EmailAnalysis } from "@/types";
-import LimitExceeded from "@/components/home/inbox/limit-exceeded";
+import EmailDetailHeader from "@/components/home/inbox/email-detail/header";
+import AIInsights from "@/components/home/inbox/email-detail/ai-insights";
+import { EmailDetailContext } from "@/context/email-detail-context";
+import Detail from "@/components/home/inbox/email-detail/detail";
 
 interface EmailListProps {
   params: { emailId: string };
@@ -40,18 +15,8 @@ interface EmailListProps {
 const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
   const emailId = params.emailId;
   const router = useRouter();
-  const { emails } = useContext(InboxContext);
-  const [email, setEmail] = React.useState<Email>();
-  const [emailAnalysis, setEmailAnalysis] =
-    React.useState<EmailAnalysis | null>(null);
+  const { setEmail, setEmailAnalysis } = useContext(EmailDetailContext);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [isAnalyzing, startAnalysis] = useTransition();
-  const [paginationActive, setPaginationActive] =
-    React.useState<boolean>(false);
-
-  const [cooldown, setCooldown] = React.useState<boolean>(false);
-  const [cooldownTime, setCooldownTime] = React.useState<number>(0);
-  const [emailsLeft, setEmailsLeft] = React.useState<boolean>(true);
 
   useEffect(() => {
     const getEmail = async () => {
@@ -69,236 +34,23 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
       }
     };
     getEmail();
-
-    let found = emails.find((email) => email.id === emailId);
-    if (found) {
-      setPaginationActive(true);
-    }
-  }, [emailId, emails, router]);
-
-  const handleAnalyze = async () => {
-    startAnalysis(async () => {
-      const res = await fetch(`/api/ai/analyze-email`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          emailIDs: [emailId],
-        }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        const emailAnalysis = data[0];
-        if (emailAnalysis.success) {
-          setEmailAnalysis(emailAnalysis.analysis);
-        }
-        if (emailAnalysis.limitExceeded) {
-          setEmailAnalysis(null);
-          setCooldown(emailAnalysis.timeLeft);
-          setEmailsLeft(emailAnalysis.emailsLeft > 0);
-        }
-      }
-    });
-  };
-
-  const handleClickOnAI = () => {
-    if (!emailAnalysis) {
-      handleAnalyze();
-    }
-  };
-
-  const handleBack = () => {
-    router.back();
-  };
-
-  const getAccordianTitle = () => {
-    if (cooldown) {
-      return "Upgrade Your Plan";
-    } else {
-      if (isAnalyzing) {
-        return "Getting your email insights using AI";
-      }
-      return "AI Insights";
-    }
-  };
-  const renderEmailAnalysis = () => {
-    return (
-      <div className="">
-        <div className="flex gap-5">
-          {emailAnalysis?.tag && emailAnalysis?.tag?.label && (
-            <AILabel bgColor={emailAnalysis?.tag?.color || "rgba(0,0,0,0.1)"}>
-              <span>{emailAnalysis?.tag?.label}</span>
-            </AILabel>
-          )}
-
-          <span className="italic font-bold ml-1">
-            {emailAnalysis &&
-              (emailAnalysis?.isImportant ? " Important" : " Not Important")}
-          </span>
-        </div>
-        <h2 className="mt-2 ml-1">{emailAnalysis?.summary}</h2>
-        <div className="flex flex-col gap-1 ml-1 mt-2">
-          {emailAnalysis?.actions && emailAnalysis?.actions.length > 0 && (
-            <>
-              <span className="font-bold">Suggested Actions:</span>
-              {emailAnalysis?.actions?.map((action: string, index: number) => (
-                <span key={index}>
-                  {`${index + 1}) `}
-                  {action}
-                </span>
-              ))}
-            </>
-          )}
-        </div>
-      </div>
-    );
-  };
-  const renderCooldown = () => (
-    <div className="flex justify-start items-center gap-5 px-2">
-      <LimitExceeded
-        timer={cooldownTime}
-        handleAnalyze={handleAnalyze}
-        setCooldown={() => {
-          setCooldown(false);
-        }}
-        emailsLeft={emailsLeft}
-      />
-    </div>
-  );
-
-  const renderEmail = () => (
-    <div className="p-5">
-      <div className="flex items-start justify-between h-12">
-        <div className="flex items-start gap-5">
-          <FancyButton onClick={handleBack}>
-            <div className="flex gap-3">
-              <MdArrowBack className="scale-[1.5] mt-[5px]" />
-              <p className="">Back</p>
-            </div>
-          </FancyButton>
-          {!isAnalyzing && (
-            <FancyButton onClick={handleAnalyze}>
-              <div className="flex gap-3">
-                <TbAnalyze className="scale-[1.5] mt-[5px]" />
-                <p className="">Analyze</p>
-              </div>
-            </FancyButton>
-          )}
-        </div>
-        {paginationActive && <Pagination emailId={emailId} emails={emails} />}
-      </div>
-      <div
-        className="pr-3 w-full border-t rounded-2xl shadow-lg p-5"
-        onClick={handleClickOnAI}
-      >
-        <div className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl">
-          <div className="p-5">
-            <Accordion type="single" collapsible>
-              <AccordionItem value="item-1">
-                <AccordionTrigger className="font-bold text-black text-xl">
-                  {getAccordianTitle()}
-                </AccordionTrigger>
-                <AccordionContent>
-                  {" "}
-                  {cooldown ? (
-                    renderCooldown()
-                  ) : isAnalyzing ? (
-                    <EmailDetailsSkeleton />
-                  ) : (
-                    renderEmailAnalysis()
-                  )}
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-        </div>
-
-        <h2 className="text-3xl font-bold ml-20 mt-5">{email?.subject}</h2>
-
-        <div className="flex justify-between w-full mt-5">
-          <div className="flex gap-5 ">
-            <Avatar className="w-16 h-16">
-              {/* <AvatarImage src={email.from.image} /> */}
-              <AvatarFallback>NA</AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col justify-center">
-              <From from={email?.from || ""} type="full" />
-              <To to={email?.to || ""} />
-            </div>
-          </div>
-          <div>
-            <DateTime date={email?.date || ""} type="detail" />
-          </div>
-        </div>
-        <div className="mt-5 rounded-2xl overflow-hidden flex justify-center">
-          <div
-            className="!max-w-[50vw]"
-            dangerouslySetInnerHTML={{
-              __html: email?.body || "",
-            }}
-          ></div>
-        </div>
-      </div>
-    </div>
-  );
+  }, [emailId, router, setEmail, setEmailAnalysis]);
 
   return (
     <div className="h-full">
-      {isLoading ? <EmailSkeleton /> : renderEmail()}
-    </div>
-  );
-};
-
-interface PaginationProps {
-  emailId: string;
-  emails: Email[];
-}
-
-const Pagination = ({ emailId, emails }: PaginationProps) => {
-  const router = useRouter();
-  const [emailIndex, setEmailIndex] = React.useState<number>();
-  useEffect(() => {
-    setEmailIndex(emails.findIndex((email) => email.id === emailId));
-  }, [emailId, emails]);
-  const Prev = () => (
-    <button
-      disabled={emailIndex === 0}
-      className={`${
-        emailIndex === 0 ? "text-muted-foreground cursot-default" : ""
-      }`}
-      onClick={() => {
-        emailIndex !== undefined &&
-          router.push(`/inbox/email/${emails[emailIndex - 1].id}`);
-      }}
-    >
-      <PaginationPrevious noHover={emailIndex === 0} />
-    </button>
-  );
-  const Next = () => (
-    <button
-      disabled={emailIndex === emails.length - 1}
-      className={`${
-        emailIndex === emails.length - 1
-          ? "text-muted-foreground cursot-default"
-          : ""
-      }`}
-      onClick={() => {
-        emailIndex !== undefined &&
-          router.push(`/inbox/email/${emails[emailIndex + 1].id}`);
-      }}
-    >
-      <PaginationNext noHover={emailIndex === emails.length - 1} />
-    </button>
-  );
-  return (
-    <div className="flex gap-5">
-      <Paginations
-        prev={<Prev />}
-        current={<PaginationLink noHover>{emailIndex}</PaginationLink>}
-        next={<Next />}
-      />
+      {isLoading ? (
+        <EmailSkeleton />
+      ) : (
+        <div className="p-5">
+          <EmailDetailHeader emailId={emailId} />
+          <div className="pr-3 w-full border-t rounded-2xl shadow-lg p-5">
+            <div className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl">
+              <AIInsights />
+            </div>
+            <Detail />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

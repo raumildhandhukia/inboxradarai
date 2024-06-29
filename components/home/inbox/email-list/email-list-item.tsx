@@ -10,7 +10,7 @@ import {
   Message,
   From,
   AILabel,
-} from "@/components/home/inbox/email";
+} from "@/components/home/inbox/email-detail/email";
 import { Button } from "@/components/ui/button";
 import { TbAnalyze } from "react-icons/tb";
 import { EmailListItemSkeleton } from "@/components/home/inbox/skeleton";
@@ -99,7 +99,7 @@ const EmailListItem: React.FC<EmailListItemProps> = ({
         <LimitExceeded
           timer={email.timeLeft}
           handleAnalyze={handleAnalyze}
-          setCooldown={() => {
+          removeCooldown={() => {
             setCooldown(false);
           }}
           emailsLeft={email.emailsLeft}
