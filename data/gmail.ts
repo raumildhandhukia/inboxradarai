@@ -3,13 +3,49 @@ import { db } from "@/lib/db";
 import { authenticate } from "@google-cloud/local-auth";
 import { google } from "googleapis";
 import { auth } from "@/auth";
-import { Email, EmailAnalysis } from "@/types";
-import { getAnalysis } from "./AIOperations";
+import { Email, EmailAnalysis, EmailSearchResultProps } from "@/types";
+import { getAnalysis, getLabelEmails } from "./AIOperations";
 import { User } from "next-auth";
 
 interface ReturnType extends Email {
   analysis?: EmailAnalysis;
 }
+
+export const queryEmails = async (auth: any, user: User, query: string) => {
+  try {
+    const gmail = google.gmail({ version: "v1", auth });
+    const res = await gmail.users.messages.list({
+      userId: "me",
+      maxResults: 20,
+      q: query,
+    });
+    if (!res) {
+      return [];
+    }
+    const messagesIds =
+      res.data.messages?.map((message: any) => message.id) || [];
+    const emails: Email[] = await Promise.all(
+      messagesIds.map(async (id: string) => {
+        return await getEmail(auth, id, user);
+      })
+    );
+    const results: EmailSearchResultProps[] = emails.map((email) => {
+      const sender = email.from?.slice(0, email.from.indexOf("<")) || "";
+      return {
+        id: email.id,
+        sender: email.from?.split("<")[0] || "",
+        senderEmail: email.from?.split("<")[1].split(">")[0] || "",
+        subject: email.subject || "",
+        date: email.date || "",
+        snippet: email.snippet || "",
+      };
+    });
+    return results;
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+};
 
 export const getGoogleApiHandler = async (refresh_token: string) => {
   const token = {
@@ -83,45 +119,53 @@ export async function listEmails(
   auth: any,
   page: string | null,
   type: string | null,
-  user: User
+  user: User,
+  labelId: string | null
 ) {
-  const gmail = google.gmail({ version: "v1", auth });
-  let res;
-  let pageToken;
-  if (!page) {
-    pageToken = undefined;
+  let messagesIds: string[] = [];
+  let nextPageToken: string | null | undefined = undefined;
+  if (labelId && labelId !== "null") {
+    messagesIds = await getLabelEmails(labelId || "");
   } else {
-    if (page === "null") {
+    const gmail = google.gmail({ version: "v1", auth });
+    let res;
+    let pageToken;
+    if (!page) {
       pageToken = undefined;
     } else {
-      pageToken = page;
+      if (page === "null") {
+        pageToken = undefined;
+      } else {
+        pageToken = page;
+      }
     }
+    let qValue = "";
+    if (type) {
+      qValue = `category:${type}`;
+    }
+    try {
+      res = await gmail.users.messages.list({
+        userId: "me",
+        maxResults: 50,
+        pageToken,
+        q: qValue,
+      });
+    } catch (e) {
+      console.error(pageToken);
+    }
+    if (!res) {
+      return { emails: [], nextPageToken: null };
+    }
+    messagesIds = res.data.messages?.map((message: any) => message.id) || [];
+    if (!messagesIds) {
+      return { emails: [], nextPageToken: null };
+    }
+    nextPageToken = res.data.nextPageToken;
   }
-  let qValue = "";
-  if (type) {
-    qValue = `category:${type}`;
-  }
-  try {
-    res = await gmail.users.messages.list({
-      userId: "me",
-      maxResults: 50,
-      pageToken,
-      q: qValue,
-    });
-  } catch (e) {
-    console.error(pageToken);
-  }
-  if (!res) {
-    return { emails: [], nextPageToken: null };
-  }
-  const messages = res.data.messages;
-  if (!messages) {
-    return { emails: [], nextPageToken: null };
-  }
-  const nextPageToken = res.data.nextPageToken;
+
   const emails: Email[] = await Promise.all(
-    messages.map(async (message: any) => {
-      return await getEmail(auth, message.id, user);
+    messagesIds.map(async (id: string) => {
+      return await getEmail(auth, id, user);
     })
   );
 

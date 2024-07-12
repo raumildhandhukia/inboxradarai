@@ -75,6 +75,14 @@ model User {
   stripeCurrentPeriodEnd    DateTime?               @map("stripe_current_period_end")
   stripeCustomerId          String?                 @unique @map("stripe_customer_id")
 
+  autoUpdate              Boolean                @default(false) @map("auto_update")
+  lastAutoUpdate             DateTime            @default(now())   @map("last_updated")
+
+  updatePrimary          Boolean                @default(true) @map("update_primary")
+  updateSocial           Boolean                @default(false) @map("update_social")
+  updatePromo            Boolean                @default(false) @map("update_promo")
+  updateUpdate           Boolean                @default(true) @map("update_update")
+
   accounts              Account[]
 
   tags                  Tag[]

@@ -17,7 +17,13 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const page = searchParams.get("page");
     const type = searchParams.get("type");
-    const data: ReturnType | null = await getInboxData(page, type, user);
+    const labelId = searchParams.get("label");
+    const data: ReturnType | null = await getInboxData(
+      page,
+      type,
+      user,
+      labelId
+    );
     if (!data) {
       return new Response("Unauthorized", { status: 401 });
     }

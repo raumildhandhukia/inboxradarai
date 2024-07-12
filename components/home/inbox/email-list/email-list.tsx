@@ -34,8 +34,8 @@ const EmailList: React.FC<EmailListProps> = ({ emails, refresh, children }) => {
     <div className="p-5">
       <div className="flex items-start justify-between h-12">
         <div className="flex items-start gap-5">
-          {selectedEmails.length === 0 ? (
-            <FancyButton onClick={refresh}>
+          {/* {selectedEmails.length === 0 ? (
+            <FancyButton onClick={refresh} className="!z-0">
               <div className="flex gap-3">
                 <IoMdRefreshCircle className="scale-[1.5] mt-[5px] hover:animate-spin360" />
                 <p className="">Reload</p>
@@ -63,7 +63,7 @@ const EmailList: React.FC<EmailListProps> = ({ emails, refresh, children }) => {
                 <MdDeselect className="scale-[1.5]" />
               </FancyButton>
             </>
-          )}
+          )} */}
         </div>
         <div>{children}</div>
       </div>

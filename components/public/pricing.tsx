@@ -6,6 +6,7 @@ import { BsPatchCheckFill } from "react-icons/bs";
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const Pricing = () => {
   return (
@@ -55,7 +56,7 @@ const Pricing = () => {
                   variant="hacker"
                   className="w-full rounded-none px-3 py-1"
                 >
-                  Get Started
+                  <Link href="/auth/login">Get Started</Link>
                 </Button>
               </div>
             </div>
@@ -105,7 +106,7 @@ const Pricing = () => {
                   variant="hacker"
                   className="w-full rounded-none px-3 py-1 text-black"
                 >
-                  Buy Now
+                  <Link href="/auth/login?sub-to-plan=pro">Subscribe</Link>
                 </Button>
               </div>
             </div>
@@ -156,7 +157,7 @@ const Pricing = () => {
                   variant="hacker"
                   className="w-full rounded-none px-3 py-1 text-black"
                 >
-                  Buy Now
+                  <Link href="/auth/login?sub-to-plan=max">Subscribe</Link>
                 </Button>
               </div>
             </div>

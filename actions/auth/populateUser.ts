@@ -1,6 +1,7 @@
 "use server";
 import { db } from "@/lib/db";
 import { generateFromEmail } from "unique-username-generator";
+import { PLANS } from "@/config/app";
 
 export async function populateUser(userId: string, userEmail: string) {
   try {
@@ -26,6 +27,7 @@ export async function populateUser(userId: string, userEmail: string) {
         emailProcessed: 0,
         username,
         emailVerified: new Date(),
+        lastAutoUpdate: new Date(),
       },
     });
     await db.userSettings.create({

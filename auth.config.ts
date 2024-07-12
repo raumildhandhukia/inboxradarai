@@ -9,9 +9,9 @@ export default {
   pages: {
     signIn: "/auth/login",
     error: "/auth/error",
-    newUser: "/label-settings",
   },
   events: {
+    async createUser({ user }) {},
     async linkAccount({ user }) {
       const dbUser = await db.user.findUnique({
         where: {

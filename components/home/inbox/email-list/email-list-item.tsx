@@ -1,4 +1,11 @@
-import React, { useState, useTransition, useContext, useEffect } from "react";
+import React, {
+  useState,
+  useTransition,
+  useContext,
+  useEffect,
+  use,
+  useCallback,
+} from "react";
 import {
   Accordion,
   AccordionContent,
@@ -11,11 +18,13 @@ import {
   From,
   AILabel,
 } from "@/components/home/inbox/email-detail/email";
+import { UserContext } from "@/context/user-context";
 import { Button } from "@/components/ui/button";
 import { TbAnalyze } from "react-icons/tb";
 import { EmailListItemSkeleton } from "@/components/home/inbox/skeleton";
 import { InboxContext } from "@/context/inbox-context";
 import LimitExceeded from "@/components/home/inbox/limit-exceeded";
+import { useSearchParams } from "next/navigation";
 
 interface EmailListItemProps {
   email: any;
@@ -37,6 +46,9 @@ const EmailListItem: React.FC<EmailListItemProps> = ({
   const [isAnalyzing, startAnalysis] = useTransition();
   const [cooldown, setCooldown] = useState(false);
   const analysis = email?.analysis;
+  const { user } = useContext(UserContext);
+  const searchParams = useSearchParams();
+  const inboxType = searchParams.get("type");
 
   const handleAnalyze = (findExisting: boolean) => {
     startAnalysis(async () => {
@@ -85,6 +97,69 @@ const EmailListItem: React.FC<EmailListItemProps> = ({
       }
     });
   };
+
+  useEffect(() => {
+    const userLastAutoUpdate = new Date(user.lastAutoUpdate);
+    const emailDate = new Date(email.date);
+    const shouldAutoUpdateEmail =
+      user.autoUpdate &&
+      !isAnalyzing &&
+      !analysis &&
+      userLastAutoUpdate < emailDate;
+    const isAutoUpdateInbox =
+      (inboxType === "primary" && user.updatePrimary) ||
+      (inboxType === "social" && user.updateSocial) ||
+      (inboxType === "promotions" && user.updatePromotions) ||
+      (inboxType === "updates" && user.updateUpdates);
+
+    if (shouldAutoUpdateEmail && isAutoUpdateInbox) {
+      startAnalysis(async () => {
+        const res = await fetch(`/api/ai/analyze-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            emailIDs: [email.id],
+            findExisting: false,
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const emailAnalysis = data[0];
+          if (emailAnalysis) {
+            if (emailAnalysis.success) {
+              setEmails((prev) => {
+                return prev.map((e) => {
+                  if (e.id === email.id) {
+                    return { ...e, analysis: emailAnalysis.analysis };
+                  }
+                  return e;
+                });
+              });
+            }
+            if (emailAnalysis.limitExceeded) {
+              setCooldown(true);
+              setEmails((prev) => {
+                return prev.map((e) => {
+                  if (e.id === email.id) {
+                    return {
+                      ...e,
+                      analysis: null,
+                      limitExceeded: true,
+                      timeLeft: emailAnalysis.timeLeft,
+                      emailsLeft: emailAnalysis.emailsLeft > 0,
+                    };
+                  }
+                  return e;
+                });
+              });
+            }
+          }
+        }
+      });
+    }
+  }, [user.autoUpdate, user.lastAutoUpdate, email.date]);
 
   const handleAccordianClick = async () => {
     setIsOpen(!isOpen);

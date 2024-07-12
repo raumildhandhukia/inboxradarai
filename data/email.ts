@@ -1,6 +1,11 @@
 import { auth } from "@/auth";
 import { getRefresh } from "@/actions/auth/refreshToken";
-import { listEmails, getGoogleApiHandler, getEmail } from "@/data/gmail";
+import {
+  listEmails,
+  getGoogleApiHandler,
+  getEmail,
+  queryEmails,
+} from "@/data/gmail";
 import { getAnalysis } from "@/data/AIOperations";
 import { Email, EmailAnalysis } from "@/types";
 import { User } from "next-auth";
@@ -9,10 +14,22 @@ interface ReturnType extends Email {
   analysis?: EmailAnalysis;
 }
 
+export const queryInbox = async (query: string, user: User) => {
+  const refresh = await getRefresh(user.id!);
+  if (!refresh) {
+    return null;
+  }
+  const { refresh_token } = refresh;
+
+  const handler = await getGoogleApiHandler(refresh_token);
+  return await queryEmails(handler, user, query);
+};
+
 export const getInboxData = async (
   page: string | null,
   type: string | null,
-  user: User
+  user: User,
+  labelId: string | null
 ) => {
   const refresh = await getRefresh(user.id!);
   if (!refresh) {
@@ -21,7 +38,7 @@ export const getInboxData = async (
   const { refresh_token } = refresh;
 
   const handler = await getGoogleApiHandler(refresh_token);
-  return await listEmails(handler, page, type, user);
+  return await listEmails(handler, page, type, user, labelId);
 };
 
 export const getEmailData = async (emailId: string, user: User) => {

@@ -34,7 +34,10 @@ export default auth(async function middleware(req) {
     }
   } else if (nextUrl.search.includes("?type")) {
     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-  } else if (nextUrl.pathname === "/inbox") {
+  } else if (
+    nextUrl.pathname === "/inbox" &&
+    !nextUrl.searchParams.get("label")
+  ) {
     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   }
   if (isApiAuthRoute) {

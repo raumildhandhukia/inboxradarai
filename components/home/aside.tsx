@@ -9,8 +9,9 @@ import { Button } from "../ui/button";
 import { logout } from "@/actions/auth/logout";
 import { TbLogout2 } from "react-icons/tb";
 import Settings from "@/components/home/settings";
-import Profile from "./profile";
+import Profile from "./user-options-dropdown";
 import { ModeToggle } from "../theme/theme-toggle";
+import { AILabel } from "./inbox/email-detail/email";
 ("@/components/home/profile");
 
 interface AsideProps {
@@ -21,9 +22,12 @@ interface SideBarItemProps {
   id: number;
   icon: React.ReactNode;
   text: string;
-  onClick: (text: string) => void;
+  onClick: (text: string, label: boolean) => void;
   active?: boolean;
   alert?: boolean;
+  label?: boolean;
+  labelId?: string;
+  color?: string;
 }
 
 export const SideBarItem: React.FC<SideBarItemProps> = ({
@@ -33,27 +37,39 @@ export const SideBarItem: React.FC<SideBarItemProps> = ({
   onClick,
   active,
   alert,
+  label,
+  labelId,
+  color,
 }) => {
   const { expanded } = useContext(SidebarContext);
   return (
     <li
-      onClick={() => onClick(text)}
+      onClick={() => onClick(label ? labelId || "" : text, label || false)}
       className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
         expanded ? "w-[95vw]" : "w-max"
-      } md:w-max ${
+      } md:w-full ${
         active
           ? "bg-gradient-to-tr from-[rgba(0,0,0,0.08)] to-[rgba(0,0,0,0.1)] dark:from-[rgba(255,255,255,0.4)] dark:to-[rgba(255,255,255,0.1)] dark:text-gray-200"
           : "hover:bg-[rgba(255,255,255,0.1)] text-gray-700 dark:text-gray-400"
       }`}
     >
       {icon}
-      <span
-        className={`overflow-hidden transition-all  ${
-          expanded ? "w-full md:w-52 ml-3" : "!w-0"
-        }`}
-      >
-        {text}
-      </span>
+      {label ? (
+        expanded && (
+          <AILabel bgColor={color || "#f1f1f1"} className=" ml-3">
+            {text}
+          </AILabel>
+        )
+      ) : (
+        <span
+          className={`overflow-hidden transition-all  ${
+            expanded ? "w-full md:w-52 ml-3" : "!w-0"
+          }`}
+        >
+          {text}
+        </span>
+      )}
+
       {alert && (
         <span
           className={`absolute top-1 right-2 w-2 h-2 bg-red-500 rounded-full ${
@@ -62,7 +78,7 @@ export const SideBarItem: React.FC<SideBarItemProps> = ({
         />
       )}
       {!expanded && (
-        <div className="absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -transition-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover-translate-x-0">
+        <div className="absolute z-20 left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -transition-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover-translate-x-0">
           {text}
         </div>
       )}
@@ -94,7 +110,7 @@ const Aside: React.FC<AsideProps> = ({ children }) => {
           </div>
           <Button
             variant="hacker"
-            className=""
+            className="p-2"
             onClick={() => setExpanded(!expanded)}
           >
             {expanded ? (
@@ -114,8 +130,8 @@ const Aside: React.FC<AsideProps> = ({ children }) => {
               expanded ? "w-full" : "!w-0"
             }`}
           >
-            <ModeToggle />
-            <Settings />
+            {/* <ModeToggle />
+            <Settings /> */}
             <Button variant="hacker" className="" onClick={handleLogout}>
               <TbLogout2 className="scale-[1.5]" />
             </Button>
