@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { auth } from "@/auth";
 import Stripe from "stripe";
 
+const DOMAIN = process.env.DOMAIN_URL ?? "http://localhost:3000";
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
   apiVersion: "2024-06-20",
   typescript: true,
@@ -65,7 +66,7 @@ export async function getUserSubscriptionPlan() {
 }
 
 export async function createStripeSession(userId: string, planSlug: string) {
-  const billingUrl = "http://localhost:3000/billing";
+  const billingUrl = DOMAIN + "/billing";
 
   if (!userId) throw new Error("User ID is required");
 
