@@ -38,3 +38,9 @@ export const apiAuthPrefix = "/api/auth";
  * @type {string}
  */
 export const DEFAULT_LOGIN_REDIRECT = "/inbox?type=primary";
+
+/**
+ * Webhooks path
+ * @type {string}
+ */
+export const webHooks = "/api/webhooks/stripe";

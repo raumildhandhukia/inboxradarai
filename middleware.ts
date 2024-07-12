@@ -15,6 +15,7 @@ import {
   publicRoutes,
   authRoutes,
   apiAuthPrefix,
+  webHooks,
 } from "@/routes";
 const defaultInboxCategories = sidebarItems.map((item) =>
   item.text.toLowerCase()
@@ -22,10 +23,15 @@ const defaultInboxCategories = sidebarItems.map((item) =>
 export default auth(async function middleware(req) {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
+  const isWebhookRoute = webHooks.includes(nextUrl.pathname);
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const inboxType = nextUrl.searchParams.get("type");
+
+  if (isWebhookRoute) {
+    return NextResponse.next();
+  }
   if (inboxType) {
     const isNotDefaultInboxCategory =
       inboxType.length === 0 || !defaultInboxCategories.includes(inboxType);
