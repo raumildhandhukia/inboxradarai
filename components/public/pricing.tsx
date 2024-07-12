@@ -106,7 +106,7 @@ const Pricing = () => {
                   variant="hacker"
                   className="w-full rounded-none px-3 py-1 text-black"
                 >
-                  <Link href="/auth/login?sub-to-plan=pro">Subscribe</Link>
+                  <Link href="/auth/login?sub-to-plan=Pro">Subscribe</Link>
                 </Button>
               </div>
             </div>
@@ -157,7 +157,7 @@ const Pricing = () => {
                   variant="hacker"
                   className="w-full rounded-none px-3 py-1 text-black"
                 >
-                  <Link href="/auth/login?sub-to-plan=max">Subscribe</Link>
+                  <Link href="/auth/login?sub-to-plan=Max">Subscribe</Link>
                 </Button>
               </div>
             </div>
