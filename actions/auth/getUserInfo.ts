@@ -7,6 +7,9 @@ export const userInfo = async (userId: string) => {
       where: {
         id: userId,
       },
+      include: {
+        tags: true,
+      },
     });
     return user;
   } catch (error) {

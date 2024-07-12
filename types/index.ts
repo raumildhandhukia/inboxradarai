@@ -1,4 +1,5 @@
 import { RgbaColor } from "react-colorful";
+import { Tag as TagPrisma } from "@prisma/client";
 
 export interface Label {
   id: string;
@@ -53,6 +54,15 @@ export interface SuccessResponseType extends AnalysisSuccess {
 
 export type AnalysisResponseType = SuccessResponseType | FailureResponseType;
 
+export type EmailSearchResultProps = {
+  id: string;
+  sender: string;
+  senderEmail: string;
+  subject: string;
+  date: string;
+  snippet: string;
+};
+
 export interface Email {
   id: string;
   labelIds: string[] | null | undefined;
@@ -63,3 +73,19 @@ export interface Email {
   date: string | null | undefined;
   body: string | null | undefined;
 }
+
+export type UserPreferences = {
+  name: string;
+  email: string;
+  plan: string;
+  updateSocial: boolean;
+  updatePrimary: boolean;
+  updatePromotions: boolean;
+  updateUpdates: boolean;
+  autoUpdate: boolean;
+  emailsProcessed: number;
+  customLabels: TagPrisma[];
+  predefinedLabels: TagPrisma[];
+  stripeEndDate: string;
+  lastAutoUpdate: Date;
+};

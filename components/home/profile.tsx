@@ -1,57 +1,26 @@
-import React, { ReactNode } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import React from "react";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
-import Link from "next/link";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const Profile = () => {
-  const user = useCurrentUser();
-  const avatarFallback = user?.name ? user.name[0] : "NA";
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        {" "}
-        <Avatar>
-          <AvatarImage
-            src={
-              user?.image ||
-              `https://avatars.dicebear.com/api/avataaars/username.svg`
-            }
-          />
-          <AvatarFallback>{avatarFallback}</AvatarFallback>
-        </Avatar>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem className="flex flex-col items-start hover:!bg-transparent">
-          <h4 className="text-gray-400">{user?.name}</h4>
-          <span className="text-xs text-gray-600">{user?.email}</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="hover:cursor-pointer">
-          My Profile
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="hover:cursor-pointer">
-          <button>
-            <Link href="/label-settings">AI Labels</Link>
-          </button>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="hover:cursor-pointer">
-          Subscription
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-
-        <DropdownMenuSeparator />
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Dialog>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogDescription>
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   );
 };
 

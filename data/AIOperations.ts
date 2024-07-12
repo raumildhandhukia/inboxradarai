@@ -25,28 +25,27 @@ export const analyze = async (
         `Label ${index + 1}) 
           id:${label.id} 
           label:${label.label} 
-          description:${label.description} 
-          color:${label.color}`
+          description:${label.description}`
     )
     .join(", ");
   const prompt = `
   Response Return Type: JSON OBJECT
   Response Example (MUST INCLUDE ALL KEYS): {
       "summary": "The email is about .....",
-      "isImportant": false/true (replace with actual value) (true if it is really important, newsletter are not important. promotional emails are not important, social media notification emails are not important.), 
-      personolized email are important, emails which requires next steps, or it is a decision, or it is financial email, or it is tracking, or it is message from someone, or it is reciept, or it is security,
-      or it is security code, or it is alert, or it is confirmation or it is invitation
-      "actions": ["Action 1", "Action 2", "Action 3"] (replace with actual actions, keep empty if no actions needed. ),
-      "tag":"Label id from the list of labels provided"}
+      "isImportant": false/true,
+      "actions": ["Action 1", "Action 2", "Action 3"],
+      "tag": "Label id from the list of labels provided"
+  }
 
-  Email Data ${body}
+  Email Data: ${body}
   Instructions:
-  1) Summerize the email content. max 3 small lines.
-  2) Identify if the email is important or not. (true/false) 
-  3) List any actions that need to be taken. Max 3 actions. Actions should be in the form of a string. You should decide what actions are suitable for the email.
-     Actions can be empty too if no actions needed. Dependent upon nature of email decide if actions are needed or not.
-  4) Assign a tag (Fields returned (id, label, description, color)) to the email from the following list: [${labelsList}]
-     if list does not contain any labels which are suitable for the email or label list is empty, value for AILabel should be null.
+  1) Summarize the email content in a maximum of 3 small lines.
+  2) Identify if the email is important or not (true/false).
+  3) List any actions that need to be taken (maximum of 3 actions). Actions should be strings and should be suitable for the nature of the email. Leave empty if no actions are needed.
+  4) Assign a tag to the email from the following list based on the description (id, label, description, color). If no suitable label is found or if the label list is empty, set the value for 'tag' to null:
+  [${labelsList}]
+  
+  Be very specific in choosing the tag based on the email content and label descriptions provided.
   `;
   try {
     const result = await model.generateContent(prompt);
@@ -283,4 +282,17 @@ export const setAPIStats = async (emailProcessed: number, user: ExtUser) => {
     console.error(e);
     return false;
   }
+};
+
+export const getLabelEmails = async (labelId: string) => {
+  const label = await db.processedEmails.findMany({
+    where: {
+      tagId: labelId,
+    },
+    select: {
+      emailId: true,
+    },
+  });
+  const emailIds = label.map((l) => l.emailId);
+  return emailIds as string[];
 };

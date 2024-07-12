@@ -25,7 +25,7 @@ export function AILabel({
         backgroundColor: bgColor,
       }}
     >
-      <div className="flex gap-2 leading-3 text-black">
+      <div className="flex gap-2 leading-3 text-black overflow-hidden">
         {children}
         {deleteLabel && (
           <MdClose

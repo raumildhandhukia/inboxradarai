@@ -23,7 +23,6 @@ const AIInsights = ({}: {}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const getAccordianTitle = () => {
-    debugger;
     if (cooldown) {
       return "Upgrade Your Plan";
     } else {
@@ -36,7 +35,7 @@ const AIInsights = ({}: {}) => {
 
   const handleAccordianClick = async () => {
     setIsOpen(!isOpen);
-    if (isOpen && !cooldown && !isAnalyzing && !emailAnalysis) {
+    if (!isOpen && !cooldown && !isAnalyzing && !emailAnalysis) {
       handleAnalyze();
     }
   };
