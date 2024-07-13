@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     const subscription = await stripe.subscriptions.retrieve(
       session.subscription as string
     );
-    await db.user.update({
+    const res = await db.user.update({
       where: {
         stripeSubscriptionId: subscription.id,
       },
@@ -42,16 +42,17 @@ export async function POST(request: Request) {
         stripeCurrentPeriodEnd: new Date(
           subscription.current_period_end * 1000
         ),
-        plan: "CHANGED PLAN",
       },
     });
+    console.error(res);
+    console.error(subscription);
   }
   if (event.type === "customer.subscription.deleted") {
     const subscription = await stripe.subscriptions.retrieve(
       session.subscription as string
     );
 
-    await db.user.update({
+    const res = await db.user.update({
       where: {
         stripeSubscriptionId: subscription.id,
       },
@@ -64,6 +65,8 @@ export async function POST(request: Request) {
         plan: "FREE",
       },
     });
+    console.error(res);
+    console.error(subscription);
   }
 
   if (event.type === "checkout.session.completed") {
