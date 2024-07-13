@@ -81,7 +81,7 @@ export async function POST(request: Request) {
         stripeCurrentPeriodEnd: new Date(
           subscription.current_period_end * 1000
         ),
-        plan: session.metadata.plan.toUpperCase(),
+        plan: "CHANGED PLAN",
       },
     });
   }
