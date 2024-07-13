@@ -29,12 +29,48 @@ export async function POST(request: Request) {
       status: 200,
     });
   }
+  if (event.type === "customer.subscription.updated") {
+    const subscription = await stripe.subscriptions.retrieve(
+      session.subscription as string
+    );
+    await db.user.update({
+      where: {
+        stripeSubscriptionId: subscription.id,
+      },
+      data: {
+        stripePriceId: subscription.items.data[0].price.id,
+        stripeCurrentPeriodEnd: new Date(
+          subscription.current_period_end * 1000
+        ),
+        plan: session.metadata.plan.toUpperCase(),
+      },
+    });
+  }
+  if (event.type === "customer.subscription.deleted") {
+    const subscription = await stripe.subscriptions.retrieve(
+      session.subscription as string
+    );
+
+    await db.user.update({
+      where: {
+        stripeSubscriptionId: subscription.id,
+      },
+      data: {
+        stripeSubscriptionId: subscription.id,
+        stripePriceId: subscription.items.data[0].price.id,
+        stripeCurrentPeriodEnd: new Date(
+          subscription.current_period_end * 1000
+        ),
+        plan: "FREE",
+      },
+    });
+  }
 
   if (event.type === "checkout.session.completed") {
     const subscription = await stripe.subscriptions.retrieve(
       session.subscription as string
     );
-    const res = await db.user.update({
+    await db.user.update({
       where: {
         id: session.metadata.userId,
       },
@@ -48,7 +84,6 @@ export async function POST(request: Request) {
         plan: session.metadata.plan.toUpperCase(),
       },
     });
-    console.log(res);
   }
 
   if (event.type === "invoice.payment_succeeded") {
