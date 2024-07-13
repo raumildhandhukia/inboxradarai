@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         stripeCurrentPeriodEnd: new Date(
           subscription.current_period_end * 1000
         ),
-        plan: "NEW PLAN YAYY NIGGA",
+        plan: "NEW PLAN YAYY",
       },
     });
     console.log(res);
