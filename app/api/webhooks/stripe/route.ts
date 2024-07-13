@@ -44,8 +44,8 @@ export async function POST(request: Request) {
         ),
       },
     });
-    console.error(res);
-    console.error(subscription);
+    console.log(res);
+    console.log(subscription);
   }
   if (event.type === "customer.subscription.deleted") {
     const subscription = await stripe.subscriptions.retrieve(
@@ -65,8 +65,8 @@ export async function POST(request: Request) {
         plan: "FREE",
       },
     });
-    console.error(res);
-    console.error(subscription);
+    console.log(res);
+    console.log(subscription);
   }
 
   if (event.type === "checkout.session.completed") {
