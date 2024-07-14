@@ -3,7 +3,6 @@ import React, {
   useTransition,
   useContext,
   useEffect,
-  use,
   useCallback,
 } from "react";
 import {
@@ -241,6 +240,7 @@ const EmailListItem: React.FC<EmailListItemProps> = ({
       <AccordionItem value="item-1">
         <div className="flex gap-x-2 justify-start items-center px-2">
           <AccordionTrigger
+            showAnalysisLoader={isAnalyzing}
             className=" max-w-10"
             onClick={handleAccordianClick}
           ></AccordionTrigger>
