@@ -1,3 +1,4 @@
+import { PLANS } from "@/config/app";
 import { db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
@@ -25,24 +26,24 @@ export async function POST(request: Request) {
   const session = event.data.object as Stripe.Checkout.Session;
 
   if (event.type === "customer.subscription.updated") {
-    console.log("customer.subscription.updated is called");
     const subscription = await stripe.subscriptions.retrieve(
       session.id as string
     );
+    const planId = subscription.items.data[0].price.id;
     const res = await db.user.update({
       where: {
         stripeSubscriptionId: subscription.id,
       },
       data: {
-        stripePriceId: subscription.items.data[0].price.id,
+        stripePriceId: planId,
         stripeCurrentPeriodEnd: new Date(
           subscription.current_period_end * 1000
         ),
-        plan: "NEW PLAN YAYY",
+        plan: PLANS.find(
+          (plan) => plan.price.priceIds.test === planId
+        )?.plan.toUpperCase(),
       },
     });
-    console.log(res);
-    console.log(subscription);
   }
   if (event.type === "customer.subscription.deleted") {
     const subscription = await stripe.subscriptions.retrieve(
@@ -68,6 +69,7 @@ export async function POST(request: Request) {
 
   if (event.type === "invoice.payment_succeeded") {
     // Retrieve the subscription details from Stripe.
+    console.warn("invoice.payment_succeeded is called");
     const subscription = await stripe.subscriptions.retrieve(
       session.subscription as string
     );
