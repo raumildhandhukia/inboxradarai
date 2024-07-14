@@ -2,7 +2,7 @@ import NextAuth, { type DefaultSession } from "next-auth";
 import Plans from "@/types/Plans";
 
 export type ExtUser = DefaultSession["user"] & {
-  plan: Plans;
+  stripePriceId: string;
 };
 
 declare module "next-auth" {

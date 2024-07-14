@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { TagSchema } from "@/schemas"; // Ensure this path is correct
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import SearchBarLabels from "@/components/home/search-bar-labels";
-import { PLANS } from "@/config/app";
-import { Label } from "@/types";
+import { Label, Plan } from "@/types";
 import CreateLabelInputs from "@/components/home/inbox/create-label-inputs";
 import LabelList from "./label-list";
 import {
@@ -23,15 +22,16 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import FancyButton from "@/components/ui/fancy-button";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import { getUserPlan } from "@/actions/plan";
 
 interface ConfProps {
   existingLabels: Label[];
+  plan: Plan;
 }
 
-const Conf: React.FC<ConfProps> = ({ existingLabels }) => {
+const Conf: React.FC<ConfProps> = ({ existingLabels, plan }) => {
   const { toast } = useToast();
   const user = useCurrentUser();
-  const plan = PLANS.find((plan) => plan.plan === user?.plan);
   const router = useRouter();
   const [customLabels, setCustomLabels] = useState<number>(0);
   const [error, setError] = useState<string>("");
@@ -167,6 +167,7 @@ const Conf: React.FC<ConfProps> = ({ existingLabels }) => {
                 setLabels={selectLabel}
                 setCurrentTab={setCurrentTab}
                 setNewLabel={setNewLabel}
+                plan={plan}
               />
               {/* <div className="flex flex-wrap gap-1">
                 {labels.length > 0 ? (

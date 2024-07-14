@@ -39,7 +39,7 @@ export default {
       if (session && token && session.user && token.sub) {
         const user = await userInfo(token.sub);
         session.user.id = token.sub;
-        session.user.plan = user?.plan;
+        session.user.stripePriceId = user?.stripePriceId || "";
       }
       return session;
     },

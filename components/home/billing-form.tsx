@@ -59,29 +59,39 @@ const BillingForm = ({ subscriptionPlan }: BillingFormProps) => {
             <CardDescription>
               You are currently on the <strong>{subscriptionPlan.name}</strong>{" "}
               plan.
+              {subscriptionPlan.isCanceled &&
+                ` Your plan will be canceled on ${format(
+                  subscriptionPlan.stripeCurrentPeriodEnd!,
+                  "MMMM.dd.yyyy"
+                )}.`}
             </CardDescription>
           </CardHeader>
 
           <CardFooter className="flex flex-col items-start space-y-2 md:flex-row md:justify-between md:space-x-0">
-            <Button type="submit">
-              {isLoading ? (
-                <Loader2 className="mr-4 h-4 w-4 animate-spin" />
-              ) : null}
-              {"Manage Subscription"}
-            </Button>
-            <Link href="/inbox?type=primary">
-              <Button>Take me to dashboard</Button>
-            </Link>
+            <div className="flex gap-2">
+              <Button type="submit">
+                {isLoading ? (
+                  <Loader2 className="mr-4 h-4 w-4 animate-spin" />
+                ) : null}
+                {"Manage Subscription"}
+              </Button>
+              <Link href="/inbox?type=primary">
+                <Button>Take me to dashboard</Button>
+              </Link>
+            </div>
 
-            {subscriptionPlan.isSubscribed ? (
-              <p className="rounded-full text-xs font-medium">
-                {subscriptionPlan.isCanceled
-                  ? "Your plan will be canceled on "
-                  : "Your plan renews on"}
-                {format(subscriptionPlan.stripeCurrentPeriodEnd!, "dd.MM.yyyy")}
-                .
-              </p>
-            ) : null}
+            {subscriptionPlan.isSubscribed
+              ? !subscriptionPlan.isCanceled && (
+                  <p className="rounded-full text-xs font-medium">
+                    {"Your plan renews on "}
+                    {format(
+                      subscriptionPlan.stripeCurrentPeriodEnd!,
+                      "MMMM.dd.yyyy"
+                    )}
+                    .
+                  </p>
+                )
+              : null}
           </CardFooter>
         </Card>
       </form>

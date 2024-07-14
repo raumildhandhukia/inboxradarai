@@ -3,17 +3,17 @@ import { predefinedLabels, labelSearchPlaceholders } from "@/data";
 import { PlaceholdersAndVanishInput } from "@/components/ui/vanish-input";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
-import { Label } from "@/types";
+import { Label, Plan } from "@/types";
 import { AILabel } from "./inbox/email-detail/email";
 import { ScrollArea } from "../ui/scroll-area";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { PLANS } from "@/config/app";
 
 interface SearchBarLabelsProps {
   labels: Label[];
   setLabels: (label: Label, callback: () => void) => void;
   setCurrentTab: React.Dispatch<React.SetStateAction<string>>;
   setNewLabel: React.Dispatch<React.SetStateAction<Label>>;
+  plan: Plan;
 }
 
 const LABELS = predefinedLabels.map((label, index) => ({
@@ -30,9 +30,9 @@ const SearchBarLabels: React.FC<SearchBarLabelsProps> = ({
   setLabels,
   setCurrentTab,
   setNewLabel,
+  plan,
 }) => {
   const user = useCurrentUser();
-  const plan = PLANS.find((plan) => plan.plan === user?.plan);
   const [searchResults, setSearchResults] = useState<Label[]>(LABELS);
   const [searchBarValue, setSearchBarValue] = useState("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,7 +1,6 @@
 "use server";
 import { db } from "@/lib/db";
 import { generateFromEmail } from "unique-username-generator";
-import { PLANS } from "@/config/app";
 
 export async function populateUser(userId: string, userEmail: string) {
   try {
@@ -23,7 +22,6 @@ export async function populateUser(userId: string, userEmail: string) {
         id: userId,
       },
       data: {
-        plan: "FREE",
         emailProcessed: 0,
         username,
         emailVerified: new Date(),

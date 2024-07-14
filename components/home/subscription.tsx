@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import React, { useContext } from "react";
 import { UserContext } from "@/context/user-context";
 import Link from "next/link";
+import Pricing from "../public/pricing";
 
 const Subscription = ({
   isSubscriptionOpen,
@@ -25,7 +26,7 @@ const Subscription = ({
   return (
     <>
       <Dialog open={isSubscriptionOpen} onOpenChange={setIsSubscriptionOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="min-w-max max-h-[90vh] overflow-scroll">
           <DialogHeader>
             <DialogTitle>Subscription</DialogTitle>
             <DialogDescription>
@@ -72,15 +73,9 @@ const Subscription = ({
               </div>
             </div>
           )}
-
-          <DialogFooter className="flex !justify-between">
-            <Button variant="hacker" className="" type="submit">
-              <Link href="/subscribe">Cancel</Link>
-            </Button>
-            <Button variant="hacker" className="bg-green-500" type="submit">
-              <Link href="/subscribe">Upgrade</Link>
-            </Button>
-          </DialogFooter>
+          <div className="w-max">
+            <Pricing noHeading currentPlan={user.plan} />
+          </div>
         </DialogContent>
       </Dialog>
     </>

@@ -67,13 +67,13 @@ model User {
   emailVerified         DateTime?
   image                 String?
   
-  plan                      String?
   emailProcessed            Int?                     @map("email_processed")
   nextAPITime           DateTime?                @map("next_ai_analysys")
   stripeSubscriptionId      String?                 @unique @map("stripe_subscription_id")
-  stripePriceId             String?                 @unique @map("stripe_price_id")
+  stripePriceId             String?                 @map("stripe_price_id")
   stripeCurrentPeriodEnd    DateTime?               @map("stripe_current_period_end")
   stripeCustomerId          String?                 @unique @map("stripe_customer_id")
+  changeToFreePlanOnPeriodEnd Boolean?            @default(false)  @map("change_to_free_plan_on_period_end")
 
   autoUpdate              Boolean                @default(false) @map("auto_update")
   lastAutoUpdate             DateTime            @default(now())   @map("last_updated")

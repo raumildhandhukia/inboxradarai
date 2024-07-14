@@ -89,3 +89,20 @@ export type UserPreferences = {
   stripeEndDate: string;
   lastAutoUpdate: Date;
 };
+export type Plan = {
+  id: number;
+  name: string;
+  plan: string;
+  emailsAllowed: number;
+  processLimit: boolean;
+  autoProcess: boolean;
+  customTag: number;
+  totalTags: number;
+  price: {
+    amount: number;
+    priceIds: {
+      test: string;
+      production: string;
+    };
+  };
+};

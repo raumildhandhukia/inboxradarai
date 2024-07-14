@@ -2,13 +2,14 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { AnalysisType, EmailAnalysis, Label } from "@/types";
-import { PLANS, REQUEST_COOL_DOWN } from "@/config/app";
+import { REQUEST_COOL_DOWN } from "@/config/app";
 
 import { model } from "@/lib/gemini";
 import { User } from "next-auth";
+import { getUserPlan } from "@/actions/plan";
 
 interface ExtUser extends User {
-  plan: string;
+  stripePriceId: string;
 }
 export const analyze = async (
   body: string,
@@ -162,15 +163,18 @@ export const isAIAnalysisAllowed = async (
   try {
     const res = await getAPIStats(user);
     const stats = res?.stats;
-    const plan = res?.plan;
+    const ResUserPlan = await getUserPlan();
+    if (!ResUserPlan) {
+      return { isValid: false, timeLeft: 0, emailsLeft: 0 };
+    }
+    const plan = ResUserPlan.plan;
 
     if (!plan || !stats) {
       return { isValid: false, timeLeft: 0, emailsLeft: 0 };
     }
 
-    const currentPlan = PLANS.find((p) => p.plan === plan);
-    const processLimit = currentPlan?.processLimit;
-    const allowedEmails = currentPlan?.emailsAllowed || 0;
+    const processLimit = plan?.processLimit;
+    const allowedEmails = plan?.emailsAllowed || 0;
 
     if (stats.emailProcessed && stats.emailProcessed >= allowedEmails) {
       return {
@@ -222,7 +226,6 @@ export const getAPIStats = async (user: ExtUser) => {
           emailProcessed: 0,
           nextAPITime: new Date(),
         },
-        plan: user.plan,
       };
     }
     if (stats && !stats.emailProcessed) {
@@ -231,26 +234,26 @@ export const getAPIStats = async (user: ExtUser) => {
     if (stats && !stats.nextAPITime) {
       stats.nextAPITime = new Date();
     }
-    return { stats, plan: user.plan };
+    return { stats };
   } catch (e) {
     return {
       stats: {
         emailProcessed: 0,
         nextAPITime: new Date(),
       },
-      plan: user.plan,
     };
   }
 };
 
 export const setAPIStats = async (emailProcessed: number, user: ExtUser) => {
-  const plan = user.plan;
+  const res = await getUserPlan();
+  const plan = res?.plan;
   if (!plan) {
     return false;
   }
   let nextAIAnalysysTime = new Date();
-  const currentPlan = PLANS.find((p) => p.plan === plan);
-  if (currentPlan?.processLimit) {
+
+  if (plan?.processLimit) {
     // Add one minute to the current time
     nextAIAnalysysTime = new Date(new Date().getTime() + REQUEST_COOL_DOWN);
   }

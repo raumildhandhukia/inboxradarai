@@ -4,6 +4,7 @@ import { Label } from "@/types";
 import { getAILabels } from "@/data/AIOperations";
 import Logo from "@/public/Logo";
 import { auth } from "@/auth";
+import { getUserPlan } from "@/actions/plan";
 const Page = async () => {
   const session = await auth();
   const user = session?.user;
@@ -14,6 +15,11 @@ const Page = async () => {
   if (!labels) {
     labels = [];
   }
+  const res = await getUserPlan();
+  const plan = res?.plan;
+  if (!plan) {
+    return <div>Unauthorized</div>;
+  }
 
   return (
     <div className="relative w-full h-full">
@@ -23,7 +29,7 @@ const Page = async () => {
       </div>
 
       <div className="flex items-center justify-center w-full h-full">
-        <Settings existingLabels={labels} />
+        <Settings existingLabels={labels} plan={plan} />
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { userInfo } from "@/actions/auth/getUserInfo";
 import { setUserPreferences } from "@/actions/auth/setUserPreferences";
 import { useSession } from "next-auth/react";
 import { UserPreferences } from "@/types";
+import { getUserPlan } from "@/actions/plan";
 
 interface UserContextType {
   user: UserPreferences;
@@ -39,11 +40,13 @@ const Context: React.FC<UserContextProviderProps> = ({ children }) => {
   useEffect(() => {
     const getData = async (userId: string) => {
       const user = await userInfo(userId);
+      const res = await getUserPlan();
+      const plan = res?.plan;
       user &&
         setUser({
           name: user.name || "",
           email: user.email || "",
-          plan: user.plan || "FREE",
+          plan: plan?.plan || "FREE",
           updateSocial: user.updateSocial,
           updatePrimary: user.updatePrimary,
           updatePromotions: user.updatePromo,

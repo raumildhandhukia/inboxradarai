@@ -1,4 +1,3 @@
-import { PLANS } from "@/config/app";
 import { db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
@@ -23,93 +22,105 @@ export async function POST(request: Request) {
     );
   }
 
-  const session = event.data.object as Stripe.Checkout.Session;
-
   if (event.type === "customer.subscription.updated") {
-    const subscription = await stripe.subscriptions.retrieve(
-      session.id as string
-    );
-    const planId = subscription.items.data[0].price.id;
-    const res = await db.user.update({
-      where: {
-        stripeSubscriptionId: subscription.id,
-      },
-      data: {
-        stripePriceId: planId,
-        stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000
-        ),
-        plan: PLANS.find(
-          (plan) => plan.price.priceIds.test === planId
-        )?.plan.toUpperCase(),
-      },
-    });
-  }
-  if (event.type === "customer.subscription.deleted") {
-    const subscription = await stripe.subscriptions.retrieve(
-      session.subscription as string
-    );
-
-    const res = await db.user.update({
-      where: {
-        stripeSubscriptionId: subscription.id,
-      },
-      data: {
-        stripeSubscriptionId: subscription.id,
-        stripePriceId: subscription.items.data[0].price.id,
-        stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000
-        ),
-        plan: "FREE",
-      },
-    });
-    console.log(res);
-    console.log(subscription);
+    const session = event.data.object as Stripe.Subscription;
+    try {
+      const subscription = await stripe.subscriptions.retrieve(
+        session.id as string
+      );
+      const planId = subscription.items.data[0].price.id;
+      const user = await db.user.findFirst({
+        where: {
+          stripeSubscriptionId: subscription.id,
+        },
+      });
+      if (!user) {
+        return new Response(null, {
+          status: 200,
+        });
+      }
+      await db.user.update({
+        where: {
+          stripeSubscriptionId: subscription.id,
+        },
+        data: {
+          stripePriceId: planId,
+          stripeCurrentPeriodEnd: new Date(
+            subscription.current_period_end * 1000
+          ),
+          changeToFreePlanOnPeriodEnd: subscription.cancel_at_period_end,
+        },
+      });
+    } catch (error) {
+      console.error("Error updating user", error);
+      return new Response(null, {
+        status: 500,
+      });
+    }
   }
 
   if (event.type === "invoice.payment_succeeded") {
-    // Retrieve the subscription details from Stripe.
-    console.warn("invoice.payment_succeeded is called");
-    const subscription = await stripe.subscriptions.retrieve(
-      session.subscription as string
-    );
-    await db.user.update({
-      where: {
-        stripeSubscriptionId: subscription.id,
-      },
-      data: {
-        stripePriceId: subscription.items.data[0].price.id,
-        stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000
-        ),
-      },
-    });
-  }
-
-  if (event.type === "checkout.session.completed") {
-    if (!session?.metadata?.userId) {
-      console.warn("No user ID found in metadata");
+    const session = event.data.object as Stripe.Invoice;
+    if (session.billing_reason == "subscription_create") {
       return new Response(null, {
         status: 200,
       });
     }
-    const subscription = await stripe.subscriptions.retrieve(
-      session.subscription as string
-    );
-    await db.user.update({
-      where: {
-        id: session.metadata.userId,
-      },
-      data: {
-        stripeCustomerId: subscription.customer as string,
-        stripeSubscriptionId: subscription.id,
-        stripePriceId: subscription.items.data[0].price.id,
-        stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000
-        ),
-        plan: session.metadata.plan.toUpperCase(),
-      },
-    });
+    try {
+      const subscription = await stripe.subscriptions.retrieve(
+        session.subscription as string
+      );
+
+      await db.user.update({
+        where: {
+          stripeSubscriptionId: subscription.id,
+        },
+        data: {
+          stripePriceId: subscription.items.data[0].price.id,
+          stripeCurrentPeriodEnd: new Date(
+            subscription.current_period_end * 1000
+          ),
+        },
+      });
+    } catch (error) {
+      console.error("Error updating user", error);
+      return new Response(null, {
+        status: 500,
+      });
+    }
+  }
+
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object as Stripe.Checkout.Session;
+    try {
+      if (!session?.metadata?.userId) {
+        console.warn("No user ID found in metadata");
+        return new Response(null, {
+          status: 200,
+        });
+      }
+      const subscription = await stripe.subscriptions.retrieve(
+        session.subscription as string
+      );
+      await db.user.update({
+        where: {
+          id: session.metadata.userId,
+        },
+        data: {
+          stripeCustomerId: subscription.customer as string,
+          stripeSubscriptionId: subscription.id,
+          stripePriceId: subscription.items.data[0].price.id,
+          stripeCurrentPeriodEnd: new Date(
+            subscription.current_period_end * 1000
+          ),
+        },
+      });
+    } catch (error) {
+      console.error("Error updating user", error);
+      return new Response(null, {
+        status: 500,
+      });
+    }
   }
 
   return new Response(null, { status: 200 });

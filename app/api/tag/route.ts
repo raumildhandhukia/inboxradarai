@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { TagSchema } from "@/schemas";
-import { PLANS } from "@/config/app";
+import { getUserPlan } from "@/actions/plan";
 
 export interface Label {
   id: string;
@@ -21,12 +21,13 @@ export async function POST(request: Request) {
         status: 401,
       });
     }
-    const selectedPlan = PLANS.find((p) => p.plan === user.plan);
-    if (!selectedPlan) {
+    const res = await getUserPlan();
+    if (!res) {
       return new Response("Subscription not found", {
         status: 401,
       });
     }
+    const selectedPlan = res.plan;
     const customTags = tags.filter((tag) => !tag.predefinedId);
     const predefinedTags = tags.filter((tag) => tag.predefinedId);
 

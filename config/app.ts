@@ -1,4 +1,22 @@
-export const PLANS = [
+type Plan = {
+  id: number;
+  name: string;
+  plan: string;
+  emailsAllowed: number;
+  processLimit: boolean;
+  autoProcess: boolean;
+  customTag: number;
+  totalTags: number;
+  price: {
+    amount: number;
+    priceIds: {
+      test: string;
+      production: string;
+    };
+  };
+};
+
+export const PLANS: Plan[] = [
   {
     id: 1,
     name: "Free",
