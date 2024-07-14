@@ -168,7 +168,7 @@ const Pricing = ({
               <div className="flex gap-1 items-center">
                 <h3 className="ThemeText text-3xl !text-left mb-4">Max</h3>
 
-                {currentPlan === "FREE" && (
+                {currentPlan === "MAX" && (
                   <Badge className="h-max -mt-3 bg-gray-100 text-black-200">
                     Active
                   </Badge>

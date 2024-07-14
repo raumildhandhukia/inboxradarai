@@ -59,6 +59,8 @@ const Context: React.FC<UserContextProviderProps> = ({ children }) => {
             user.stripeCurrentPeriodEnd?.toLocaleDateString() ||
             new Date().toDateString(),
           lastAutoUpdate: user.lastAutoUpdate || new Date(),
+          hasPlanCancelled: user.changeToFreePlanOnPeriodEnd || false,
+          planEndingDate: user.stripeCurrentPeriodEnd || null,
         });
     };
     userId && getData(userId);

@@ -13,6 +13,7 @@ import React, { useContext } from "react";
 import { UserContext } from "@/context/user-context";
 import Link from "next/link";
 import Pricing from "../public/pricing";
+import { format } from "date-fns";
 
 const Subscription = ({
   isSubscriptionOpen,
@@ -33,13 +34,21 @@ const Subscription = ({
               Details about your current subscription and usage.
             </DialogDescription>
           </DialogHeader>
-          <div className="flex justify-start gap-2 leading-3">
-            <Label htmlFor="name">Current Subscription</Label>
-            <div className="bg-gray-200 px-4 py-2 rounded-full -mt-1">
-              <p id="name" className="">
-                {user.plan}
-              </p>
+          <div>
+            <div className="flex justify-start gap-2 leading-3">
+              <Label htmlFor="name">Current Subscription</Label>
+              <div className="bg-gray-200 px-4 py-2 rounded-full -mt-1">
+                <p id="name" className="">
+                  {user.plan}
+                </p>
+              </div>
             </div>
+            {user.hasPlanCancelled && (
+              <p>
+                Your plan will be canceled on
+                {format(user.planEndingDate!, " MMMM.dd.yyyy")}
+              </p>
+            )}
           </div>
           <div className="flex justify-start gap-2 leading-3">
             <Label htmlFor="name">Emails Processed</Label>

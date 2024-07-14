@@ -88,6 +88,8 @@ export type UserPreferences = {
   predefinedLabels: TagPrisma[];
   stripeEndDate: string;
   lastAutoUpdate: Date;
+  hasPlanCancelled: boolean;
+  planEndingDate: Date | null;
 };
 export type Plan = {
   id: number;
