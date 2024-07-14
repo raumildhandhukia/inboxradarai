@@ -23,17 +23,11 @@ export async function POST(request: Request) {
   }
 
   const session = event.data.object as Stripe.Checkout.Session;
-  if (!session?.metadata?.userId) {
-    console.warn("No user ID found in metadata");
-    return new Response(null, {
-      status: 200,
-    });
-  }
 
   if (event.type === "customer.subscription.updated") {
     console.log("customer.subscription.updated is called");
     const subscription = await stripe.subscriptions.retrieve(
-      session.subscription as string
+      session.id as string
     );
     const res = await db.user.update({
       where: {
@@ -91,6 +85,12 @@ export async function POST(request: Request) {
   }
 
   if (event.type === "checkout.session.completed") {
+    if (!session?.metadata?.userId) {
+      console.warn("No user ID found in metadata");
+      return new Response(null, {
+        status: 200,
+      });
+    }
     const subscription = await stripe.subscriptions.retrieve(
       session.subscription as string
     );
