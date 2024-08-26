@@ -18,11 +18,11 @@ interface EmailDetailContextType {
   setEmailsLeft: React.Dispatch<React.SetStateAction<boolean>>;
   isAnalyzing: boolean;
   startTransition: TransitionStartFunction;
-  email: Email;
-  setEmail: Dispatch<SetStateAction<Email>>;
+  email: Email | null;
+  setEmail: Dispatch<SetStateAction<Email | null>>;
   emailAnalysis: any;
   setEmailAnalysis: Dispatch<SetStateAction<EmailAnalysis | null>>;
-  handleAnalyze: () => void;
+  handleAnalyze: (emailID: string, emailAddress: string) => void;
 }
 
 const defaultContext: EmailDetailContextType = {
@@ -34,7 +34,7 @@ const defaultContext: EmailDetailContextType = {
   setEmailsLeft: () => {},
   isAnalyzing: false,
   startTransition: () => {},
-  email: {} as Email,
+  email: null,
   setEmail: () => {},
   emailAnalysis: {},
   setEmailAnalysis: () => {},
@@ -52,12 +52,12 @@ const Context: React.FC<EmailDetailContextProviderProps> = ({ children }) => {
   const [cooldownTime, setCooldownTime] = useState<number>(0);
   const [emailsLeft, setEmailsLeft] = useState<boolean>(true);
   const [isAnalyzing, startTransition] = useTransition();
-  const [email, setEmail] = useState<Email>({} as Email);
+  const [email, setEmail] = useState<Email | null>(null);
   const [emailAnalysis, setEmailAnalysis] = useState<EmailAnalysis | null>(
     null
   );
 
-  const handleAnalyze = async () => {
+  const handleAnalyze = async (emailID: string, emailAddress: string) => {
     startTransition(async () => {
       const res = await fetch(`/api/ai/analyze-email`, {
         method: "POST",
@@ -65,12 +65,11 @@ const Context: React.FC<EmailDetailContextProviderProps> = ({ children }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          emailIDs: [email.id],
+          emailIDs: [emailID],
+          emailAddress,
         }),
       });
-
       if (res.ok) {
-        debugger;
         const data = await res.json();
         const emailAnalysis = data[0];
         if (emailAnalysis.success) {

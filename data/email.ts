@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { getRefresh } from "@/actions/auth/refreshToken";
+import { getRefresh } from "@/actions/auth/account";
 import {
   listEmails,
   getGoogleApiHandler,
@@ -9,40 +9,50 @@ import {
 import { getAnalysis } from "@/data/AIOperations";
 import { Email, EmailAnalysis } from "@/types";
 import { User } from "next-auth";
+import { Return } from "@prisma/client/runtime/library";
 
 interface ReturnType extends Email {
   analysis?: EmailAnalysis;
 }
 
-export const queryInbox = async (query: string, user: User) => {
-  const refresh = await getRefresh(user.id!);
+export const queryInbox = async (
+  query: string,
+  user: User,
+  email: string,
+  page: string | undefined
+) => {
+  const refresh = await getRefresh(user.id!, email);
   if (!refresh) {
     return null;
   }
   const { refresh_token } = refresh;
 
   const handler = await getGoogleApiHandler(refresh_token);
-  return await queryEmails(handler, user, query);
+  return await queryEmails(handler, user, query, page);
 };
 
 export const getInboxData = async (
   page: string | null,
   type: string | null,
   user: User,
-  labelId: string | null
+  labelId: string | null,
+  email: string
 ) => {
-  const refresh = await getRefresh(user.id!);
+  const refresh = await getRefresh(user.id!, email);
   if (!refresh) {
     return null;
   }
   const { refresh_token } = refresh;
-
   const handler = await getGoogleApiHandler(refresh_token);
-  return await listEmails(handler, page, type, user, labelId);
+  return await listEmails(handler, page, type, user, labelId, email);
 };
 
-export const getEmailData = async (emailId: string, user: User) => {
-  const refresh = await getRefresh(user.id!);
+export const getEmailData = async (
+  emailId: string,
+  user: User,
+  email: string
+) => {
+  const refresh = await getRefresh(user.id!, email);
   if (!refresh) {
     return null;
   }

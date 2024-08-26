@@ -1,65 +1,110 @@
 "use client";
-import React, { useState, useTransition } from "react";
-import Card from "@/components/auth/card";
-import { Meteors } from "@/components/ui/meteors";
-import { signIn } from "next-auth/react";
+import { useTransition, useState } from "react";
+import { login } from "@/actions/auth/login";
+import { CardWrapper } from "@/components/auth/card-wrapper";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema } from "@/schemas";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormLabel,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { FormError } from "@/components/auth/form-error";
+import { FormSuccess } from "@/components/auth/form-success";
+import { ForgotPassword } from "@/components/auth/forgot-password";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { FcGoogle } from "react-icons/fc";
-import { FaYahoo } from "react-icons/fa";
-import { Header } from "@/components/auth/header";
-import { motion } from "framer-motion";
-import { HeroHighlight, Highlight } from "@/components/ui/hero-highlight";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { createStripeSession } from "@/lib/stripe";
 
-const LoginForm = () => {
+export const LoginForm = () => {
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
   const searchParams = useSearchParams();
-  const sub = searchParams.get("sub-to-plan");
-  let callbackUrl = DEFAULT_LOGIN_REDIRECT;
-  const handleSignIn = async () => {
-    if (sub) {
-      callbackUrl = `/subscribe/${sub}`;
-    }
-    signIn("google", {
-      callbackUrl,
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with different provider"
+      : "";
+
+  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    setError("");
+    setSuccess("");
+    startTransition(() => {
+      login(values).then((data) => {
+        setError(data?.error);
+        setSuccess(data?.success);
+      });
     });
   };
 
   return (
-    <div className="shadow-7xl">
-      <div className=" w-full relative max-w-xs">
-        <div className="absolute inset-0 h-full w-full rounded-full blur-3xl" />
-        <div className="relative shadow-xl dark:bg-gray-900 border border-gray-800  px-4 py-8 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
-          <div className="flex flex-col gap-y-5 w-full">
-            <Header />
-            {/* <Highlight className="text-black dark:text-white">
-              Google verification pending !!!
-            </Highlight> */}
-
-            <Button
-              variant="hacker"
-              className="z-20 w-full h-max "
-              onClick={handleSignIn}
-            >
-              <div className="flex justify-center items-center gap-x-3">
-                <FcGoogle className="w-10 h-10" />
-                <p className="text-md md:text-lg">Link your Gmail Account</p>
-              </div>
-            </Button>
-            <Button variant="link" className="-mb-4">
-              <Link href="/" className="ThemeText">
-                Back to Home Page
-              </Link>
-            </Button>
+    <CardWrapper
+      headerLable="Login to your account"
+      backButtonLabel="Don't have an account?"
+      backButtonHref="/auth/register"
+      showSocial={true}
+    >
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isPending}
+                      {...field}
+                      placeholder="mr.wick@gmail.com"
+                      type="email"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isPending}
+                      {...field}
+                      placeholder="123456"
+                      type="password"
+                    />
+                  </FormControl>
+                  <ForgotPassword />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-
-          <Meteors number={30} />
-        </div>
-      </div>
-    </div>
+          <FormError message={error || urlError} />
+          <FormSuccess message={success} />
+          <Button disabled={isPending} type="submit" className="w-full">
+            Log In
+          </Button>
+        </form>
+      </Form>
+    </CardWrapper>
   );
 };
-
-export default LoginForm;

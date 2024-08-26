@@ -89,6 +89,13 @@ const Conf: React.FC<ConfProps> = ({ existingLabels, plan }) => {
       label: newLabel.label,
       description: newLabel.description,
     });
+    const isUnique = labels.every(
+      (label) => label.label !== newLabel.label.trim()
+    );
+    if (!isUnique) {
+      setError("Label name must be unique");
+      return;
+    }
     if (result.success) {
       setLabels((prev) => [
         ...prev,
@@ -203,7 +210,8 @@ const Conf: React.FC<ConfProps> = ({ existingLabels, plan }) => {
             <CardHeader>
               <CardTitle>Let&apos;s create personolized AI labels</CardTitle>
               <CardDescription>
-                Don&apos;t worry, you can always change these later.
+                Label name must be unique and cannot be change once its
+                assigned.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">

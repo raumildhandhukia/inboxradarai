@@ -1,11 +1,11 @@
 import {
-  analyze,
   getAILabels,
   getAnalysis,
   setAPIStats,
   setAnalysis,
   isAIAnalysisAllowed,
 } from "@/data/AIOperations";
+import { analyze } from "@/data/gemini";
 import { convertAndFilterHTMLToText, decodeAndSanitizeHTML } from "@/lib/utils";
 import { getEmailData } from "@/data/email";
 import {
@@ -32,7 +32,12 @@ export async function POST(req: Request) {
     const {
       emailIDs,
       findExisting,
-    }: { emailIDs: string[]; findExisting: boolean } = reqBody;
+      emailAddress,
+    }: { emailIDs: string[]; findExisting: boolean; emailAddress: string } =
+      reqBody;
+    if (!emailAddress) {
+      return new Response("Email is required", { status: 400 });
+    }
     const labels: Label[] = await getAILabels(user);
     let doneEmailIDs: string[] = [];
     let doneAnalysis: AnalysisResponseType[] = [];
@@ -76,7 +81,11 @@ export async function POST(req: Request) {
     const remainingAnalysis: AnalysisResponseType[] = await Promise.all(
       remainingEmailIDs.map(async (emailId: string) => {
         try {
-          const data: Email | null = await getEmailData(emailId, user);
+          const data: Email | null = await getEmailData(
+            emailId,
+            user,
+            emailAddress
+          );
           if (data) {
             const body = convertAndFilterHTMLToText(
               Buffer.from(data.body || "", "base64").toString("utf-8")
@@ -97,7 +106,7 @@ export async function POST(req: Request) {
                 actions: analysis.actions,
                 isImportant: analysis.isImportant,
               };
-              const set = await setAnalysis(emailAnalysis, user);
+              const set = await setAnalysis(emailAnalysis, user, emailAddress);
               if (!set) {
                 return {
                   emailId,

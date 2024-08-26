@@ -1,4 +1,11 @@
-import { IconHome, IconMessage, IconUser } from "@tabler/icons-react";
+import {
+  IconInbox,
+  IconHome,
+  IconMessage,
+  IconTrash,
+  IconUser,
+  IconSend,
+} from "@tabler/icons-react";
 import { FaStar } from "react-icons/fa";
 import { MdOutlineUpdate } from "react-icons/md";
 
@@ -23,10 +30,70 @@ export const socialMedia = [
 ];
 
 export const sidebarItems = [
-  { id: 1, icon: <IconHome size={20} />, text: "Primary" },
-  { id: 2, icon: <FaStar size={20} />, text: "Promotions" },
-  { id: 3, icon: <BsPeopleFill size={20} />, text: "Social" },
-  { id: 4, icon: <MdOutlineUpdate size={20} />, text: "Updates" },
+  {
+    id: "0",
+    icon: <IconInbox size={20} />,
+    text: "All Mails",
+    href: "/inbox?type=all",
+    type: "all",
+    queryPrefix: "",
+  },
+  {
+    id: "1",
+    icon: <IconHome size={20} />,
+    text: "Primary",
+    href: "/inbox?type=primary",
+    type: "primary",
+    queryPrefix: "category",
+  },
+  {
+    id: "2",
+    icon: <FaStar size={20} />,
+    text: "Promotions",
+    href: "/inbox?type=promotions",
+    type: "promotions",
+    queryPrefix: "category",
+  },
+  {
+    id: "3",
+    icon: <BsPeopleFill size={20} />,
+    text: "Social",
+    href: "/inbox?type=social",
+    type: "social",
+    queryPrefix: "category",
+  },
+  {
+    id: "4",
+    icon: <MdOutlineUpdate size={20} />,
+    text: "Updates",
+    href: "/inbox?type=updates",
+    type: "updates",
+    queryPrefix: "category",
+  },
+  {
+    id: "5",
+    icon: <IconSend size={20} />,
+    text: "Sent",
+    href: "/inbox?type=sent",
+    type: "sent",
+    queryPrefix: "in",
+  },
+  {
+    id: "6",
+    icon: <IconMessage size={20} />,
+    text: "Spam",
+    href: "/inbox?type=spam",
+    type: "spam",
+    queryPrefix: "in",
+  },
+  {
+    id: "7",
+    icon: <IconTrash size={20} />,
+    text: "Trash",
+    href: "/inbox?type=trash",
+    type: "trash",
+    queryPrefix: "in",
+  },
 ];
 
 export const labelSearchPlaceholders = [

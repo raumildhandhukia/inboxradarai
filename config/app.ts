@@ -22,7 +22,7 @@ export const PLANS: Plan[] = [
     name: "Free",
     plan: "FREE",
     emailsAllowed: 100,
-    processLimit: true,
+    processLimit: false,
     autoProcess: false,
     customTag: 3,
     totalTags: 6,

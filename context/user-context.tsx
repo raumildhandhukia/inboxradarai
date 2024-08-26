@@ -26,7 +26,6 @@ const Context: React.FC<UserContextProviderProps> = ({ children }) => {
   const userId = session?.data?.user?.id;
 
   const saveChanges = () => {
-    debugger;
     userId &&
       setUserPreferences({
         id: userId,
@@ -53,6 +52,7 @@ const Context: React.FC<UserContextProviderProps> = ({ children }) => {
           updateUpdates: user.updateUpdate,
           autoUpdate: user.autoUpdate,
           emailsProcessed: user.emailProcessed || 0,
+          labels: user.tags || [],
           customLabels: user.tags.filter((tag) => !tag.predefinedId) || [],
           predefinedLabels: user.tags.filter((tag) => tag.predefinedId) || [],
           stripeEndDate:

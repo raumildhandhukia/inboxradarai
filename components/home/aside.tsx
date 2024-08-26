@@ -124,7 +124,7 @@ const Aside: React.FC<AsideProps> = ({ children }) => {
           <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
         <div className="border-t flex p-3">
-          <Profile />
+          {/* <Profile isCollapsed={isCollapsed} /> */}
           <div
             className={`flex justify-end items-center gap-3 w-52 ml-3 overflow-hidden transition-all ${
               expanded ? "w-full" : "!w-0"

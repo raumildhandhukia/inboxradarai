@@ -38,7 +38,6 @@ const TheForm = () => {
       email: "",
       name: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
@@ -82,18 +81,7 @@ const TheForm = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Conform Passeword</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="******" {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+
           <div className="flex flex-col justify-center items-center">
             {isPending && <BeatLoader color="rgba(255, 255, 255, 0.125)" />}
             <Button variant="destructive" className="mt-5 w-full" type="submit">

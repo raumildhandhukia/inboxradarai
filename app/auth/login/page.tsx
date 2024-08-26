@@ -1,8 +1,10 @@
-import React from "react";
-import LoginForm from "@/components/auth/login-form";
-
-const Login = () => {
-  return <LoginForm />;
+import { LoginForm } from "@/components/auth/login-form";
+import { Suspense } from "react";
+const LoginPage = () => {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
+  );
 };
-
-export default Login;
+export default LoginPage;

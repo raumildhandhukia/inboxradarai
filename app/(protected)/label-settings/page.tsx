@@ -23,9 +23,9 @@ const Page = async () => {
 
   return (
     <div className="relative w-full h-full">
-      <Logo className="w-52 absolute top-10 left-20" color="black" />
+      <Logo className="w-40 absolute top-10 left-24" color="black" />
       <div className="absolute top-14 right-20">
-        <span className="text-4xl font-bold">AI Label Settings</span>
+        {/* <span className="text-4xl font-bold">AI Label Settings</span> */}
       </div>
 
       <div className="flex items-center justify-center w-full h-full">

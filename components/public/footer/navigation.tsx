@@ -7,6 +7,11 @@ export const Navigation = () => (
       </Link>
     </li>
     <li className="ThemeText text-lg">
+      <Link href="/auth/register" className="hover:text-xl">
+        Sign Up
+      </Link>
+    </li>
+    <li className="ThemeText text-lg">
       <Link href="/" className="hover:text-xl">
         Home
       </Link>

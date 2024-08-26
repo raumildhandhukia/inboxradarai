@@ -7,7 +7,7 @@ const FirstTimeConfLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <SessionProvider>
       <Toaster />
-      <BackgroundBeams />
+      {/* <BackgroundBeams /> */}
       <div className=" h-screen w-screen">{children}</div>
     </SessionProvider>
   );

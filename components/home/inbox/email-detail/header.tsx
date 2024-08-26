@@ -23,14 +23,14 @@ const EmailDetailHeader = ({ emailId }: { emailId: string }) => {
             <p className="mt-[1px]">Back</p>
           </div>
         </Button>
-        {!isAnalyzing && (
+        {/* {!isAnalyzing && (
           <Button onClick={handleAnalyze} variant="hacker">
             <div className="flex gap-2 leading-3">
               <TbAnalyze className="scale-[1.1]" />
               <p className="mt-[1px]">Analyze</p>
             </div>
           </Button>
-        )}
+        )} */}
       </div>
       <Pagination emailId={emailId} />
     </div>
