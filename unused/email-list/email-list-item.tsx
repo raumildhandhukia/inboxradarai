@@ -172,7 +172,7 @@ const EmailListItem: React.FC<EmailListItemProps> = ({
       return (
         <LimitExceeded
           timer={email.timeLeft}
-          handleAnalyze={handleAnalyze}
+          handleAnalyze={() => {}}
           removeCooldown={() => {
             setCooldown(false);
           }}

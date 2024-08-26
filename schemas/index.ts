@@ -2,14 +2,35 @@ import * as z from "zod";
 
 // If ever development for Credential Login/Register will be executed.
 
-export const RegisterSchema = z
+export const LoginSchema = z.object({
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  password: z.string().min(1, {
+    message: "Password is required",
+  }),
+});
+
+export const RegisterSchema = z.object({
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  password: z.string().min(6, {
+    message: "Minimum 6 characters required",
+  }),
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+});
+
+export const ResetSchema = z.object({
+  email: z.string().email({
+    message: "Email is required",
+  }),
+});
+
+export const NewPasswordSchema = z
   .object({
-    name: z.string().min(3, {
-      message: "Name is required",
-    }),
-    email: z.string().email({
-      message: "Email is required",
-    }),
     password: z.string().min(6, {
       message: "Minimum 6 characters required",
     }),
@@ -21,15 +42,6 @@ export const RegisterSchema = z
     message: "Passwords don't match",
     path: ["confirmPassword"],
   });
-
-export const LoginSchema = z.object({
-  email: z.string().email({
-    message: "Email is required",
-  }),
-  password: z.string().min(6, {
-    message: "Minimum 6 characters required",
-  }),
-});
 
 export const TagSchema = z.object({
   label: z

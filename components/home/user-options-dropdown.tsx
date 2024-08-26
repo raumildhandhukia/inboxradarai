@@ -6,13 +6,18 @@ import Subscription from "./subscription";
 import Preferences from "./preferences";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
-const DropDown = () => {
+const DropDown = ({ isCollapsed }: { isCollapsed: boolean }) => {
+  const user = useCurrentUser();
   return (
     <div className="flex justify-center">
-      <FlyoutLink href="#">
+      <FlyoutLink href="#" isCollapsed={isCollapsed}>
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage
+            src={user?.image || "https://github.com/shadcn.png"}
+            alt={user?.name || "CN"}
+          />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </FlyoutLink>
@@ -23,9 +28,10 @@ const DropDown = () => {
 interface FlyoutLink {
   children: React.ReactNode;
   href: string;
+  isCollapsed: boolean;
 }
 
-const FlyoutLink = ({ children, href }: FlyoutLink) => {
+const FlyoutLink = ({ children, href, isCollapsed }: FlyoutLink) => {
   const [open, setOpen] = useState(false);
   const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
@@ -75,7 +81,7 @@ const FlyoutLink = ({ children, href }: FlyoutLink) => {
       </div>
 
       <AnimatePresence>
-        {open && (
+        {open && !isCollapsed && (
           <motion.div
             onClick={(e) => e.stopPropagation()}
             initial={{ opacity: 0, y: 15 }}
@@ -83,11 +89,11 @@ const FlyoutLink = ({ children, href }: FlyoutLink) => {
             exit={{ opacity: 0, y: 15 }}
             style={{ translateX: "-50%" }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="absolute left-32 -top-[220px] bg-white text-black"
+            className="absolute left-[6.5rem] -top-[220px] bg-white text-black"
           >
             <div className="absolute -top-6 left-0 right-0 h-6 bg-transparent" />
             <div className="absolute left-5 -bottom-4 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-white border-b-2 border-r-2" />
-            <div className="w-64 bg-white rounded-lg p-6 shadow-xl h-[200px] flex flex-col justify-evenly border-2">
+            <div className="w-52 bg-white rounded-lg p-6 shadow-xl h-[200px] flex flex-col justify-evenly border-2">
               <Button
                 variant="hacker"
                 onClick={() => {

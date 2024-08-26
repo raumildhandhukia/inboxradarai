@@ -23,7 +23,6 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarItems }) => {
   const handleSidebarItemClick = (text: string, label: boolean) => {
     setActiveItem(text);
     if (label) {
-      console.log(text);
       router.push(`/inbox?label=${text}`);
       return;
     }

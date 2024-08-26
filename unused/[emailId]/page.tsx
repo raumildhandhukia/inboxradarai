@@ -45,7 +45,7 @@ const EmailDetail: React.FC<EmailListProps> = ({ params }) => {
           <EmailDetailHeader emailId={emailId} />
           <div className="pr-3 w-full border-t rounded-2xl shadow-lg p-5">
             <div className="text-lg text-md text-muted-foreground mx-10 bg-gray-100 rounded-3xl">
-              <AIInsights />
+              {/* <AIInsights /> */}
             </div>
             <Detail />
           </div>

@@ -69,14 +69,20 @@ export interface Email {
   snippet: string | null | undefined;
   subject: string | null | undefined;
   from: string | null | undefined;
+  deliveredTo: string | null | undefined;
   to: string | null | undefined;
   date: string | null | undefined;
   body: string | null | undefined;
+  threadId: string | null | undefined;
+  messageId: string | null | undefined;
+  read?: boolean;
+  analysis?: EmailAnalysis | null;
 }
 
 export type UserPreferences = {
   name: string;
   email: string;
+  labels: TagPrisma[];
   plan: string;
   updateSocial: boolean;
   updatePrimary: boolean;
@@ -108,3 +114,9 @@ export type Plan = {
     };
   };
 };
+export type Account = {
+  id: string;
+  email: string;
+};
+
+export type inbox = {};

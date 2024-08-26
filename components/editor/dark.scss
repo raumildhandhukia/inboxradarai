@@ -1,0 +1,54 @@
+.tiptap {
+  .dark & hr {
+    border-top-color: rgba(#fff, 0.4);
+  }
+  li {
+    margin: 0;
+  }
+  .dark & li {
+    color: #fff;
+  }
+
+  .dark & ul {
+    color: #fff;
+  }
+
+  .dark & ol {
+    color: #fff;
+  }
+
+  .dark & h1 {
+    color: #fff;
+  }
+
+  .dark & h2 {
+    color: #fff;
+  }
+
+  .dark & strong {
+    color: #fff;
+  }
+  .dark & code {
+    background-color: rgba(#fff, 0.1);
+    color: #dfd5d5;
+  }
+  .dark & mark {
+    background-color: #635a11;
+    color: #fff;
+  }
+  .dark & pre {
+    background: #e6d2d2;
+    color: #0d0d0d;
+    code {
+      color: #0d0d0d;
+    }
+  }
+
+  .dark & blockquote {
+    border-left-color: rgba(#fff, 0.3);
+  }
+
+  .dark & p {
+    color: #fff;
+  }
+}

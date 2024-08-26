@@ -13,6 +13,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { TagSchema } from "@/schemas";
 import { AILabel } from "./inbox/email-detail/email";
+import { ScrollArea } from "../ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 interface LabelListProps {
   predefined?: boolean;
@@ -74,8 +76,13 @@ const LabelList: React.FC<LabelListProps> = ({
             : "Manage your personalized labels"}
         </CardDescription>
       </CardHeader>
-      <CardContent className="overflow-y-scroll">
-        <div className="flex flex-wrap gap-2 p-2 overflow-y-scroll max-h-[25vh] pr-4">
+      <CardContent className="">
+        <ScrollArea
+          className={cn(
+            "flex flex-wrap gap-2 p-2 pr-4",
+            predefined ? "h-[5vh]" : "h-[25vh]"
+          )}
+        >
           {predefined ? (
             <div className="flex gap-2 flex-wrap">
               {labels.map((label) => (
@@ -186,7 +193,7 @@ const LabelList: React.FC<LabelListProps> = ({
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Button
+                        {/* <Button
                           className="ml-2 bg-green-400"
                           variant="outline"
                           onClick={() => handleEditLabel(label)}
@@ -194,7 +201,7 @@ const LabelList: React.FC<LabelListProps> = ({
                           <div className="flex gap-1 leading-3">
                             <MdEdit color="white" />
                           </div>
-                        </Button>
+                        </Button> */}
                         <Button
                           onClick={() =>
                             setLabels((prev) =>
@@ -215,7 +222,7 @@ const LabelList: React.FC<LabelListProps> = ({
               </div>
             ))
           )}
-        </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   );

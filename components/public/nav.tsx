@@ -126,6 +126,15 @@ const NavLinks = ({ className }: { className?: string }) => {
         >
           Sign In
         </Button>
+        <Button
+          variant="hacker"
+          className="rounded-none bg-white ml-3 font-medium"
+          onClick={() => {
+            Router.push("/auth/register");
+          }}
+        >
+          Sign Up
+        </Button>
       </ul>
     </>
   );
