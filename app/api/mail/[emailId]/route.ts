@@ -11,7 +11,12 @@ export async function GET(
     if (!user) {
       return new Response("Unauthorized", { status: 401 });
     }
-    const data: Email | null = await getEmailData(params.emailId, user);
+    const { searchParams } = new URL(request.url);
+    const email = searchParams.get("email");
+    if (!email) {
+      return new Response("No Email Provided", { status: 404 });
+    }
+    const data: Email | null = await getEmailData(params.emailId, user, email);
     if (!data) {
       return new Response("Unauthorized", { status: 401 });
     }

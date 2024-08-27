@@ -68,12 +68,30 @@ export async function POST(request: Request) {
     await db.tag.deleteMany({
       where: {
         userId,
+        NOT: {
+          label: {
+            in: data.map((tag) => tag.label),
+          },
+        },
       },
     });
-
-    await db.tag.createMany({
-      data,
+    const alreadyExists = await db.tag.findMany({
+      where: {
+        userId,
+        label: {
+          in: data.map((tag) => tag.label),
+        },
+      },
     });
+    const toCreate = data.filter(
+      (tag) =>
+        !alreadyExists.find((existingTag) => existingTag.label === tag.label)
+    );
+    await db.tag.createMany({
+      data: toCreate,
+    });
+
+    // find tags which do not exist in db, which are suppoesd to be created
 
     return new Response("Created", {
       status: 201,

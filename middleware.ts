@@ -2,6 +2,8 @@ import authConfig from "./auth.config";
 import NextAuth from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { sidebarItems } from "@/data";
+import { getInboxByUserId } from "@/data/inbox";
+import { auth as getSession } from "@/auth";
 
 // Use only one of the two middleware options below
 // 1. Use middleware directly
@@ -17,9 +19,7 @@ import {
   apiAuthPrefix,
   webHooks,
 } from "@/routes";
-const defaultInboxCategories = sidebarItems.map((item) =>
-  item.text.toLowerCase()
-);
+const defaultInboxCategories = sidebarItems.map((item) => item.type);
 export default auth(async function middleware(req) {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
@@ -28,6 +28,14 @@ export default auth(async function middleware(req) {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const inboxType = nextUrl.searchParams.get("type");
+  // const session = await getSession();
+  // if (!session) {
+  //   return NextResponse.redirect(new URL("/auth/login", nextUrl));
+  // }
+  // const inboxIds = session.user.inboxIds;
+  // if (inboxIds.length === 0 && nextUrl.pathname === "/inbox") {
+  //   return NextResponse.redirect(new URL("/add-inbox", nextUrl));
+  // }
 
   if (isWebhookRoute) {
     return NextResponse.next();
@@ -42,7 +50,8 @@ export default auth(async function middleware(req) {
     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   } else if (
     nextUrl.pathname === "/inbox" &&
-    !nextUrl.searchParams.get("label")
+    !nextUrl.searchParams.get("label") &&
+    !nextUrl.searchParams.get("query")
   ) {
     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   }
@@ -59,9 +68,8 @@ export default auth(async function middleware(req) {
     return NextResponse.redirect(new URL("/auth/login", nextUrl));
   }
   if (isLoggedIn && isPublicRoute) {
-    return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    return NextResponse.next();
   }
-  return NextResponse.next();
 });
 
 export const config = {

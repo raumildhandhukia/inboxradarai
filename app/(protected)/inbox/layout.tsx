@@ -6,8 +6,14 @@ import Sidebar from "@/components/home/sidebar";
 import { sidebarItems } from "@/data";
 import SearchBar from "@/components/home/search-bar";
 import InboxContextProvider from "@/context/inbox-context-provider";
-import { EmailListSkeleton } from "@/components/home/inbox/skeleton";
+import {
+  FullPageLoaderLayout,
+  InboxPageSkeletonLoader,
+} from "@/components/home/inbox/skeleton";
 import UserContextProvider from "@/context/user-context-provider";
+import EmailDetailContextProvider from "@/context/email-detail-context-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { BeatLoader } from "react-spinners";
 
 interface DashboardLayoutProps {
   params: {
@@ -25,19 +31,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       <UserContextProvider>
         <InboxContextProvider>
           <SideBarCotextProvider>
-            <div className="flex justify-start max-w-screen h-screen bg-white dark:bg-neutral-950">
-              <Sidebar sidebarItems={sidebarItems} />
-              <div className="flex-1 w-full h-full">
-                <div className="flex flex-col w-full h-full">
-                  <SearchBar />
-                  <div className="flex-grow h-full mt-[10vh] overflow-y-auto">
-                    <Suspense fallback={<EmailListSkeleton />}>
-                      {children}
-                    </Suspense>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <EmailDetailContextProvider>
+              <Suspense fallback={<InboxPageSkeletonLoader />}>
+                {children}
+              </Suspense>
+              <Toaster />
+            </EmailDetailContextProvider>
           </SideBarCotextProvider>
         </InboxContextProvider>
       </UserContextProvider>

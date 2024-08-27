@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { TbAnalyze } from "react-icons/tb";
+import { InboxContext } from "@/context/inbox-context";
 
 interface LimitExceededProps {
   timer: number;
-  handleAnalyze: (getExisting: boolean) => void;
+  handleAnalyze: () => void;
   removeCooldown: () => void;
   emailsLeft: boolean;
 }
@@ -15,6 +16,7 @@ const LimitExceeded: React.FC<LimitExceededProps> = ({
   removeCooldown,
   emailsLeft,
 }) => {
+  const { selectedAccount } = useContext(InboxContext);
   const [timeLeft, setTimeLeft] = useState<number>(timer || 0);
   useEffect(() => {
     if (timeLeft > 0) {
@@ -25,7 +27,6 @@ const LimitExceeded: React.FC<LimitExceededProps> = ({
       }
     }
   }, [emailsLeft, removeCooldown, timeLeft]);
-  debugger;
 
   return (
     <div className="flex justify-center items-center gap-5 px-2">
@@ -43,7 +44,7 @@ const LimitExceeded: React.FC<LimitExceededProps> = ({
             className="w-4 rounded-full"
             disabled={timeLeft > 0}
             onClick={() => {
-              handleAnalyze(false);
+              handleAnalyze();
             }}
           >
             {timeLeft < 0 ? (

@@ -13,7 +13,6 @@ export const Social = () => {
         <Link href="https://raumild.com" target="_blank">
           <div className="flex items-center gap-4">
             <CgWebsite className="w-6 h-6" />
-            <span>portfolio</span>
           </div>
         </Link>
       </Button>

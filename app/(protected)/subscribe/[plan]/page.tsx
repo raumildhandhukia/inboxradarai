@@ -12,7 +12,10 @@ const Subscribe = async ({ params }: SubscribeProps) => {
   if (!user || !user.id) {
     return null;
   }
-  const plan = params.plan;
+  let plan = params.plan;
+  if (plan !== "Pro" && plan !== "Max") {
+    plan = "Max";
+  }
   const { url } = await createStripeSession(user.id, plan);
   if (url) {
     redirect(url);

@@ -1,18 +1,22 @@
-import { ReactNode } from "react";
+import { Nav } from "@/components/public/nav";
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import { Suspense } from "react";
+import { ReactNode, Suspense } from "react";
+
 interface AuthLayoutProps {
   children: ReactNode;
 }
 
 const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   return (
-    <Suspense fallback={null}>
+    <main>
+      <header className="">
+        <Nav />
+      </header>
       <div className="h-[calc(100dvh)] flex items-center justify-center">
-        <BackgroundBeams />
-        {children}
+        <BackgroundBeams className="" />
+        <Suspense>{children}</Suspense>
       </div>
-    </Suspense>
+    </main>
   );
 };
 

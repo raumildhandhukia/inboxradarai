@@ -1,9 +1,17 @@
 import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
-import { storeRefresh } from "@/actions/auth/refreshToken";
+import {
+  storeAccountData,
+  // upsertInbox
+} from "@/actions/auth/account";
 import { populateUser } from "@/actions/auth/populateUser";
 import { db } from "@/lib/db";
 import { userInfo } from "./actions/auth/getUserInfo";
+import { LoginSchema } from "./schemas";
+import { getUserByEmail } from "./data/user";
+// import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export default {
   pages: {
@@ -26,15 +34,41 @@ export default {
         }
       }
     },
+    async signIn(incoming) {
+      const { account, profile, user } = incoming;
+      if (
+        account?.provider === "google" &&
+        account?.access_token &&
+        account?.refresh_token &&
+        profile?.email
+      ) {
+        await storeAccountData(
+          account.refresh_token,
+          account.providerAccountId,
+          profile.email || ""
+        );
+      }
+    },
   },
   callbacks: {
-    async signIn({ account, user }) {
-      if (account?.access_token && account?.refresh_token) {
-        await storeRefresh(account.refresh_token, account.providerAccountId);
-      }
+    // async signIn(incoming) {
+    //   const { account, profile, user } = incoming;
+    //   if (
+    //     account?.provider === "google" &&
+    //     account?.access_token &&
+    //     account?.refresh_token &&
+    //     profile?.email
+    //   ) {
+    //     await storeAccountData(
+    //       account.refresh_token,
+    //       account.providerAccountId,
+    //       profile.email || ""
+    //     );
+    //     // await upsertInbox(account.refresh_token, "google", user.email);
+    //   }
 
-      return true;
-    },
+    //   return true;
+    // },
     async session({ session, token }) {
       if (session && token && session.user && token.sub) {
         const user = await userInfo(token.sub);
@@ -45,6 +79,25 @@ export default {
     },
   },
   providers: [
+    Credentials({
+      async authorize(credentials) {
+        const validatedFields = LoginSchema.safeParse(credentials);
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data;
+          const user = await getUserByEmail(email);
+          if (!user || !password) {
+            return null;
+          } else {
+            const isValid = await bcrypt.compare(password, user.password!);
+            if (!isValid) {
+              return null;
+            }
+            return user;
+          }
+        }
+        return null;
+      },
+    }),
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
@@ -54,7 +107,7 @@ export default {
           prompt: "consent",
           response_type: "code",
           scope:
-            "openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/gmail.readonly",
+            "openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.modify",
         },
       },
     }),

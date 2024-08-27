@@ -3,6 +3,7 @@ import Plans from "@/types/Plans";
 
 export type ExtUser = DefaultSession["user"] & {
   stripePriceId: string;
+  inboxIds: string[];
 };
 
 declare module "next-auth" {

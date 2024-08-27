@@ -6,6 +6,7 @@ export const Navigation = () => (
         Sign In
       </Link>
     </li>
+
     <li className="ThemeText text-lg">
       <Link href="/" className="hover:text-xl">
         Home
@@ -21,7 +22,6 @@ export const Navigation = () => (
         Pricing
       </Link>
     </li>
-
     <li className="ThemeText text-lg">
       <Link href="/blog" className="hover:text-xl">
         Blog

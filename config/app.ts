@@ -1,4 +1,4 @@
-type Plan = {
+export type Plan = {
   id: number;
   name: string;
   plan: string;
@@ -7,6 +7,7 @@ type Plan = {
   autoProcess: boolean;
   customTag: number;
   totalTags: number;
+  contentAi: boolean;
   price: {
     amount: number;
     priceIds: {
@@ -22,10 +23,11 @@ export const PLANS: Plan[] = [
     name: "Free",
     plan: "FREE",
     emailsAllowed: 100,
-    processLimit: true,
+    processLimit: false,
     autoProcess: false,
     customTag: 3,
     totalTags: 6,
+    contentAi: false,
     price: {
       amount: 0,
       priceIds: {
@@ -43,6 +45,7 @@ export const PLANS: Plan[] = [
     autoProcess: true,
     customTag: 8,
     totalTags: 12,
+    contentAi: true,
     price: {
       amount: 1.99,
       priceIds: {
@@ -60,6 +63,7 @@ export const PLANS: Plan[] = [
     autoProcess: true,
     customTag: 20,
     totalTags: 25,
+    contentAi: true,
     price: {
       amount: 4.99,
       priceIds: {

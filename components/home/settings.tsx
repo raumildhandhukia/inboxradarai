@@ -15,7 +15,6 @@ import { Label } from "@/types";
 const Settings = ({}: {}) => {
   const [aiLabels, setAILabels] = React.useState<Label[]>([]);
   useEffect(() => {
-    console.log("Settings mounted");
     const get = async () => {
       const res = await fetch("/api/mail/labels", {
         cache: "no-store",

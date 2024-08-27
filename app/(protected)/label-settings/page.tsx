@@ -21,18 +21,7 @@ const Page = async () => {
     return <div>Unauthorized</div>;
   }
 
-  return (
-    <div className="relative w-full h-full">
-      <Logo className="w-52 absolute top-10 left-20" color="black" />
-      <div className="absolute top-14 right-20">
-        <span className="text-4xl font-bold">AI Label Settings</span>
-      </div>
-
-      <div className="flex items-center justify-center w-full h-full">
-        <Settings existingLabels={labels} plan={plan} />
-      </div>
-    </div>
-  );
+  return <Settings existingLabels={labels} plan={plan} />;
 };
 
 export default Page;
