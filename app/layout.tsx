@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Anonymous_Pro, Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { SessionProvider } from "next-auth/react";
 const poppins = Poppins({
   weight: ["100", "300", "500", "700"],
   subsets: ["latin"],
@@ -24,14 +25,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pro.className} ${poppins.className}`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="bg-white dark:bg-neutral-950">{children}</div>
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="bg-white dark:bg-neutral-950">{children}</div>
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );

@@ -12,12 +12,14 @@ export const useSelectedAccount = (defaultAccount: string) => {
       setSelectedAccount(account);
     } else {
       setSelectedAccount(defaultAccount);
+
       Cookies.set("selectedEmailAccount", defaultAccount);
     }
   }, [setSelectedAccount, defaultAccount]);
 
   const setAccount = (account: string) => {
     setSelectedAccount(account);
+
     Cookies.set("selectedEmailAccount", account);
   };
   return setAccount;

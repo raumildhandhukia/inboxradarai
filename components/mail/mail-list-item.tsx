@@ -13,15 +13,20 @@ import { Badge } from "../ui/badge";
 import { Email } from "@/types";
 
 import { InboxContext } from "@/context/inbox-context";
-import { DateTime } from "../home/inbox/email-detail/email";
+import { AILabel, DateTime } from "../home/inbox/email-detail/email";
 import { UserContext } from "@/context/user-context";
 import { useSearchParams } from "next/navigation";
 
 const MailListItem = (item: Email, inUnreadTab?: boolean) => {
   const searchParams = useSearchParams();
   const { id, from, subject, snippet, read, labelIds, analysis, date } = item;
-  const { selectedEmail, setSelectedEmail, selectedAccount, setEmails } =
-    useContext(InboxContext);
+  const {
+    selectedEmail,
+    setSelectedEmail,
+    selectedAccount,
+    setEmails,
+    setComposeMessage,
+  } = useContext(InboxContext);
   const [isAnalyzing, startAnalysis] = useTransition();
   const inboxType = searchParams.get("type");
   const { user } = useContext(UserContext);
@@ -93,6 +98,7 @@ const MailListItem = (item: Email, inUnreadTab?: boolean) => {
   }, [user.autoUpdate, user.lastAutoUpdate, item?.date]);
 
   const handleEmailClick = async () => {
+    setComposeMessage(false);
     setSelectedEmail(item);
     setEmailAnalysis(null);
     const res = await fetch(`/api/mail/mark-read`, {
@@ -156,7 +162,9 @@ const MailListItem = (item: Email, inUnreadTab?: boolean) => {
       </div>
       {!isAnalyzing && analysis?.tag ? (
         <div className="flex items-center gap-2">
-          <Badge key={analysis.tag.id}>{analysis.tag.label}</Badge>
+          <AILabel key={analysis.tag.id} bgColor={analysis.tag.color}>
+            {analysis.tag.label}
+          </AILabel>
         </div>
       ) : null}
       {isAnalyzing && (

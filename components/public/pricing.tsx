@@ -23,7 +23,7 @@ const Pricing = ({
         </div>
       )}
       <div className="flex flex-col items-center gap-y-10 md:flex-row justify-center md:gap-x-10">
-        <div className="md:w-[300px]">
+        <div className="md:w-[300px]" id="free">
           <div className=" rounded-2xl shadow-lg dark:bg-zinc-900">
             <div className="relative dark:bg-zinc-900 px-6 py-10 min-h-[48vh] md:min-h-[64vh] 2xl:min-h-[44vh]">
               <div className="flex gap-1 items-center">
@@ -36,7 +36,7 @@ const Pricing = ({
                 )}
               </div>
               <p className="text-neutral-600 dark:text-neutral-400 mb-6">
-                Perfect for getting started
+                For getting started
               </p>
               <div className="text-center flex justify-center items-center mb-12">
                 <span className="text-4xl font-bold text-black dark:text-neutral-200">
@@ -91,7 +91,7 @@ const Pricing = ({
             </div>
           </div>
         </div>
-        <div className="md:w-[300px]">
+        {/* <div className="md:w-[300px]">
           <div className=" rounded-2xl shadow-lg dark:bg-zinc-900 ">
             <div className="relative pricing-card dark:bg-zinc-900 px-6 py-10 min-h-[48vh] md:min-h-[64vh] 2xl:min-h-[44vh]">
               <div className="flex gap-1 items-center">
@@ -161,21 +161,21 @@ const Pricing = ({
               </div>
             </div>
           </div>
-        </div>
-        <div className="md:w-[300px]">
+        </div> */}
+        <div className="md:w-[300px]" id="Pro">
           <div className="md:min-w-[30%] rounded-2xl shadow-lg dark:bg-zinc-900">
             <div className="relative pricing-card dark:bg-zinc-900 px-6 py-10 min-h-[48vh] md:min-h-[64vh] 2xl:min-h-[44vh]">
               <div className="flex gap-1 items-center">
-                <h3 className="ThemeText text-3xl !text-left mb-4">Max</h3>
+                <h3 className="ThemeText text-3xl !text-left mb-4">Pro</h3>
 
-                {currentPlan === "MAX" && (
+                {currentPlan === "PRO" && (
                   <Badge className="h-max -mt-3 bg-gray-100 text-black-200">
                     Active
                   </Badge>
                 )}
               </div>
               <p className="text-neutral-600 dark:text-neutral-400 mb-6">
-                For power users
+                For ultimate AI experience
               </p>
               <div className="text-center mb-6 flex justify-center items-center">
                 <span className="text-4xl font-bold text-black dark:text-neutral-200">
@@ -193,19 +193,32 @@ const Pricing = ({
                 </li>
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="grey" />
+                  AI Autocompletion
+                </li>
+                <li className="mb-2 flex gap-2 leading-[17px]">
+                  <BsPatchCheckFill color="grey" />
                   AI Insights
+                </li>
+                <li className="mb-2 flex gap-2 leading-[17px]">
+                  <BsPatchCheckFill color="grey" />
+                  Context Prompting
                 </li>
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="gray" />
                   Automated Analysis
                 </li>
+
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="grey" />
-                  20 Personalized Labels
+                  No Rate Limiting
                 </li>
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="grey" />
-                  Unlimited Email Processing
+                  Unlimited Inboxes
+                </li>
+                <li className="mb-2 flex gap-2 leading-[17px]">
+                  <BsPatchCheckFill color="grey" />
+                  20 Personalized Labels
                 </li>
               </ul>
 

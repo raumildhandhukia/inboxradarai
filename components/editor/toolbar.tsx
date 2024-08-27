@@ -32,14 +32,23 @@ import {
 // import { setLink } from "../helpers";
 
 import "./Toolbar.scss";
+import { Bot, BotOff } from "lucide-react";
 
 type ToolbarProps = {
   editor: Editor;
   expandButton?: boolean;
   handleButtonClick?: () => void;
+  setUseAI?: () => void;
+  useAI?: boolean;
 };
 
-function Toolbar({ editor, expandButton, handleButtonClick }: ToolbarProps) {
+function Toolbar({
+  editor,
+  expandButton,
+  handleButtonClick,
+  setUseAI,
+  useAI,
+}: ToolbarProps) {
   const isCursorOverLink = editor.getAttributes("link").href;
 
   const { observe, inView } = useInView({
@@ -78,56 +87,7 @@ function Toolbar({ editor, expandButton, handleButtonClick }: ToolbarProps) {
           >
             <RiCodeSSlashLine />
           </div>
-          <div className="divider"></div>
-          <div
-            className="icon"
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 1 }).run()
-            }
-          >
-            <RiH1 />
-          </div>
-          <div
-            className="icon"
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 2 }).run()
-            }
-          >
-            <RiH2 />
-          </div>
-          <div
-            className="icon"
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 3 }).run()
-            }
-          >
-            <RiH3 />
-          </div>
-          <div
-            className="icon"
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
-          >
-            <RiListOrdered />
-          </div>
-          <div
-            className="icon"
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          >
-            <RiListUnordered />
-          </div>
-          <div className="divider"></div>
-          <div
-            className="icon"
-            onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          >
-            <RiDoubleQuotesL />
-          </div>
-          <div
-            className="icon"
-            onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          >
-            <RiSeparator />
-          </div>
+
           <div className="divider"></div>
           <div
             className="icon"
@@ -161,6 +121,14 @@ function Toolbar({ editor, expandButton, handleButtonClick }: ToolbarProps) {
             <button className="" onClick={handleButtonClick}>
               <RiExpandDiagonalFill className="text-black" />
             </button>
+          )}
+          <div className="divider"></div>
+          {setUseAI && (
+            <div>
+              <button className="text-black" onClick={setUseAI}>
+                {useAI ? <Bot /> : <BotOff />}
+              </button>
+            </div>
           )}
         </div>
       </div>

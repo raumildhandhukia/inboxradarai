@@ -10,7 +10,12 @@ const Test = ({}: TestProps) => {
 
   return (
     <div className="p-10 h-screen">
-      <Editor content={content} setContent={setContent} className="h-[80vh]" />
+      <Editor
+        content={content}
+        setContent={setContent}
+        className="h-[80vh]"
+        useAI={true}
+      />
     </div>
   );
 };

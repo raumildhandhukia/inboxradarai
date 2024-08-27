@@ -22,6 +22,7 @@ interface NavProps {
     icon?: React.JSX.Element;
     href: string;
     color?: string;
+    type?: string;
   }[];
 }
 
@@ -29,7 +30,8 @@ export function Nav({ links, isCollapsed, showCompose }: NavProps) {
   const searchParams = useSearchParams();
   const inboxType = searchParams.get("type");
   const labelName = searchParams.get("label");
-  const { query, setQuery, setComposeMessage } = useContext(InboxContext);
+  const { query, setQuery, setComposeMessage, setSelectedEmail } =
+    useContext(InboxContext);
 
   return (
     <div
@@ -56,7 +58,10 @@ export function Nav({ links, isCollapsed, showCompose }: NavProps) {
             </Tooltip>
           ) : (
             <Button
-              onClick={() => setComposeMessage(true)}
+              onClick={() => {
+                setComposeMessage(true);
+                setSelectedEmail(null);
+              }}
               variant="indigo"
               className="flex gap-2 w-max rounded-2xl text-lg p-6"
             >
@@ -67,9 +72,8 @@ export function Nav({ links, isCollapsed, showCompose }: NavProps) {
         ) : null}
         {links.map((link, index) => {
           const variant =
-            (!query &&
-              inboxType &&
-              link.text.toLowerCase().includes(inboxType?.toLowerCase())) ||
+            (inboxType &&
+              link.type?.toLowerCase().includes(inboxType?.toLowerCase())) ||
             (labelName &&
               link.id.toLowerCase().includes(labelName?.toLowerCase()))
               ? "default"

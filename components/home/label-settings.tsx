@@ -23,6 +23,8 @@ import FancyButton from "@/components/ui/fancy-button";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { getUserPlan } from "@/actions/plan";
+import { FullPageLoaderLayout } from "./inbox/skeleton";
+import { BeatLoader } from "react-spinners";
 
 interface ConfProps {
   existingLabels: Label[];
@@ -30,6 +32,7 @@ interface ConfProps {
 }
 
 const Conf: React.FC<ConfProps> = ({ existingLabels, plan }) => {
+  const [loading, startLoading] = useState<boolean>(false);
   const { toast } = useToast();
   const user = useCurrentUser();
   const router = useRouter();
@@ -126,6 +129,7 @@ const Conf: React.FC<ConfProps> = ({ existingLabels, plan }) => {
       body: JSON.stringify({ tags: labels }),
     });
     if (res.ok) {
+      startLoading(true);
       router.push(DEFAULT_LOGIN_REDIRECT);
     } else {
       setError("Failed to Create Labels");
@@ -146,6 +150,14 @@ const Conf: React.FC<ConfProps> = ({ existingLabels, plan }) => {
     setLabels((prev) => [...prev, label]);
     callback();
   };
+
+  if (loading) {
+    return (
+      <FullPageLoaderLayout>
+        <BeatLoader color="#6366F1" />
+      </FullPageLoaderLayout>
+    );
+  }
 
   return (
     <div className="flex justify-evenly items-center w-full h-full">

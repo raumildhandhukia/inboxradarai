@@ -7,12 +7,27 @@ import Preferences from "./preferences";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useRouter } from "next/navigation";
 
-const DropDown = ({ isCollapsed }: { isCollapsed: boolean }) => {
+const DropDown: React.FC<{
+  isCollapsed: boolean;
+  setFullPageLoader: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({
+  isCollapsed,
+  setFullPageLoader,
+}: {
+  isCollapsed: boolean;
+  setFullPageLoader: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const user = useCurrentUser();
+  const router = useRouter();
   return (
     <div className="flex justify-center">
-      <FlyoutLink href="#" isCollapsed={isCollapsed}>
+      <FlyoutLink
+        href="#"
+        isCollapsed={isCollapsed}
+        setFullPageLoader={setFullPageLoader}
+      >
         <Avatar>
           <AvatarImage
             src={user?.image || "https://github.com/shadcn.png"}
@@ -29,9 +44,16 @@ interface FlyoutLink {
   children: React.ReactNode;
   href: string;
   isCollapsed: boolean;
+  setFullPageLoader: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FlyoutLink = ({ children, href, isCollapsed }: FlyoutLink) => {
+const FlyoutLink = ({
+  children,
+  href,
+  isCollapsed,
+  setFullPageLoader,
+}: FlyoutLink) => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
@@ -117,6 +139,9 @@ const FlyoutLink = ({ children, href, isCollapsed }: FlyoutLink) => {
               <Button
                 onClick={() => {
                   setOpen(false);
+                  router.push("/label-settings");
+                  setFullPageLoader(true);
+                  // redirect("/label-settings");
                 }}
                 variant="hacker"
               >

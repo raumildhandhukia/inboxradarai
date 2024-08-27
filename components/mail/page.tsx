@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { Mail } from "./mail";
+import Mail from "./main";
 import { getAccounts } from "@/data/account";
 import { Account } from "@/types";
 import { redirect } from "next/navigation";
@@ -17,14 +17,13 @@ export default async function MailPage() {
 
   return (
     <>
-      <div className="hidden flex-col md:flex">
+      {accounts && (
         <Mail
           accounts={accounts}
           defaultLayout={defaultLayout}
           defaultCollapsed={defaultCollapsed}
-          navCollapsedSize={4}
         />
-      </div>
+      )}
     </>
   );
 }

@@ -18,21 +18,25 @@ import FloatingTips from "./floating-tips";
 import { set } from "date-fns";
 
 interface EditorProps {
+  useAI?: boolean;
+  setUseAI?: () => void;
   content: string;
   setContent: React.Dispatch<React.SetStateAction<string>>;
   className?: string;
   expandButton?: boolean;
   handleButtonClick?: () => void;
-  placeholder?: string;
+  placeholderString?: string;
 }
 
 export const Editor: React.FC<EditorProps> = ({
+  useAI,
+  setUseAI,
   content,
   setContent,
   className,
   expandButton,
   handleButtonClick,
-  placeholder,
+  placeholderString,
 }) => {
   const [floatingText, setFloatingText] = useState<string | null>(null);
   const [show, setShow] = useState(false);
@@ -63,7 +67,7 @@ export const Editor: React.FC<EditorProps> = ({
       Placeholder.configure({
         placeholder: ({ node }) => {
           if (node.type.name === "paragraph") {
-            return "Your placeholder text here...";
+            return placeholderString || "Start writing here...";
           }
           return "";
         },
@@ -98,7 +102,7 @@ export const Editor: React.FC<EditorProps> = ({
 
   useEffect(() => {
     const handleKeyDown = async (event: KeyboardEvent) => {
-      if (event.key === "Tab") {
+      if (event.key === "Tab" && useAI) {
         // setShow(!show)
         event.preventDefault();
         if (
@@ -158,6 +162,8 @@ export const Editor: React.FC<EditorProps> = ({
       >
         {editor && (
           <Toolbar
+            useAI={useAI}
+            setUseAI={setUseAI}
             editor={editor}
             expandButton={expandButton}
             handleButtonClick={handleButtonClick}
@@ -171,7 +177,7 @@ export const Editor: React.FC<EditorProps> = ({
           />
         </div>
       </div>
-      {showFloatingTipComponent() && (
+      {useAI && showFloatingTipComponent() && (
         <FloatingTips editor={editor}>{floatingText}</FloatingTips>
       )}
     </div>

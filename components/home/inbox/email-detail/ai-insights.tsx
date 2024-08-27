@@ -23,7 +23,8 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
     handleAnalyze,
   } = useContext(EmailDetailContext);
   const { selectedAccount, setEmails } = useContext(InboxContext);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+  const [value, setValue] = useState("2");
 
   const getAccordianTitle = () => {
     if (cooldown) {
@@ -54,7 +55,7 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
   };
   return (
     <div>
-      <Accordion type="single" collapsible>
+      <Accordion type="single" collapsible defaultChecked>
         <AccordionItem value="item-1">
           <AccordionTrigger
             className="font-bold text-black text-md w-full p-2"

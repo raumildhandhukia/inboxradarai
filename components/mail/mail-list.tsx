@@ -12,7 +12,9 @@ export function MailList({ items, inUnreadTab }: MailListProps) {
   return (
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-1 p-4 pt-0">
-        {items.map((item) => MailListItem(item, inUnreadTab))}
+        {items.map((item) => (
+          <MailListItem key={item.id} {...item} />
+        ))}
       </div>
     </ScrollArea>
   );

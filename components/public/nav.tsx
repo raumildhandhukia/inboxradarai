@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { logout } from "@/actions/auth/logout";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 import Logo from "@/public/Logo";
-
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 interface NavProps {
   type?: String;
 }
@@ -99,6 +99,7 @@ export const Nav: React.FC<NavProps> = ({ type }) => {
 
 const NavLinks = ({ className }: { className?: string }) => {
   const Router = useRouter();
+  const user = useCurrentUser();
   return (
     <>
       <ul className={`${className}`}>
@@ -124,9 +125,9 @@ const NavLinks = ({ className }: { className?: string }) => {
             Router.push("/auth/login");
           }}
         >
-          Sign In
+          <Link href="/auth/login">{user ? "Back to site" : "Sign In"}</Link>
         </Button>
-        <Button
+        {/* <Button
           variant="hacker"
           className="rounded-none bg-white ml-3 font-medium"
           onClick={() => {
@@ -134,7 +135,7 @@ const NavLinks = ({ className }: { className?: string }) => {
           }}
         >
           Sign Up
-        </Button>
+        </Button> */}
       </ul>
     </>
   );
