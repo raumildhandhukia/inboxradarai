@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -5,6 +6,7 @@ import { ContainerScroll } from "../ui/container-scroll-animation";
 import GradualSpacing from "../ui/gradual-spacing";
 import { Social } from "../auth/social-variant";
 import { cn } from "@/lib/utils";
+import Footer from "./footer/footer";
 
 const headers = [
   <h1
@@ -72,7 +74,47 @@ const images = [
     className: "object-contain",
   },
 ];
-const Hero = ({ activeFeature }: { activeFeature: number }) => {
+const Hero = ({
+  activeFeature,
+  isMobile,
+}: {
+  activeFeature: number;
+  isMobile?: boolean;
+}) => {
+  if (isMobile) {
+    return (
+      <div className="flex flex-col overflow-hidden">
+        <ContainerScroll
+          titleComponent={
+            <div className="flex justify-center items-center ">
+              {headers[0]}
+            </div>
+          }
+        >
+          <img
+            src={`/inboxradarai.png`}
+            alt="hero"
+            height={720}
+            width={1400}
+            className="mx-auto rounded-2xl object-cover h-full object-left-top"
+            draggable={true}
+          />
+        </ContainerScroll>
+        <div className="fixed bottom-10 left-[16%] !w-[68%]">
+          <div className="">
+            <GradualSpacing
+              className="text-xl md:text-[2rem] font-bold mt-1 leading-none w-max overflow-hidden"
+              text="Currently available "
+            />
+            <GradualSpacing
+              className="text-xl md:text-[2rem] font-bold mt-1 leading-none w-max overflow-hidden"
+              text="only on Desktop"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="h-full">
       <div className="flex flex-col justify-center items-center h-full">
