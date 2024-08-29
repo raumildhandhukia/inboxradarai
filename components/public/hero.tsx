@@ -50,9 +50,9 @@ const headers = [
 ];
 const images = [
   "/inboxradarai.png",
-  "/inboxradarai.png",
-  "/inboxradarai.png",
-  "/inboxradarai.png",
+  "/autocomplete.gif",
+  "/insights.gif",
+  "/label-cropped.gif",
   "/inboxradarai.png",
   "/inboxradarai.png",
 ];

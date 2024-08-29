@@ -268,7 +268,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
                       content={replyMessage}
                       setContent={setReplyMessage}
                       className={`text-xs ${
-                        isReplyWindowExpanded ? "h-[80vh]" : "h-[40vh]"
+                        isReplyWindowExpanded ? "h-[56vh]" : "h-[40vh]"
                       }`}
                       placeholderString={`Click here to reply ${mail.from}...`}
                     />

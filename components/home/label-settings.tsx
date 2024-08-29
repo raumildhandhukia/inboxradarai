@@ -25,6 +25,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { getUserPlan } from "@/actions/plan";
 import { FullPageLoaderLayout } from "./inbox/skeleton";
 import { BeatLoader } from "react-spinners";
+import GridPattern from "@/components/ui/grid";
+import { cn } from "@/lib/utils";
+import DotPattern from "@/components/ui/dot";
 
 interface ConfProps {
   existingLabels: Label[];
@@ -160,12 +163,31 @@ const Conf: React.FC<ConfProps> = ({ existingLabels, plan }) => {
   }
 
   return (
-    <div className="flex justify-evenly items-center w-full h-full">
+    <div className="flex justify-between gap-20 items-center w-full h-full">
+      <GridPattern
+        width={20}
+        height={20}
+        x={-1}
+        y={-1}
+        className={cn(
+          "!z-0",
+          "[mask-image:linear-gradient(to_bottom,white,transparent,transparent)] "
+        )}
+      />
+      <DotPattern
+        width={20}
+        height={20}
+        x={-1}
+        y={-1}
+        className={cn(
+          "[mask-image:linear-gradient(to_top,white,transparent,transparent)] "
+        )}
+      />
       <Tabs
         value={currentTab}
         onValueChange={setCurrentTab}
         defaultValue={currentTab}
-        className="w-[40%] bg-white dark:bg-neutral-950 z-[1]"
+        className="w-[70%] bg-white dark:bg-neutral-950 z-[1]"
       >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="select-label">Select</TabsTrigger>

@@ -25,6 +25,9 @@ const features = [
           <strong>InboxRadarAI</strong> helps you write emails faster and more
           effectively.
         </span>
+        <span>
+          Keep your responses clean and concise by using AI assistant.
+        </span>
       </div>
     ),
   },
@@ -43,7 +46,7 @@ const features = [
     ),
   },
   {
-    image: "/inboxradarai.png",
+    image: "/Label.gif",
     title: "AI Labels",
     bgColor: "bg-gradient-to-b from-green-300 to-yellow-50",
     description: (
@@ -52,6 +55,10 @@ const features = [
         <span>
           <strong>InboxRadarAI</strong> automatically labels your emails, so you
           can focus on what matters.
+        </span>
+        <span>
+          Create custom labels for your emails for one time and let{" "}
+          <strong>AI</strong> handle the rest.
         </span>
       </div>
     ),
