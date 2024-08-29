@@ -63,7 +63,7 @@ export const ContactForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col md:items-start">
-        <h3 className="ThemeText text-4xl">Contact Me</h3>
+        <h3 className="ThemeText text-4xl">Contact</h3>
       </div>
       <div className="flex flex-col md:flex-row md:gap-10 ">
         <div className="mt-5">

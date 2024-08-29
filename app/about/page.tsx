@@ -34,7 +34,7 @@ const About = () => {
             technology, which also includes automated responses and much more.
           </p>
         </div>
-        <div className="mt-20 px-5">
+        {/* <div className="mt-20 px-5">
           <p className="text-3xl lg:text-4xl ThemeText !text-left ">
             Developer
           </p>
@@ -61,7 +61,7 @@ const About = () => {
             feedback, feel free to reach out. Your satisfaction and success are
             my top priorities.
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
