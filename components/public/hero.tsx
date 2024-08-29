@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ContainerScroll } from "../ui/container-scroll-animation";
 import GradualSpacing from "../ui/gradual-spacing";
 import { Social } from "../auth/social-variant";
+import { cn } from "@/lib/utils";
 
 const headers = [
   <h1
@@ -49,19 +50,34 @@ const headers = [
   </h1>,
 ];
 const images = [
-  "/inboxradarai.png",
-  "/autocomplete.gif",
-  "/insights.gif",
-  "/label-cropped.gif",
-  "/inboxradarai.png",
-  "/inboxradarai.png",
+  { src: "/inboxradarai.png", className: "object-contain" },
+  {
+    src: "/autocomplete.gif",
+    className: "object-contain",
+  },
+  {
+    src: "/insights.gif",
+    className: "object-contain",
+  },
+  {
+    src: "/label-cropped.gif",
+    className: "object-contain",
+  },
+  {
+    src: "/inboxradarai.png",
+    className: "object-contain",
+  },
+  {
+    src: "/inboxradarai.png",
+    className: "object-contain",
+  },
 ];
 const Hero = ({ activeFeature }: { activeFeature: number }) => {
   return (
     <div className="h-full">
       <div className="flex flex-col justify-center items-center h-full">
         <ContainerScroll
-          cardClassNames={`${activeFeature === 3 ? "!h-max !w-full" : ""}`}
+          cardClassNames={`${activeFeature === -1 ? "w-full " : "w-[62vh]"}`}
           titleComponent={
             <div className="w-full flex justify-center">
               {headers[activeFeature + 1]}
@@ -71,9 +87,12 @@ const Hero = ({ activeFeature }: { activeFeature: number }) => {
           <AnimatePresence mode="wait">
             <motion.img
               key={activeFeature}
-              src={images[activeFeature + 1]}
+              src={images[activeFeature + 1].src}
               alt="hero"
-              className="p-2 md:p-0 mx-auto rounded-2xl object-cover h-full object-left-top w-full"
+              className={cn(
+                "p-2 md:p-0 mx-auto rounded-2xl object-cover h-full",
+                images[activeFeature + 1].className
+              )}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
