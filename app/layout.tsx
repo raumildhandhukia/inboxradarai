@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${pro.className} ${poppins.className}`}>
+      <body className={` ${poppins.className}`}>
         <SessionProvider>
           <ThemeProvider
             attribute="class"
@@ -32,7 +32,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="bg-white dark:bg-neutral-950">{children}</div>
+            <div className="bg-gradient-to-b from-white to-indigo-300 dark:bg-neutral-950">
+              {children}
+            </div>
           </ThemeProvider>
         </SessionProvider>
       </body>

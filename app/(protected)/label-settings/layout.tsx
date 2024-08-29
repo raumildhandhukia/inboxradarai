@@ -17,7 +17,7 @@ const FirstTimeConfLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
 
           <div className="flex items-center justify-center w-full h-full">
-            {children}{" "}
+            <div className="!bg-white">{children}</div>
           </div>
         </div>
       </div>

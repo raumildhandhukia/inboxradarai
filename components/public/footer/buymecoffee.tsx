@@ -9,7 +9,7 @@ export const BuyMeCoffee = () => {
   return (
     <div className="mt-10 md:mt-0">
       <div className="flex flex-col items-center gap-y-8">
-        <h3 className="ThemeText !text-left text-4xl">Buy Me A Coffee</h3>
+        <h3 className="ThemeText !text-left text-xl">Buy Me A Coffee</h3>
         <div className="flex flex-col items-start h-full ">
           <Image
             src="/bmc_qr.png"

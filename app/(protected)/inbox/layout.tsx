@@ -33,7 +33,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <SideBarCotextProvider>
             <EmailDetailContextProvider>
               <Suspense fallback={<InboxPageSkeletonLoader />}>
-                {children}
+                <div className="!bg-white">{children}</div>
               </Suspense>
               <Toaster />
             </EmailDetailContextProvider>
