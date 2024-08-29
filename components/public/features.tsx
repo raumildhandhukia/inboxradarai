@@ -23,8 +23,8 @@ const Feature = ({
         transition={{ duration: 0.5 }}
         className="w-1/2 pr-16"
       >
-        <h2 className="text-5xl font-bold mb-10">{title}</h2>
-        <p className="text-4xl">{description}</p>
+        <div className="text-5xl font-bold mb-10">{title}</div>
+        <div className="text-3xl">{description}</div>
       </motion.div>
     </div>
   );

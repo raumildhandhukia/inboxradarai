@@ -8,6 +8,9 @@ import Pricing from "@/components/public/pricing";
 import Feature from "@/components/public/features";
 import { Social } from "@/components/auth/social-variant";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import GridPattern from "@/components/ui/grid";
+import { cn } from "@/utils/cn";
+import DotPattern from "@/components/ui/dot";
 
 const features = [
   {
@@ -123,11 +126,32 @@ export default function Home() {
   }, []);
 
   return (
-    <div ref={containerRef}>
+    <div
+      ref={containerRef}
+      className="bg-gradient-to-b from-white to-indigo-300"
+    >
       <header>
         <Nav />
       </header>
       <main>
+        <GridPattern
+          width={20}
+          height={20}
+          x={-1}
+          y={-1}
+          className={cn(
+            "[mask-image:linear-gradient(to_bottom,white,transparent,transparent)] "
+          )}
+        />
+        <DotPattern
+          width={20}
+          height={20}
+          x={-1}
+          y={-1}
+          className={cn(
+            "[mask-image:linear-gradient(to_top,white,transparent,transparent)] "
+          )}
+        />
         <motion.div
           style={{
             width: containerWidth,

@@ -3,6 +3,7 @@ import { Anonymous_Pro, Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SessionProvider } from "next-auth/react";
+import { Suspense } from "react";
 const poppins = Poppins({
   weight: ["100", "300", "500", "700"],
   subsets: ["latin"],
@@ -32,8 +33,8 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="bg-gradient-to-b from-white to-indigo-300 dark:bg-neutral-950">
-              {children}
+            <div className=" dark:bg-neutral-950">
+              <Suspense>{children}</Suspense>
             </div>
           </ThemeProvider>
         </SessionProvider>
