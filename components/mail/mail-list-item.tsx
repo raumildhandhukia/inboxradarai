@@ -10,14 +10,15 @@ import React, {
   useTransition,
 } from "react";
 import { Badge } from "../ui/badge";
-import { Email } from "@/types";
-
+import { Email, Label, Tag } from "@/types";
+import { useHandleAnalyze } from "@/hooks/useHandleAnalyze";
 import { InboxContext } from "@/context/inbox-context";
 import { AILabel, DateTime } from "../home/inbox/email-detail/email";
 import { UserContext } from "@/context/user-context";
 import { useSearchParams } from "next/navigation";
 
 const MailListItem = (item: Email, inUnreadTab?: boolean) => {
+  const handleAnalyze = useHandleAnalyze();
   const searchParams = useSearchParams();
   const { id, from, subject, snippet, read, labelIds, analysis, date } = item;
   const {
@@ -27,11 +28,11 @@ const MailListItem = (item: Email, inUnreadTab?: boolean) => {
     setEmails,
     setComposeMessage,
   } = useContext(InboxContext);
-  const [isAnalyzing, startAnalysis] = useTransition();
+
   const inboxType = searchParams.get("type");
   const { user } = useContext(UserContext);
-  const [cooldown, setCooldown] = useState(false);
   const { setEmailAnalysis } = useContext(EmailDetailContext);
+  const [isAnalyzing, startTransition] = useTransition();
 
   useEffect(() => {
     const userLastAutoUpdate = new Date(user.lastAutoUpdate);
@@ -46,53 +47,9 @@ const MailListItem = (item: Email, inUnreadTab?: boolean) => {
       (inboxType === "social" && user.updateSocial) ||
       (inboxType === "promotions" && user.updatePromotions) ||
       (inboxType === "updates" && user.updateUpdates);
-
-    if (shouldAutoUpdateEmail && isAutoUpdateInbox) {
-      startAnalysis(async () => {
-        const res = await fetch(`/api/ai/analyze-email`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            emailIDs: [item.id],
-            findExisting: false,
-            emailAddress: selectedAccount,
-          }),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          const emailAnalysis = data[0];
-          if (emailAnalysis) {
-            if (emailAnalysis.success) {
-              setEmails((prev) => {
-                return prev.map((e) => {
-                  if (e.id === item?.id) {
-                    return { ...e, analysis: emailAnalysis.analysis };
-                  }
-                  return e;
-                });
-              });
-            }
-            if (emailAnalysis.limitExceeded) {
-              setCooldown(true);
-              setEmails((prev) => {
-                return prev.map((e) => {
-                  if (e.id === item.id) {
-                    return {
-                      ...e,
-                      analysis: null,
-                      limitExceeded: true,
-                      timeLeft: emailAnalysis.timeLeft,
-                      emailsLeft: emailAnalysis.emailsLeft > 0,
-                    };
-                  }
-                  return e;
-                });
-              });
-            }
-          }
-        }
+    if (shouldAutoUpdateEmail) {
+      startTransition(async () => {
+        await handleAnalyze(item.id, selectedAccount);
       });
     }
   }, [user.autoUpdate, user.lastAutoUpdate, item?.date]);
@@ -160,13 +117,12 @@ const MailListItem = (item: Email, inUnreadTab?: boolean) => {
       <div className="text-xs text-muted-foreground overflow-ellipsis line-clamp-2">
         {snippet?.substring(0, 128)}
       </div>
-      {!isAnalyzing && analysis?.tag ? (
-        <div className="flex items-center gap-2">
-          <AILabel key={analysis.tag.id} bgColor={analysis.tag.color}>
-            {analysis.tag.label}
-          </AILabel>
-        </div>
-      ) : null}
+      {!isAnalyzing &&
+        analysis?.tags?.map((tag) => (
+          <div key={tag.id} className="flex items-center gap-2">
+            <AILabel bgColor={tag.color}>{tag.label}</AILabel>
+          </div>
+        ))}
       {isAnalyzing && (
         <div className="flex items-center gap-2">
           <BarLoader className="max-w-5 max-h-5" />

@@ -116,19 +116,25 @@ function Toolbar({
           >
             <RiArrowGoForwardLine />
           </div>
-          <div className="divider"></div>
+
           {expandButton && handleButtonClick && (
-            <button className="" onClick={handleButtonClick}>
-              <RiExpandDiagonalFill className="text-black" />
-            </button>
-          )}
-          <div className="divider"></div>
-          {setUseAI && (
-            <div>
-              <button className="text-black" onClick={setUseAI}>
-                {useAI ? <Bot /> : <BotOff />}
+            <>
+              <div className="divider"></div>
+              <button className="" onClick={handleButtonClick}>
+                <RiExpandDiagonalFill className="text-black" />
               </button>
-            </div>
+            </>
+          )}
+
+          {setUseAI && (
+            <>
+              <div className="divider"></div>
+              <div>
+                <button className="text-black" onClick={setUseAI}>
+                  {useAI ? <Bot /> : <BotOff />}
+                </button>
+              </div>
+            </>
           )}
         </div>
       </div>

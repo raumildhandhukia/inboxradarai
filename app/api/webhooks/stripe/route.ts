@@ -48,7 +48,46 @@ export async function POST(request: Request) {
           stripeCurrentPeriodEnd: new Date(
             subscription.current_period_end * 1000
           ),
+          lastFreeTierRefillDate: new Date(
+            subscription.current_period_end * 1000
+          ),
           changeToFreePlanOnPeriodEnd: subscription.cancel_at_period_end,
+        },
+      });
+    } catch (error) {
+      console.error("Error updating user", error);
+      return new Response(null, {
+        status: 500,
+      });
+    }
+  }
+  if (event.type === "customer.subscription.deleted") {
+    const session = event.data.object as Stripe.Subscription;
+    try {
+      const subscription = await stripe.subscriptions.retrieve(
+        session.id as string
+      );
+      const planId = subscription.items.data[0].price.id;
+      const user = await db.user.findFirst({
+        where: {
+          stripeSubscriptionId: subscription.id,
+        },
+      });
+      if (!user) {
+        return new Response(null, {
+          status: 200,
+        });
+      }
+      await db.user.update({
+        where: {
+          stripeSubscriptionId: subscription.id,
+        },
+        data: {
+          stripePriceId: planId,
+          stripeCurrentPeriodEnd: new Date(),
+          lastFreeTierRefillDate: new Date(),
+          emailProcessed: 0,
+          changeToFreePlanOnPeriodEnd: true,
         },
       });
     } catch (error) {
@@ -78,6 +117,9 @@ export async function POST(request: Request) {
         data: {
           stripePriceId: subscription.items.data[0].price.id,
           stripeCurrentPeriodEnd: new Date(
+            subscription.current_period_end * 1000
+          ),
+          lastFreeTierRefillDate: new Date(
             subscription.current_period_end * 1000
           ),
         },
@@ -111,6 +153,9 @@ export async function POST(request: Request) {
           stripeSubscriptionId: subscription.id,
           stripePriceId: subscription.items.data[0].price.id,
           stripeCurrentPeriodEnd: new Date(
+            subscription.current_period_end * 1000
+          ),
+          lastFreeTierRefillDate: new Date(
             subscription.current_period_end * 1000
           ),
         },

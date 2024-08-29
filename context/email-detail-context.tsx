@@ -20,9 +20,13 @@ interface EmailDetailContextType {
   startTransition: TransitionStartFunction;
   email: Email | null;
   setEmail: Dispatch<SetStateAction<Email | null>>;
-  emailAnalysis: any;
+  emailAnalysis: EmailAnalysis | null;
   setEmailAnalysis: Dispatch<SetStateAction<EmailAnalysis | null>>;
-  handleAnalyze: (emailID: string, emailAddress: string) => void;
+  handleAnalyze: (
+    emailID: string,
+    emailAddress: string,
+    findExisting?: boolean
+  ) => void;
 }
 
 const defaultContext: EmailDetailContextType = {
@@ -36,7 +40,7 @@ const defaultContext: EmailDetailContextType = {
   startTransition: () => {},
   email: null,
   setEmail: () => {},
-  emailAnalysis: {},
+  emailAnalysis: null,
   setEmailAnalysis: () => {},
   handleAnalyze: () => {},
 };
@@ -57,7 +61,11 @@ const Context: React.FC<EmailDetailContextProviderProps> = ({ children }) => {
     null
   );
 
-  const handleAnalyze = async (emailID: string, emailAddress: string) => {
+  const handleAnalyze = async (
+    emailID: string,
+    emailAddress: string,
+    findExisting?: boolean
+  ) => {
     startTransition(async () => {
       const res = await fetch(`/api/ai/analyze-email`, {
         method: "POST",
@@ -67,6 +75,7 @@ const Context: React.FC<EmailDetailContextProviderProps> = ({ children }) => {
         body: JSON.stringify({
           emailIDs: [emailID],
           emailAddress,
+          findExisting: !!findExisting,
         }),
       });
       if (res.ok) {

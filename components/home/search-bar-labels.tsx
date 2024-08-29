@@ -36,7 +36,6 @@ const SearchBarLabels: React.FC<SearchBarLabelsProps> = ({
   const [searchResults, setSearchResults] = useState<Label[]>(LABELS);
   const [searchBarValue, setSearchBarValue] = useState("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debugger;
     const query = e.target.value.toLowerCase();
     let results = LABELS.filter((label) =>
       label.label.toLowerCase().includes(query)

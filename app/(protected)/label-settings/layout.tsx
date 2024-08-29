@@ -1,7 +1,6 @@
 import { SessionProvider } from "next-auth/react";
 import React, { Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
-import { BackgroundBeams } from "@/components/ui/background-beams";
 import { FullPageLoaderLayout } from "@/components/home/inbox/skeleton";
 import { BeatLoader } from "react-spinners";
 import Logo from "@/public/Logo";

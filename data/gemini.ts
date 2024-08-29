@@ -4,7 +4,16 @@ import { AnalysisType, EmailAnalysis, Label } from "@/types";
 
 import { JSONModel, TextModel } from "@/lib/gemini";
 
+type APIResponse = {
+  summary: string;
+  isImportant: boolean;
+  actions: string[];
+  labels: string[] | null;
+};
+
 export const analyze = async (
+  emailId: string,
+  from: string,
   body: string,
   labels: Label[]
 ): Promise<AnalysisType> => {
@@ -16,10 +25,7 @@ export const analyze = async (
   const labelsList: string = labels
     .map(
       (label, index) =>
-        `Label ${index + 1}) 
-          id:${label.id} 
-          label:${label.label} 
-          description:${label.description}`
+        `label:${label.label} , description:${label.description}`
     )
     .join(", ");
   const prompt = `
@@ -28,33 +34,36 @@ export const analyze = async (
     "summary": string,
     "isImportant": boolean,
     "actions": string[],
-    "tag": {
-      "id": string,
-      "label": string,
-      "description": string,
-      "color": string
-    } | null
+    "labels": string[] | null
   }
-
-  Email Body: ${body}
-  
   Instructions:
   1) Summarize the email content in a maximum of 3 small lines.
-  2) Identify if the email is important or not (true/false).
-  3) List any actions that need to be taken (maximum of 3 actions). Actions should be strings and should be suitable for the nature of the email. Leave empty if no actions are needed.
-  4) Assign a tag to the email from the following list based on the description (id, label, description, color). If no suitable label is found or if the label list is empty, set the value for 'tag' to null:
+  2) Return if email is important or not. Emails which require immediate action, are urgent in nature should be marked as important.
+  3) List any actions that need to be taken (maximum of 3 actions). Leave empty if no actions are needed.
+  4) Assign labels(upto 3 labels) to the email from the following list based on the label description. 
+     If no suitable label is found or if the label list is empty, set the value for 'labels' to null.
+     Follow instructions provided in label description to assign accurate labels. 
   [${labelsList}]
-  
-  Be very specific in choosing the tag based on the email content and label descriptions provided.
+
+  Be very specific in choosing the label based on the email content and label descriptions provided.
+  Email From: ${from}
+  Email Body: ${body}
   `;
   try {
     const result = await JSONModel.generateContent(prompt);
     const response = result.response;
     const text = response.text();
-    const textToJson: EmailAnalysis = JSON.parse(text);
+    const textToJson = JSON.parse(text) as APIResponse;
+    const analysis = {
+      emailId: "",
+      summary: textToJson.summary,
+      isImportant: textToJson.isImportant,
+      actions: textToJson.actions,
+      tags: labels.filter((label) => textToJson.labels?.includes(label.label)),
+    } as EmailAnalysis;
     return {
       success: true,
-      analysis: textToJson,
+      analysis: analysis,
     } as AnalysisType;
   } catch (e) {
     return {

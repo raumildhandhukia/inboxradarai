@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { generateAutocompleteSuggestions } from "@/data/gemini";
 import { PLANS } from "@/config/app";
+import { getUserPlan } from "@/actions/plan";
 import { type Plan } from "@/config/app";
 
 export async function POST(req: Request) {
@@ -10,9 +11,12 @@ export async function POST(req: Request) {
     if (!user || !user.email) {
       return new Response("Unauthorized", { status: 401 });
     }
-    const plan: Plan | undefined = PLANS.find(
-      (p: Plan) => p.price.priceIds.test === user.stripePriceId
-    );
+
+    const userPlanData = await getUserPlan();
+    if (!userPlanData) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+    const { plan } = userPlanData;
     if (!plan || !plan.contentAi) {
       return new Response("Upgrade Your Plan, Sir !!!", { status: 401 });
     }

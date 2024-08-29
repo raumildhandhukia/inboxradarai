@@ -29,35 +29,44 @@ model UserSettings {
 }
 
 model Tag {
-  id          String   @id @default(cuid())
-  userId      String
-  label        String  
-  description String?
-  color       String?
-  predefinedId Int?
-  isActive    Boolean @default(true) @map ("is_active")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String            @id @default(cuid())
+  userId        String
+  label         String
+  description   String?
+  color         String?
+  predefinedId  Int?
+  isActive      Boolean           @default(true) @map("is_active")
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
 
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  processedEmails ProcessedEmailsOnTags[] // Relation field to join table
 
   @@unique([userId, label])
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  processedEmails ProcessedEmails[]
 }
 
 model ProcessedEmails {
-  id        String   @id @default(cuid())
-  emailId   String   @unique
+  id          String            @id @default(cuid())
+  emailId     String            @unique
   emailAddress String
-  userId    String
-  tagId     String?
-  summary   String?
-  actions   String[]
-  isImportant Boolean @default(false) @map("is_important")
-  createdAt DateTime @default(now())
+  userId      String
+  summary     String?
+  actions     String[]
+  isImportant Boolean           @default(false) @map("is_important")
+  createdAt   DateTime          @default(now())
 
-  tag Tag? @relation(fields: [tagId], references: [id])
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags        ProcessedEmailsOnTags[] // Relation field to join table
+}
+
+model ProcessedEmailsOnTags {
+  emailId String            // Foreign key to ProcessedEmails
+  tagId   String            // Foreign key to Tag
+
+  processedEmail ProcessedEmails @relation(fields: [emailId], references: [id], onDelete: Cascade)
+  tag            Tag            @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  @@id([emailId, tagId])
+ 
 }
 
 model User {
@@ -84,6 +93,7 @@ model User {
   updateSocial           Boolean                @default(false) @map("update_social")
   updatePromo            Boolean                @default(false) @map("update_promo")
   updateUpdate           Boolean                @default(true) @map("update_update")
+  lastFreeTierRefillDate DateTime?              @map("last_free_tier_refill_date")
 
   accounts              Account[]
 

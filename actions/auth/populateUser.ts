@@ -26,6 +26,7 @@ export async function populateUser(userId: string, userEmail: string) {
         username,
         emailVerified: new Date(),
         lastAutoUpdate: new Date(),
+        lastFreeTierRefillDate: new Date(),
       },
     });
     await db.userSettings.create({

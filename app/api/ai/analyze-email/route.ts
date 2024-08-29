@@ -44,7 +44,8 @@ export async function POST(req: Request) {
     if (findExisting) {
       const existingAnalysis: EmailAnalysis[] | null = await getAnalysis(
         emailIDs,
-        user
+        user,
+        emailAddress
       );
       if (existingAnalysis && existingAnalysis.length > 0) {
         doneEmailIDs = existingAnalysis.map((analysis) => analysis.emailId);
@@ -90,7 +91,13 @@ export async function POST(req: Request) {
             const body = convertAndFilterHTMLToText(
               Buffer.from(data.body || "", "base64").toString("utf-8")
             );
-            const res: AnalysisType = await analyze(body, labels);
+            const from = data.from || "";
+            const res: AnalysisType = await analyze(
+              emailId,
+              from,
+              body,
+              labels
+            );
             if (!res) {
               return {
                 emailId,
@@ -99,14 +106,8 @@ export async function POST(req: Request) {
             }
             if (res.success) {
               const analysis = (res as SuccessResponseType).analysis;
-              const emailAnalysis = {
-                emailId,
-                summary: analysis.summary,
-                tag: analysis.tag,
-                actions: analysis.actions,
-                isImportant: analysis.isImportant,
-              };
-              const set = await setAnalysis(emailAnalysis, user, emailAddress);
+              analysis.emailId = emailId;
+              const set = await setAnalysis(analysis, user, emailAddress);
               if (!set) {
                 return {
                   emailId,

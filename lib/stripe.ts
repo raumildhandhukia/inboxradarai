@@ -97,8 +97,7 @@ export async function createStripeSession(userId: string, planSlug: string) {
     billing_address_collection: "auto",
     line_items: [
       {
-        price: PLANS.find((plan) => plan.name === planSlug)?.price.priceIds
-          .test,
+        price: PLANS.find((plan) => plan.name === "Pro")?.price.priceIds.test,
         quantity: 1,
       },
     ],

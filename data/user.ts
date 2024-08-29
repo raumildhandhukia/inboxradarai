@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { sendEmail } from "./gmail";
 
 interface UserData {
   id: string;
@@ -64,5 +65,47 @@ export const getUsersByName = async (query: string | undefined) => {
   } catch (e) {
     console.log(e);
     return null;
+  }
+};
+const isUserSubscribed = (user: any) => {
+  return Boolean(
+    user.stripePriceId &&
+      user.stripeCurrentPeriodEnd &&
+      user.stripeCurrentPeriodEnd.getTime() > Date.now()
+  );
+};
+export const performCronOperations = async () => {
+  try {
+    const users = await db.user.findMany();
+    users.forEach(async (user) => {
+      try {
+        if (!isUserSubscribed(user)) {
+          const differenceInDays = Math.floor(
+            (new Date().getTime() -
+              new Date(user.lastFreeTierRefillDate as Date).getTime()) /
+              (1000 * 60 * 60 * 24)
+          );
+
+          if (differenceInDays > 30) {
+            await db.user.update({
+              where: {
+                id: user.id,
+              },
+              data: {
+                lastFreeTierRefillDate: new Date(),
+                emailProcessed: 0,
+              },
+            });
+          }
+          // sendEmail
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    });
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
   }
 };

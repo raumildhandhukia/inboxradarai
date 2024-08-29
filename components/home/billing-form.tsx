@@ -29,6 +29,7 @@ const BillingForm = ({ subscriptionPlan }: BillingFormProps) => {
   if (!user || !user.id) return null;
   const handleSumbit = async () => {
     startTransition(async () => {
+      console.log("user.id", user.id);
       const url = await manageSubscriptions(
         user.id || "",
         subscriptionPlan.name || ""
