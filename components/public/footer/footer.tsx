@@ -10,10 +10,10 @@ import { Separator } from "@/components/ui/separator";
 const Footer = ({ mini }: { mini?: boolean }) => {
   if (mini) {
     return (
-      <div className="w-screen h-20 px-20 py-2">
+      <div className="w-screen h-20 md:px-20 md:py-2">
         <div className="border-t w-full">
           <div className="flex justify-between items-start px-4 py-2">
-            <span className="text-muted-foreground text-xs mt-2">
+            <span className="text-muted-foreground text-[8px] mt-2">
               Copyright © 2024 InboxRadarAI. All rights reserved.
             </span>
             <div className="">

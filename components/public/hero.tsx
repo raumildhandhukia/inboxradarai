@@ -1,9 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ContainerScroll } from "../ui/container-scroll-animation";
 import GradualSpacing from "../ui/gradual-spacing";
 import { Social } from "../auth/social-variant";
+import { cn } from "@/lib/utils";
+import Footer from "./footer/footer";
 
 const headers = [
   <h1
@@ -49,19 +52,74 @@ const headers = [
   </h1>,
 ];
 const images = [
-  "/inboxradarai.png",
-  "/autocomplete.gif",
-  "/insights.gif",
-  "/label-cropped.gif",
-  "/inboxradarai.png",
-  "/inboxradarai.png",
+  { src: "/inboxradarai.png", className: "object-contain" },
+  {
+    src: "/autocomplete.gif",
+    className: "object-contain",
+  },
+  {
+    src: "/insights.gif",
+    className: "object-contain",
+  },
+  {
+    src: "/label-cropped.gif",
+    className: "object-contain",
+  },
+  {
+    src: "/inboxradarai.png",
+    className: "object-contain",
+  },
+  {
+    src: "/inboxradarai.png",
+    className: "object-contain",
+  },
 ];
-const Hero = ({ activeFeature }: { activeFeature: number }) => {
+const Hero = ({
+  activeFeature,
+  isMobile,
+}: {
+  activeFeature: number;
+  isMobile?: boolean;
+}) => {
+  if (isMobile) {
+    return (
+      <div className="flex flex-col overflow-hidden">
+        <ContainerScroll
+          titleComponent={
+            <div className="flex justify-center items-center ">
+              {headers[0]}
+            </div>
+          }
+        >
+          <img
+            src={`/inboxradarai.png`}
+            alt="hero"
+            height={720}
+            width={1400}
+            className="mx-auto rounded-2xl object-cover h-full object-left-top"
+            draggable={true}
+          />
+        </ContainerScroll>
+        <div className="fixed bottom-10 left-[16%] !w-[68%]">
+          <div className="">
+            <GradualSpacing
+              className="text-xl md:text-[2rem] font-bold mt-1 leading-none w-max overflow-hidden"
+              text="Currently available "
+            />
+            <GradualSpacing
+              className="text-xl md:text-[2rem] font-bold mt-1 leading-none w-max overflow-hidden"
+              text="only on Desktop"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="h-full">
       <div className="flex flex-col justify-center items-center h-full">
         <ContainerScroll
-          cardClassNames={`${activeFeature === 3 ? "!h-max !w-full" : ""}`}
+          cardClassNames={`${activeFeature === -1 ? "w-full " : "w-[62vh]"}`}
           titleComponent={
             <div className="w-full flex justify-center">
               {headers[activeFeature + 1]}
@@ -71,9 +129,12 @@ const Hero = ({ activeFeature }: { activeFeature: number }) => {
           <AnimatePresence mode="wait">
             <motion.img
               key={activeFeature}
-              src={images[activeFeature + 1]}
+              src={images[activeFeature + 1].src}
               alt="hero"
-              className="p-2 md:p-0 mx-auto rounded-2xl object-cover h-full object-left-top w-full"
+              className={cn(
+                "p-2 md:p-0 mx-auto rounded-2xl object-cover h-full",
+                images[activeFeature + 1].className
+              )}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

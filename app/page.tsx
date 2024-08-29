@@ -77,6 +77,7 @@ export default function Home() {
   const { scrollYProgress } = useScroll({ target: containerRef });
   const [pos, setPos] = useState("fixed");
   const user = useCurrentUser();
+  const [isMobile, setIsMobile] = useState(false);
 
   // Set thresholds for transformation to occur after last feature
   const endTransitionThreshold =
@@ -127,6 +128,8 @@ export default function Home() {
         Math.max(-1, Math.min(newActiveFeature, features.length - 1))
       );
     };
+    const windowWidth = window.innerWidth;
+    setIsMobile(windowWidth <= 768);
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -159,47 +162,55 @@ export default function Home() {
             "[mask-image:linear-gradient(to_top,white,transparent,transparent)] "
           )}
         />
-        <motion.div
-          style={{
-            width: containerWidth,
-            x: containerX,
-            opacity: containerOpacity,
-          }}
-          className={`${pos} top-0 left-0 h-screen`}
-        >
-          <Hero activeFeature={activeFeature} />
-          {!user && (
+        {isMobile ? (
+          <div className="flex flex-col justify-center items-center h-screen">
+            <Hero activeFeature={activeFeature} isMobile />
+          </div>
+        ) : (
+          <>
             <motion.div
               style={{
+                width: containerWidth,
                 x: containerX,
-                y: socialY,
                 opacity: containerOpacity,
               }}
-              className="absolute bottom-20 left-[38%] flex justify-center items-center mb-8"
+              className={`${pos} top-0 left-0 h-screen`}
             >
-              <Social />
+              <Hero activeFeature={activeFeature} />
+              {!user && (
+                <motion.div
+                  style={{
+                    x: containerX,
+                    y: socialY,
+                    opacity: containerOpacity,
+                  }}
+                  className="absolute bottom-20 left-[38%] flex justify-center items-center mb-8"
+                >
+                  <Social />
+                </motion.div>
+              )}
             </motion.div>
-          )}
-        </motion.div>
-        <div className="h-screen" /> {/* Spacer for initial hero view */}
-        {features.map((feature, index) => (
-          <Feature
-            key={index}
-            {...feature}
-            isActive={activeFeature === index}
-          />
-        ))}
-        <motion.div
-          style={{
-            x: pricingX,
-            opacity: pricingOpacity,
-          }}
-          className="fixed top-0 left-0 h-screen w-full"
-        >
-          <div className="h-screen flex items-center justify-center">
-            <Pricing noHeading showFooter />
-          </div>
-        </motion.div>
+            <div className="h-screen" /> {/* Spacer for initial hero view */}
+            {features.map((feature, index) => (
+              <Feature
+                key={index}
+                {...feature}
+                isActive={activeFeature === index}
+              />
+            ))}
+            <motion.div
+              style={{
+                x: pricingX,
+                opacity: pricingOpacity,
+              }}
+              className="fixed top-0 left-0 h-screen w-full"
+            >
+              <div className="h-screen flex items-center justify-center">
+                <Pricing noHeading showFooter />
+              </div>
+            </motion.div>
+          </>
+        )}
       </main>
     </div>
   );
