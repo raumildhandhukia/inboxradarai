@@ -14,32 +14,39 @@ export const setAnalysis = async (
   user: User,
   emailAddress: string
 ) => {
-  const { emailId, summary, isImportant, tag, actions } = emailAnalysis;
-
+  const { emailId, summary, isImportant, tags, actions } = emailAnalysis;
   try {
-    await db.processedEmails.upsert({
-      where: {
-        emailId,
-        userId: user.id,
-      },
+    const processedEmail = await db.processedEmails.upsert({
+      where: { emailId },
       update: {
+        emailAddress,
         summary,
-        tagId: tag?.id || null,
-        actions: actions || [],
-        isImportant: isImportant || false,
+        actions,
+        isImportant,
       },
       create: {
         emailId,
         emailAddress,
         userId: user.id!,
         summary,
-        tagId: tag?.id || null,
-        actions: actions || [],
-        isImportant: isImportant || false,
+        actions,
+        isImportant,
       },
+    });
+    const deleted = await db.processedEmailsOnTags.deleteMany({
+      where: {
+        emailId: processedEmail.id,
+      },
+    });
+    const created = await db.processedEmailsOnTags.createMany({
+      data: tags.map((t) => ({
+        emailId: processedEmail.id,
+        tagId: t.id,
+      })),
     });
     return true;
   } catch (e) {
+    console.error("Error in setAnalysis:", e);
     return false;
   }
 };
@@ -47,32 +54,52 @@ export const setAnalysis = async (
 // returns the AI analysis for the given email IDs
 export const getAnalysis = async (
   emailIDs: string[],
-  user: User
+  user: User,
+  emailAddress: string
 ): Promise<EmailAnalysis[] | null> => {
   try {
-    const analysis = await db.processedEmails.findMany({
-      select: {
-        emailId: true,
-        summary: true,
-        tag: {
-          select: {
-            id: true,
-            label: true,
-            color: true,
-            description: true,
+    if (emailIDs.length > 1) {
+      console.error("Error in getAnalysis: emailIDs length is greater than 1");
+    }
+    const apperentlyManyanalysisBecauseOfPoorShemaDesign =
+      await db.processedEmails.findMany({
+        select: {
+          emailId: true,
+          summary: true,
+          isImportant: true,
+          actions: true,
+          tags: {
+            select: {
+              tag: {
+                select: {
+                  id: true,
+                  label: true,
+                  description: true,
+                  color: true,
+                  predefinedId: true,
+                  isActive: true,
+                },
+              },
+            },
           },
         },
-        actions: true,
-        isImportant: true,
-      },
-      where: {
-        userId: user.id,
-        emailId: {
-          in: emailIDs,
+        where: {
+          emailId: emailIDs[0],
+          emailAddress,
+          userId: user.id!,
         },
+      });
+    const analysis = apperentlyManyanalysisBecauseOfPoorShemaDesign[0];
+
+    return [
+      {
+        emailId: analysis.emailId,
+        summary: analysis.summary,
+        isImportant: analysis.isImportant,
+        actions: analysis.actions,
+        tags: analysis.tags.map((t) => t.tag),
       },
-    });
-    return analysis as EmailAnalysis[];
+    ] as EmailAnalysis[];
   } catch (e) {
     return null;
   }
@@ -242,15 +269,22 @@ export const setAPIStats = async (emailProcessed: number, user: ExtUser) => {
 
 // Returns the Email IDs of emails that have the given label and email address
 export const getLabelEmails = async (labelId: string, email: string) => {
-  const label = await db.processedEmails.findMany({
+  const label = await db.processedEmailsOnTags.findMany({
     where: {
       tagId: labelId,
-      emailAddress: email,
+      processedEmail: {
+        emailAddress: email,
+      },
     },
     select: {
       emailId: true,
+      processedEmail: {
+        select: {
+          emailId: true,
+        },
+      },
     },
   });
-  const emailIds = label.map((l) => l.emailId);
+  const emailIds = label.map((l) => l.processedEmail.emailId);
   return emailIds as string[];
 };

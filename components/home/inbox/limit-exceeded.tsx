@@ -2,31 +2,30 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect, useContext } from "react";
 import { TbAnalyze } from "react-icons/tb";
 import { InboxContext } from "@/context/inbox-context";
+import { EmailDetailContext } from "@/context/email-detail-context";
 
 interface LimitExceededProps {
-  timer: number;
   handleAnalyze: () => void;
   removeCooldown: () => void;
   emailsLeft: boolean;
 }
 
 const LimitExceeded: React.FC<LimitExceededProps> = ({
-  timer,
   handleAnalyze,
   removeCooldown,
   emailsLeft,
 }) => {
   const { selectedAccount } = useContext(InboxContext);
-  const [timeLeft, setTimeLeft] = useState<number>(timer || 0);
+  const { cooldownTime, setCooldownTime } = useContext(EmailDetailContext);
   useEffect(() => {
-    if (timeLeft > 0) {
-      setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    if (cooldownTime > 0) {
+      setTimeout(() => setCooldownTime(cooldownTime - 1), 1000);
     } else {
       if (emailsLeft) {
         removeCooldown();
       }
     }
-  }, [emailsLeft, removeCooldown, timeLeft]);
+  }, [cooldownTime]);
 
   return (
     <div className="flex justify-center items-center gap-5 px-2">
@@ -42,17 +41,17 @@ const LimitExceeded: React.FC<LimitExceededProps> = ({
           <Button
             variant="hacker"
             className="w-4 rounded-full"
-            disabled={timeLeft > 0}
+            disabled={cooldownTime > 0}
             onClick={() => {
               handleAnalyze();
             }}
           >
-            {timeLeft < 0 ? (
+            {cooldownTime < 0 ? (
               <div>
                 <TbAnalyze className="scale-[1.5]" />
               </div>
             ) : (
-              <span>{timeLeft.toFixed(0)}</span>
+              <span>{cooldownTime.toFixed(0)}</span>
             )}
           </Button>
           <p className="">Upgrade your plan to get insights now. </p>

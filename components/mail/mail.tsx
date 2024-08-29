@@ -144,7 +144,6 @@ export function Mail({
       inboxType ? `&type=${inboxType}` : labelName ? `&label=${labelName}` : ""
     }&email=${selectedAccount}`;
 
-    debugger;
     const res = await fetch(URL, {
       method: "GET",
       headers: {
@@ -397,9 +396,7 @@ export function Mail({
               <Message />
             ) : (
               <MailDisplay
-                mail={
-                  emails.find((item) => item.id === selectedEmail?.id) || null
-                }
+                mail={emails.find((item) => item.id === selectedEmail?.id)}
               />
             )}
           </ResizablePanel>

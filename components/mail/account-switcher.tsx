@@ -14,6 +14,7 @@ import {
 
 import { Account } from "@/types";
 import { InboxContext } from "@/context/inbox-context";
+import { UserContext } from "@/context/user-context";
 import { useEffect } from "react";
 import { useSelectedAccount } from "@/hooks/useSelectedAccount";
 import { IoMdAdd } from "react-icons/io";
@@ -21,6 +22,8 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { Button } from "../ui/button";
+import { PLANS } from "@/config/app";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 interface AccountSwitcherProps {
   isCollapsed: boolean;
@@ -31,9 +34,10 @@ export function AccountSwitcher({
   isCollapsed,
   accounts,
 }: AccountSwitcherProps) {
+  const user = useCurrentUser();
   const { selectedAccount } = React.useContext(InboxContext);
-
   const setAccount = useSelectedAccount(accounts[0].email);
+  const plan = PLANS.find((p) => p.price.priceIds.test === user?.stripePriceId);
 
   if (!selectedAccount) {
     return null;
@@ -70,7 +74,6 @@ export function AccountSwitcher({
             </div>
           </SelectItem>
         ))}
-
         <Button
           onClick={handleAddGoogleInbox}
           variant="ghost"

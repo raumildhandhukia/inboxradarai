@@ -1,25 +1,7 @@
 "use server";
 import { db } from "@/lib/db";
 import { auth } from "@/auth";
-import { PLANS } from "@/config/app";
-
-type Plan = {
-  id: number;
-  name: string;
-  plan: string;
-  emailsAllowed: number;
-  processLimit: boolean;
-  autoProcess: boolean;
-  customTag: number;
-  totalTags: number;
-  price: {
-    amount: number;
-    priceIds: {
-      test: string;
-      production: string;
-    };
-  };
-};
+import { PLANS, Plan } from "@/config/app";
 
 export const getUserPlan = async () => {
   try {
@@ -39,7 +21,7 @@ export const getUserPlan = async () => {
     const isSubscribed = Boolean(
       dbUser.stripePriceId &&
         dbUser.stripeCurrentPeriodEnd && // 86400000 = 1 day
-        dbUser.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now()
+        dbUser.stripeCurrentPeriodEnd.getTime() > Date.now()
     );
     if (!isSubscribed) {
       return {

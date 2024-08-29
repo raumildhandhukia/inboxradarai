@@ -11,6 +11,8 @@ import LimitExceeded from "@/components/home/inbox/limit-exceeded";
 import { AILabel } from "./email";
 import { InboxContext } from "@/context/inbox-context";
 import { Button } from "@/components/ui/button";
+import { Tag } from "@/types";
+import { useHandleAnalyze } from "@/hooks/useHandleAnalyze";
 
 const AIInsights = ({ emailId }: { emailId: string }) => {
   const {
@@ -20,9 +22,10 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
     setCooldown,
     emailsLeft,
     emailAnalysis,
-    handleAnalyze,
+    // handleAnalyze,
   } = useContext(EmailDetailContext);
   const { selectedAccount, setEmails } = useContext(InboxContext);
+  const handleAnalyze = useHandleAnalyze();
   const [isOpen, setIsOpen] = useState(true);
   const [value, setValue] = useState("2");
 
@@ -37,29 +40,29 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
     }
   };
 
-  const handleAccordianClick = async () => {
-    setIsOpen(!isOpen);
-    if (!isOpen && !cooldown && !isAnalyzing && !emailAnalysis) {
-      handleAnalyze(emailId, selectedAccount);
-      if (emailAnalysis) {
-        setEmails((prev) => {
-          return prev.map((email) => {
-            if (email.id === emailId) {
-              return { ...email, analysis: emailAnalysis };
-            }
-            return email;
-          });
-        });
-      }
-    }
-  };
+  // const handleAccordianClick = async () => {
+  //   setIsOpen(!isOpen);
+  //   if (!isOpen && !cooldown && !isAnalyzing && !emailAnalysis) {
+  //     handleAnalyze(emailId, selectedAccount, true);
+  //     if (emailAnalysis) {
+  //       setEmails((prev) => {
+  //         return prev.map((email) => {
+  //           if (email.id === emailId) {
+  //             return { ...email, analysis: emailAnalysis };
+  //           }
+  //           return email;
+  //         });
+  //       });
+  //     }
+  //   }
+  // };
   return (
     <div>
       <Accordion type="single" collapsible defaultChecked>
         <AccordionItem value="item-1">
           <AccordionTrigger
             className="font-bold text-black text-md w-full p-2"
-            onClick={handleAccordianClick}
+            // onClick={handleAccordianClick}
           >
             <div className="flex justify-between ">
               <div>{getAccordianTitle()}</div>
@@ -69,19 +72,8 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
             {cooldown ? (
               <div className="flex justify-start items-center gap-5 px-2">
                 <LimitExceeded
-                  timer={cooldownTime}
                   handleAnalyze={() => {
                     handleAnalyze(emailId, selectedAccount);
-                    if (emailAnalysis) {
-                      setEmails((prev) => {
-                        return prev.map((email) => {
-                          if (email.id === emailId) {
-                            return { ...email, analysis: emailAnalysis };
-                          }
-                          return email;
-                        });
-                      });
-                    }
                   }}
                   removeCooldown={() => {
                     setCooldown(false);
@@ -98,31 +90,23 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
                     variant="destructive"
                     onClick={() => {
                       handleAnalyze(emailId, selectedAccount);
-                      if (emailAnalysis) {
-                        setEmails((prev) => {
-                          return prev.map((email) => {
-                            if (email.id === emailId) {
-                              return { ...email, analysis: emailAnalysis };
-                            }
-                            return email;
-                          });
-                        });
-                      }
                     }}
                   >
-                    {" "}
-                    Re-analyze{" "}
+                    {emailAnalysis ? "Re-Analyze" : "Analyze"}
                   </Button>
                 </div>
                 <div className="text-sm ">
                   <div className="flex gap-5">
-                    {emailAnalysis?.tag && (
-                      <AILabel
-                        bgColor={emailAnalysis?.tag?.color || "rgba(0,0,0,0.1)"}
-                      >
-                        <span>{emailAnalysis?.tag?.label}</span>
-                      </AILabel>
-                    )}
+                    {emailAnalysis?.tags?.map((t: Tag) => {
+                      return (
+                        <AILabel
+                          key={t.id + emailId}
+                          bgColor={t.color || "rgba(0,0,0,0.1)"}
+                        >
+                          <span>{t.label}</span>
+                        </AILabel>
+                      );
+                    })}
 
                     <span className="italic font-bold ml-1">
                       {emailAnalysis &&

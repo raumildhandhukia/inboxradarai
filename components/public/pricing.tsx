@@ -56,6 +56,10 @@ const Pricing = ({
                   AI Insights
                 </li>
                 <li className="mb-2 flex gap-2 leading-[17px]">
+                  <BsPatchCheckFill color="grey" />
+                  Unlimited Inboxes
+                </li>
+                <li className="mb-2 flex gap-2 leading-[17px]">
                   <AiFillCloseCircle color="red" />
                   No Automated Analysis
                 </li>
@@ -230,13 +234,13 @@ const Pricing = ({
                   {currentPlan ? (
                     <Link
                       href={
-                        currentPlan === "FREE" ? "/subscribe/Max" : "/billing"
+                        currentPlan === "FREE" ? "/subscribe/Pro" : "/billing"
                       }
                     >
-                      {currentPlan !== "MAX" ? "Subscribe" : "Cancel"}
+                      {currentPlan !== "Pro" ? "Subscribe" : "Cancel"}
                     </Link>
                   ) : (
-                    <Link href="/auth/login?sub-to-plan=Max">Subscribe</Link>
+                    <Link href="/auth/login?sub-to-plan=Pro">Subscribe</Link>
                   )}
                 </Button>
               </div>

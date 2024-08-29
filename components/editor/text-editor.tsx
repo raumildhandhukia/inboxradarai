@@ -15,7 +15,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { cn } from "@/lib/utils";
 import { Toolbar } from "./toolbar";
 import FloatingTips from "./floating-tips";
-import { set } from "date-fns";
+import { TextSelection } from "prosemirror-state";
 
 interface EditorProps {
   useAI?: boolean;
@@ -103,7 +103,6 @@ export const Editor: React.FC<EditorProps> = ({
   useEffect(() => {
     const handleKeyDown = async (event: KeyboardEvent) => {
       if (event.key === "Tab" && useAI) {
-        // setShow(!show)
         event.preventDefault();
         if (
           showFloatingTips &&
@@ -111,14 +110,22 @@ export const Editor: React.FC<EditorProps> = ({
           editor &&
           showFloatingTipComponent()
         ) {
-          const { commands } = editor;
+          const { state, view } = editor;
+          const { from } = state.selection;
 
-          // Insert text at the current cursor position
-          commands.insertContent(floatingText);
+          // Create a transaction to insert text
+          const transaction = state.tr.insertText(floatingText, from);
+
+          // Set cursor position after the inserted content
+          const newPos = from + floatingText.length - 2;
+          const textSelection = TextSelection.create(transaction.doc, newPos);
+          transaction.setSelection(textSelection);
+
+          view.dispatch(transaction);
+
           setShowFloatingTips(false);
           setFloatingText(null);
         } else if (editor && showFloatingTipComponent()) {
-          const { schema } = editor;
           const res = await fetch("/api/ai/autocomplete", {
             method: "POST",
             body: JSON.stringify({
@@ -156,7 +163,7 @@ export const Editor: React.FC<EditorProps> = ({
   }
 
   return (
-    <div className="">
+    <div className="!max-w-full">
       <div
         className={cn(`editor transition-all  !overflow-x-hidden`, className)}
       >
@@ -178,7 +185,9 @@ export const Editor: React.FC<EditorProps> = ({
         </div>
       </div>
       {useAI && showFloatingTipComponent() && (
-        <FloatingTips editor={editor}>{floatingText}</FloatingTips>
+        <FloatingTips editor={editor} editorRef={editorRef}>
+          {floatingText}
+        </FloatingTips>
       )}
     </div>
   );

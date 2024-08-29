@@ -21,7 +21,7 @@ export interface EmailAnalysis {
   summary: string;
   isImportant: boolean;
   actions: string[];
-  tag: Tag;
+  tags: any[];
   emailId: string;
 }
 

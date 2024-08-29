@@ -8,6 +8,7 @@ export type Plan = {
   customTag: number;
   totalTags: number;
   contentAi: boolean;
+  multipleInbox: boolean;
   price: {
     amount: number;
     priceIds: {
@@ -23,11 +24,12 @@ export const PLANS: Plan[] = [
     name: "Free",
     plan: "FREE",
     emailsAllowed: 100,
-    processLimit: false,
+    processLimit: true,
     autoProcess: false,
     customTag: 3,
     totalTags: 6,
     contentAi: false,
+    multipleInbox: true,
     price: {
       amount: 0,
       priceIds: {
@@ -37,37 +39,20 @@ export const PLANS: Plan[] = [
     },
   },
   {
-    id: 3,
+    id: 2,
     name: "Pro",
     plan: "PRO",
-    emailsAllowed: 1000,
-    processLimit: false,
-    autoProcess: true,
-    customTag: 8,
-    totalTags: 12,
-    contentAi: true,
-    price: {
-      amount: 1.99,
-      priceIds: {
-        test: "price_1PQzzwJyByQqr4U2Bf1gnFXt",
-        production: "",
-      },
-    },
-  },
-  {
-    id: 2,
-    name: "Max",
-    plan: "MAX",
     emailsAllowed: 5000,
     processLimit: false,
     autoProcess: true,
     customTag: 20,
     totalTags: 25,
     contentAi: true,
+    multipleInbox: true,
     price: {
       amount: 4.99,
       priceIds: {
-        test: "price_1PR00sJyByQqr4U2AqKWVpsA",
+        test: "price_1PsWxlJyByQqr4U28Ka1Jp0D",
         production: "",
       },
     },

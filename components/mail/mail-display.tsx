@@ -29,22 +29,18 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PLANS } from "@/config/app";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import {
-  EmailDetailSkeletonLoader,
-  EmailDislayHeaderSkeletonLoader,
-  EmailDisplayAIInsightsSkeletonLoader,
-  EmailDisplaySkeletonLoader,
-} from "../home/inbox/skeleton";
+import { EmailDetailSkeletonLoader } from "../home/inbox/skeleton";
 
 interface MailDisplayProps {
-  mail: Email | null;
+  mail: Email;
 }
 
 export function MailDisplay({ mail }: MailDisplayProps) {
   const { toast } = useToast();
   const router = useRouter();
   const { setEmailAnalysis, setEmail } = useContext(EmailDetailContext);
-  const { selectedAccount, setEmails } = useContext(InboxContext);
+  const { selectedAccount, setEmails, setSelectedEmail } =
+    useContext(InboxContext);
   const [emailBody, setEmailBody] = useState<string>("");
   const [isLoading, startTransitionOfFetchingEmail] = useTransition();
   const [replyMessage, setReplyMessage] = useState<string>("");
@@ -99,10 +95,10 @@ export function MailDisplay({ mail }: MailDisplayProps) {
     };
     if (mail) {
       startTransitionOfFetchingEmail(async () => {
-        getEmail();
+        await getEmail();
       });
     }
-  }, [router, setEmailAnalysis, mail, selectedAccount]);
+  }, [mail?.id]);
 
   const handleTrash = async () => {
     if (!mail) return;

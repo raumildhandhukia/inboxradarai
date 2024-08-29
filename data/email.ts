@@ -28,7 +28,7 @@ export const queryInbox = async (
   const { refresh_token } = refresh;
 
   const handler = await getGoogleApiHandler(refresh_token);
-  return await queryEmails(handler, user, query, page);
+  return await queryEmails(handler, user, query, page, email);
 };
 
 export const getInboxData = async (
@@ -59,8 +59,12 @@ export const getEmailData = async (
   const { refresh_token } = refresh;
 
   const handler = await getGoogleApiHandler(refresh_token);
-  const data: ReturnType = await getEmail(handler, emailId, user, true);
-  const analysis: EmailAnalysis[] | null = await getAnalysis([emailId], user);
+  const data: ReturnType = await getEmail(handler, emailId, user, email, true);
+  const analysis: EmailAnalysis[] | null = await getAnalysis(
+    [emailId],
+    user,
+    email
+  );
   if (analysis) {
     data.analysis = analysis[0];
   }

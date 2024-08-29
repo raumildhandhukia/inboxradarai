@@ -9,7 +9,7 @@ import { EmailDetailContext } from "@/context/email-detail-context";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 const EmailDetailHeader = ({ emailId }: { emailId: string }) => {
-  const { isAnalyzing, handleAnalyze } = useContext(EmailDetailContext);
+  const { isAnalyzing } = useContext(EmailDetailContext);
   const router = useRouter();
   const handleBack = () => {
     router.back();

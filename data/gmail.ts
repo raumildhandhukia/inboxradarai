@@ -16,7 +16,8 @@ export const queryEmails = async (
   auth: any,
   user: User,
   query: string,
-  pageToken: string | undefined
+  pageToken: string | undefined,
+  emailAddress: string
 ) => {
   try {
     let nextPageToken: string | null | undefined;
@@ -35,14 +36,15 @@ export const queryEmails = async (
       res.data.messages?.map((message: any) => message.id) || [];
     const emails: Email[] = await Promise.all(
       messagesIds.map(async (id: string) => {
-        return await getEmail(auth, id, user);
+        return await getEmail(auth, id, user, emailAddress);
       })
     );
     const promises = emails.map(async (email) => {
-      const emailData = await getEmail(auth, email.id, user);
+      const emailData = await getEmail(auth, email.id, user, emailAddress);
       const analysis: EmailAnalysis[] | null = await getAnalysis(
         [email.id],
-        user
+        user,
+        emailAddress
       );
       return {
         ...emailData,
@@ -72,6 +74,7 @@ export async function getEmail(
   auth: any,
   id: string,
   user: User,
+  emailAddress: string,
   body?: boolean
 ) {
   try {
@@ -130,7 +133,11 @@ export async function getEmail(
       }
       mail.body = body;
     }
-    const analysis: EmailAnalysis[] | null = await getAnalysis([id], user);
+    const analysis: EmailAnalysis[] | null = await getAnalysis(
+      [id],
+      user,
+      emailAddress
+    );
     if (analysis && analysis.length > 0) {
       mail.analysis = analysis[0];
     }
@@ -148,12 +155,12 @@ export async function listEmails(
   type: string | null,
   user: User,
   labelId: string | null,
-  email: string
+  emailAddress: string
 ) {
   let messagesIds: string[] = [];
   let nextPageToken: string | null | undefined = undefined;
   if (labelId && labelId !== "null") {
-    messagesIds = await getLabelEmails(labelId || "", email);
+    messagesIds = await getLabelEmails(labelId || "", emailAddress);
   } else {
     const gmail = google.gmail({ version: "v1", auth });
     let res;
@@ -181,7 +188,7 @@ export async function listEmails(
     try {
       res = await gmail.users.messages.list({
         userId: "me",
-        maxResults: 50,
+        maxResults: 15,
         pageToken,
         q: qValue,
         includeSpamTrash: true,
@@ -201,8 +208,8 @@ export async function listEmails(
 
   const emails: Email[] = await Promise.all(
     messagesIds.map(async (id: string) => {
-      const email = await getEmail(auth, id, user);
-      const analysis = await getAnalysis([id], user);
+      const email = await getEmail(auth, id, user, emailAddress);
+      const analysis = await getAnalysis([id], user, emailAddress);
       return { ...email, analysis: analysis ? analysis[0] : null };
     })
   );
