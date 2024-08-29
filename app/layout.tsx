@@ -3,6 +3,7 @@ import { Anonymous_Pro, Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SessionProvider } from "next-auth/react";
+import { Suspense } from "react";
 const poppins = Poppins({
   weight: ["100", "300", "500", "700"],
   subsets: ["latin"],
@@ -24,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${pro.className} ${poppins.className}`}>
+      <body className={` ${poppins.className}`}>
         <SessionProvider>
           <ThemeProvider
             attribute="class"
@@ -32,7 +33,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="bg-white dark:bg-neutral-950">{children}</div>
+            <div className=" dark:bg-neutral-950">
+              <Suspense>{children}</Suspense>
+            </div>
           </ThemeProvider>
         </SessionProvider>
       </body>

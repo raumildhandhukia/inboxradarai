@@ -43,7 +43,7 @@ const CreateLabelInputs: React.FC<CreateLabelInputsProps> = ({
 
   return (
     <div className="flex flex-col gap-y-3 w-full">
-      <div className="flex flex-col md:flex-row gap-y-5 gap-x-2 w-full items-center justify-start">
+      <div className="flex flex-col md:flex-row gap-y-5 gap-x-2 w-full items-center justify-start z-50">
         <div className="space-y-1 relative w-full">
           <div>
             <ShadCNLabel htmlFor="label">Label</ShadCNLabel>
@@ -62,7 +62,7 @@ const CreateLabelInputs: React.FC<CreateLabelInputsProps> = ({
               style={{
                 backgroundColor: `${color}`,
               }}
-              className=" flex items-center justify-center rounded-md cursor-pointer"
+              className="text-black flex items-center justify-center rounded-md cursor-pointer"
             >
               {showPicker ? (
                 <RgbaColorPicker

@@ -50,7 +50,7 @@ const Subscription = ({
   return (
     <>
       <Dialog open={isSubscriptionOpen} onOpenChange={setIsSubscriptionOpen}>
-        <DialogContent className="min-w-max max-h-[90vh] overflow-scroll">
+        <DialogContent className="min-w-max max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>Subscription</DialogTitle>
             <DialogDescription>

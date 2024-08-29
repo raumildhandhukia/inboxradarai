@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { logout } from "@/actions/auth/logout";
 import { FloatingNav } from "@/components/ui/floating-navbar";
+import HyperText from "../ui/hyper-text";
 import Logo from "@/public/Logo";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 interface NavProps {
@@ -103,29 +104,44 @@ const NavLinks = ({ className }: { className?: string }) => {
   return (
     <>
       <ul className={`${className}`}>
-        <li className="text-gray-800 font-light hover:text-gray-400 cursor-pointer mt-1">
-          <Link href="/">Home</Link>
+        {/* <li className="text-gray-800 font-light hover:text-gray-400 cursor-pointer mt-1">
+          <Link href="/">
+            <HyperText text="Home" className="cursor-pointer" />
+          </Link>
         </li>
         <li className="text-gray-800 font-light hover:text-gray-400 cursor-pointer mt-1">
-          <Link href="/pricing">Pricing</Link>
+          <Link href="/pricing">
+            <HyperText text="Pricing" className="cursor-pointer" />
+          </Link>
         </li>
         <li className="text-gray-800 font-light hover:text-gray-400 cursor-pointer mt-1">
-          <Link href="#contact">Contact</Link>
+          <Link href="#contact">
+            <HyperText text="Contact" className="cursor-pointer" />
+          </Link>
         </li>
         <li className="text-gray-800 font-light hover:text-gray-400 cursor-pointer mt-1">
-          <Link href="/about">About</Link>
+          <Link href="/about">
+            <HyperText text="About" className="cursor-pointer" />
+          </Link>
         </li>
         <li className="text-gray-800 font-light hover:text-gray-400 cursor-pointer mt-1">
-          <Link href="/blog">Blog</Link>
-        </li>
+          <Link href="/blog">
+            <HyperText text="Blog" className="cursor-pointer" />
+          </Link></li> */}
+
         <Button
-          variant="hacker"
-          className="rounded-none bg-white ml-3 font-medium"
+          variant="indigo"
+          className="rounded-2xl bg-white ml-3 font-bold mt-1"
           onClick={() => {
             Router.push("/auth/login");
           }}
         >
-          <Link href="/auth/login">{user ? "Back to site" : "Sign In"}</Link>
+          <Link href="/auth/login">
+            <HyperText
+              text={user ? "Back to site" : "Sign In"}
+              className="cursor-pointer"
+            />
+          </Link>
         </Button>
         {/* <Button
           variant="hacker"
