@@ -7,7 +7,7 @@ export async function GET(request: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
   try {
-    const data = await getAILabels(user);
+    const data = await getAILabels(user.id!);
     if (!data) {
       return new Response("Unauthorized", { status: 401 });
     }

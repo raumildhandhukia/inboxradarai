@@ -27,7 +27,7 @@ export const PLANS: Plan[] = [
     processLimit: true,
     autoProcess: false,
     customTag: 3,
-    totalTags: 6,
+    totalTags: 3,
     contentAi: false,
     multipleInbox: true,
     price: {
@@ -46,7 +46,7 @@ export const PLANS: Plan[] = [
     processLimit: false,
     autoProcess: true,
     customTag: 20,
-    totalTags: 25,
+    totalTags: 20,
     contentAi: true,
     multipleInbox: true,
     price: {
@@ -59,4 +59,4 @@ export const PLANS: Plan[] = [
   },
 ];
 
-export const REQUEST_COOL_DOWN = 1000 * 60 * 1; // 1 minutes
+export const REQUEST_COOL_DOWN = 1000 * 15 * 1; // 15 seconds

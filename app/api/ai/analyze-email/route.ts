@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     if (!emailAddress) {
       return new Response("Email is required", { status: 400 });
     }
-    const labels: Label[] = await getAILabels(user);
+    const labels: Label[] = await getAILabels(user.id!);
     let doneEmailIDs: string[] = [];
     let doneAnalysis: AnalysisResponseType[] = [];
     if (findExisting) {

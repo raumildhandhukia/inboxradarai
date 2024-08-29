@@ -350,7 +350,7 @@ export function Mail({
                     value="all"
                     className="text-zinc-600 dark:text-zinc-200"
                   >
-                    {user.plan}
+                    {user.plan || "FREE"}
                   </TabsTrigger>
                   {/* <TabsTrigger
                     value="unread"

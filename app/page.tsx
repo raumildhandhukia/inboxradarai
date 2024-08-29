@@ -11,6 +11,8 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import GridPattern from "@/components/ui/grid";
 import { cn } from "@/utils/cn";
 import DotPattern from "@/components/ui/dot";
+import CookieConsent from "@/components/public/cookie";
+import { useCookies } from "react-cookie";
 
 const features = [
   {
@@ -72,12 +74,20 @@ const features = [
 ];
 
 export default function Home() {
+  const [cookie, setCookie] = useCookies(["cookieConsent"]);
+  const [showCookie, setShowCookie] = useState(false);
   const [activeFeature, setActiveFeature] = useState(-1);
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: containerRef });
   const [pos, setPos] = useState("fixed");
   const user = useCurrentUser();
   const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (!cookie.cookieConsent) {
+      setShowCookie(true);
+    }
+  }, [cookie]);
 
   // Set thresholds for transformation to occur after last feature
   const endTransitionThreshold =
@@ -211,6 +221,7 @@ export default function Home() {
             </motion.div>
           </>
         )}
+        {showCookie && <CookieConsent />}
       </main>
     </div>
   );

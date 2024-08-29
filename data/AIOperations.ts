@@ -106,7 +106,7 @@ export const getAnalysis = async (
 };
 
 // Returns the labels for the user
-export const getAILabels = async (user: User): Promise<Label[]> => {
+export const getAILabels = async (userId: string): Promise<Label[]> => {
   try {
     const labels = await db.tag.findMany({
       select: {
@@ -118,7 +118,7 @@ export const getAILabels = async (user: User): Promise<Label[]> => {
         isActive: true,
       },
       where: {
-        userId: user.id,
+        userId: userId,
       },
     });
 

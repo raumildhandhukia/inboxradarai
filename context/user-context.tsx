@@ -79,8 +79,10 @@ const Context: React.FC<UserContextProviderProps> = ({ children }) => {
       });
   };
   useEffect(() => {
-    userId && refresh && getData(userId);
-    setRefresh(false);
+    if (userId && refresh) {
+      getData(userId);
+      setRefresh(false);
+    }
   }, [userId, refresh]);
 
   return (

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { TagSchema } from "@/schemas"; // Ensure this path is correct
@@ -28,20 +28,20 @@ import { BeatLoader } from "react-spinners";
 import GridPattern from "@/components/ui/grid";
 import { cn } from "@/lib/utils";
 import DotPattern from "@/components/ui/dot";
+import { getAILabels } from "@/data/AIOperations";
 
 interface ConfProps {
-  existingLabels: Label[];
   plan: Plan;
 }
 
-const Conf: React.FC<ConfProps> = ({ existingLabels, plan }) => {
+const Conf: React.FC<ConfProps> = ({ plan }) => {
   const [loading, startLoading] = useState<boolean>(false);
   const { toast } = useToast();
   const user = useCurrentUser();
   const router = useRouter();
   const [customLabels, setCustomLabels] = useState<number>(0);
   const [error, setError] = useState<string>("");
-  const [labels, setLabels] = useState<Label[]>(existingLabels);
+  const [labels, setLabels] = useState<Label[]>([]);
   const planMaxedOut =
     plan?.totalTags === labels.length || plan?.customTag === customLabels;
   const [currentTab, setCurrentTab] = useState<string>("select-label");
@@ -52,6 +52,14 @@ const Conf: React.FC<ConfProps> = ({ existingLabels, plan }) => {
     color: `rgba(200, 150, 35, 0.5)`,
     isActive: true,
   });
+
+  useEffect(() => {
+    const fetchLabels = async () => {
+      const labels = await getAILabels(user?.id!);
+      setLabels(labels);
+    };
+    fetchLabels();
+  }, [user?.id]);
 
   // Learn This Syntax
   const updateLabel = (
@@ -184,61 +192,17 @@ const Conf: React.FC<ConfProps> = ({ existingLabels, plan }) => {
         )}
       />
       <Tabs
-        value={currentTab}
+        value="create-label"
         onValueChange={setCurrentTab}
-        defaultValue={currentTab}
+        defaultValue="create-label"
         className="w-[70%] bg-white dark:bg-neutral-950 z-[1]"
       >
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="select-label">Select</TabsTrigger>
-          <TabsTrigger value="create-label">Create</TabsTrigger>
+        <TabsList className="w-max">
+          <TabsTrigger value="create-label" className="w-max">
+            Create Customizable AI Labels in your own words
+          </TabsTrigger>
         </TabsList>
-        <TabsContent value="select-label">
-          <Card>
-            <CardHeader>
-              <CardTitle>Choose from popular labels</CardTitle>
-              <CardDescription>
-                Click on Save Changes to save your label selection when
-                you&apos;re done.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-5">
-              <SearchBarLabels
-                labels={labels}
-                setLabels={selectLabel}
-                setCurrentTab={setCurrentTab}
-                setNewLabel={setNewLabel}
-                plan={plan}
-              />
-              {/* <div className="flex flex-wrap gap-1">
-                {labels.length > 0 ? (
-                  labels.map((label) => (
-                    <AILabel
-                      key={label.id}
-                      bgColor={label.color || "rgba(200, 150, 35, 0.5)"}
-                      deleteLabel={() => {
-                        deleteLabel(label.id);
-                      }}
-                      isActive={false}
-                    >
-                      {label.label}
-                    </AILabel>
-                  ))
-                ) : (
-                  <span>No Labels Selected</span>
-                )}
-              </div> */}
-            </CardContent>
-            <CardFooter className="flex flex-col">
-              <div className="flex justify-between w-full">
-                {planMaxedOut && <FancyButton>Upgrade Plan</FancyButton>}
-                <Button className="bg-indigo-500" onClick={handleNext}>
-                  Save
-                </Button>
-              </div>
-            </CardFooter>
-          </Card>
-        </TabsContent>
+
         <TabsContent value="create-label">
           <Card>
             <CardHeader>
@@ -249,20 +213,6 @@ const Conf: React.FC<ConfProps> = ({ existingLabels, plan }) => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              {/* <div className="flex justify-start flex-wrap gap-1">
-                {labels.map((label) => (
-                  <AILabel
-                    key={label.id}
-                    bgColor={label.color || "rgba(200, 150, 35, 0.5)"}
-                    deleteLabel={() => {
-                      deleteLabel(label.id);
-                    }}
-                    isActive={label.isActive}
-                  >
-                    {label.label}
-                  </AILabel>
-                ))}
-              </div> */}
               {!planMaxedOut && (
                 <CreateLabelInputs
                   labelData={newLabel}
@@ -291,13 +241,6 @@ const Conf: React.FC<ConfProps> = ({ existingLabels, plan }) => {
         </TabsContent>
       </Tabs>
       <div className="flex flex-col justify-center gap-5 h-full w-[40%] z-[1]">
-        <div className="">
-          <LabelList
-            predefined
-            labels={labels.filter((label) => label.predefinedId)}
-            setLabels={setLabels}
-          />
-        </div>
         <div className="">
           <LabelList
             labels={labels.filter((label) => !label.predefinedId)}

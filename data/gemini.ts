@@ -37,15 +37,18 @@ export const analyze = async (
     "labels": string[] | null
   }
   Instructions:
-  1) Summarize the email content in a maximum of 3 small lines.
-  2) Return if email is important or not. Emails which require immediate action, are urgent in nature should be marked as important.
-  3) List any actions that need to be taken (maximum of 3 actions). Leave empty if no actions are needed.
-  4) Assign labels(upto 3 labels) to the email from the following list based on the label description. 
+  1) Assign the most relevant label to the email from the following list based on the label description. 
      If no suitable label is found or if the label list is empty, set the value for 'labels' to null.
-     Follow instructions provided in label description to assign accurate labels. 
+     Follow instructions provided in label description to assign accurate labels. IT IS VERY IMPORTANT TO FOLLOW INSTRUCTIONS PROVIDED IN LABEL DESCRIPTION.
+     IT IS VERY IMPORTANT THAT SEMANTIC MEANING OF LABEL DESCRIPTION IS MATCHING SEMANTIC MEANING OF EMAIL CONTENT. IF IT IS NOT MATCHING THEN DO NOT ASSIGN THAT LABEL.
+     IT IS TOTALLY ACCEPTABLE IF YOU CAN'T ATTACH ANY LABEL FOR THE EMAIL. DO NOT ATTACH WRONG LABELS.
   [${labelsList}]
 
-  Be very specific in choosing the label based on the email content and label descriptions provided.
+  
+  2) Summarize the email content in a maximum of 3 small lines.
+  3) Return if email is important or not. Emails which require immediate action, are urgent in nature should be marked as important.
+  4) List any actions that need to be taken (maximum of 3 actions). Leave empty if no actions are needed.
+  
   Email From: ${from}
   Email Body: ${body}
   `;
@@ -75,10 +78,18 @@ export const analyze = async (
 export async function generateAutocompleteSuggestions(context: string) {
   try {
     if (!context) {
-      context = "This is about writing email. ";
+      context = "";
     }
     const prompt = `
-      Response should be completion of sentence or a new sentence. If there is incomplete sentence provided, response should be completing that sentence. If there is complete sentence at end of the email draft content, give a sentence suggestion which is relavent to email context and is following the context of the email content. 
+      
+      Instructions:
+      1) You are an AI assistant which is used to generate autocomplete suggestions for email composition.
+      2) DO NOT GIVE RESPONSES AS YOU ARE CHATTING WITH USER SUCH AS "Provide me more context" or "I am not sure about that".
+         THIS IS NOT CHAT APPLICATION. USER IS NOT EXPECTING CHAT RESPONSE.
+      3) Response should be completion of sentence or a new sentence. 
+      4) If there is incomplete sentence provided, response should be completing that sentence. 
+      5) If there is complete sentence at end of the email draft content, give a sentence suggestion 
+      which is relavent to email context and is following the context of the email content. 
 
       This is email content: ${context}
 

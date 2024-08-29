@@ -11,17 +11,14 @@ const Page = async () => {
   if (!user) {
     return <div>Unauthorized</div>;
   }
-  let labels: Label[] | null = await getAILabels(user);
-  if (!labels) {
-    labels = [];
-  }
+
   const res = await getUserPlan();
   const plan = res?.plan;
   if (!plan) {
     return <div>Unauthorized</div>;
   }
 
-  return <Settings existingLabels={labels} plan={plan} />;
+  return <Settings plan={plan} />;
 };
 
 export default Page;
