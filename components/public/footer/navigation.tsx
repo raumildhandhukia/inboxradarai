@@ -22,11 +22,7 @@ export const Navigation = () => (
         Pricing
       </Link>
     </li>
-    <li className="ThemeText text-lg">
-      <Link href="/blog" className="hover:text-xl">
-        Blog
-      </Link>
-    </li>
+
     <li className="ThemeText text-lg">
       <Link href="/faq" className="hover:text-xl">
         FAQ

@@ -2,10 +2,8 @@ import React from "react";
 import { Navigation } from "@/components/public/footer/navigation";
 import { ContactForm } from "@/components/public/footer/contact";
 import { BuyMeCoffee } from "@/components/public/footer/buymecoffee";
-import Logo from "@/public/Logo";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
 
 const Footer = ({ mini }: { mini?: boolean }) => {
   if (mini) {
@@ -13,33 +11,47 @@ const Footer = ({ mini }: { mini?: boolean }) => {
       <div className="w-screen h-20 md:px-20 md:py-2">
         <div className="border-t w-full">
           <div className="flex justify-between items-start px-4 py-2">
-            <span className="text-muted-foreground text-[8px] mt-2">
+            <span className="text-muted-foreground text-[10px] mt-2">
               Copyright © 2024 InboxRadarAI. All rights reserved.
             </span>
             <div className="">
               <Button variant="link">
                 <Link
-                  href="/auth/login"
+                  href="/cookie-policy"
                   className="text-xs text-muted-foreground"
                 >
+                  Cookie Policy
+                </Link>
+              </Button>
+              <Button variant="link">
+                <Link href="/privacy" className="text-xs text-muted-foreground">
                   Privacy Policy
                 </Link>
               </Button>
 
               <Button variant="link">
-                <Link
-                  href="/auth/login"
-                  className="text-xs text-muted-foreground"
-                >
-                  Terms of Use
+                <Link href="/terms" className="text-xs text-muted-foreground">
+                  Terms of Service
+                </Link>
+              </Button>
+              <Button variant="link">
+                <Link href="/pricing" className="text-xs text-muted-foreground">
+                  Pricing
+                </Link>
+              </Button>
+              <Button variant="link">
+                <Link href="/faq" className="text-xs text-muted-foreground">
+                  FAQ
+                </Link>
+              </Button>
+              <Button variant="link">
+                <Link href="/about" className="text-xs text-muted-foreground">
+                  About
                 </Link>
               </Button>
 
               <Button variant="link">
-                <Link
-                  href="/auth/login"
-                  className="text-xs text-muted-foreground"
-                >
+                <Link href="/about" className="text-xs text-muted-foreground">
                   Contact
                 </Link>
               </Button>
