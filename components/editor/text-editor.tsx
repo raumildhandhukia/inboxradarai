@@ -163,7 +163,7 @@ export const Editor: React.FC<EditorProps> = ({
   }
 
   return (
-    <div className="">
+    <div className="!max-w-full">
       <div
         className={cn(`editor transition-all  !overflow-x-hidden`, className)}
       >
@@ -185,7 +185,9 @@ export const Editor: React.FC<EditorProps> = ({
         </div>
       </div>
       {useAI && showFloatingTipComponent() && (
-        <FloatingTips editor={editor}>{floatingText}</FloatingTips>
+        <FloatingTips editor={editor} editorRef={editorRef}>
+          {floatingText}
+        </FloatingTips>
       )}
     </div>
   );

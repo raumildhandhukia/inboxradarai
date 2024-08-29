@@ -83,7 +83,6 @@ export function MailDisplay({ mail }: MailDisplayProps) {
   };
   useEffect(() => {
     const getEmail = async () => {
-      debugger;
       const res = await fetch(`/api/mail/${mail?.id}?email=${selectedAccount}`);
       if (res.ok) {
         const data = await res.json();
