@@ -130,6 +130,7 @@ model Account {
   token_type        String?
   scope             String?
   id_token          String?
+  accountId         Int      @unique @default(autoincrement())
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

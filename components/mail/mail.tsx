@@ -140,9 +140,12 @@ export function Mail({
     logout();
   };
   const getData = async () => {
+    if (!selectedAccount) {
+      return;
+    }
     const URL = `${EMAILS_URL}?page=${pageTokens[Math.max(page - 1, 0)]}${
       inboxType ? `&type=${inboxType}` : labelName ? `&label=${labelName}` : ""
-    }&email=${selectedAccount}`;
+    }&accountId=${selectedAccount.accountId}`;
 
     const res = await fetch(URL, {
       method: "GET",
@@ -169,10 +172,13 @@ export function Mail({
     abortControllerRef.current = newAbortController;
 
     try {
+      if (!selectedAccount) {
+        return;
+      }
       const response = await fetch(
-        `${SEARCH_URL}?query=${query}&email=${selectedAccount}&page=${
-          pageTokens[Math.max(page - 1, 0)]
-        }`,
+        `${SEARCH_URL}?query=${query}&accountId=${
+          selectedAccount.accountId
+        }&page=${pageTokens[Math.max(page - 1, 0)]}`,
         {
           signal: newAbortController.signal,
         }

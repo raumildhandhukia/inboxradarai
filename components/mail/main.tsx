@@ -15,7 +15,7 @@ export default function MailPage({
   defaultCollapsed?: boolean;
 }) {
   const { selectedAccount } = useContext(InboxContext);
-  useSelectedAccount(accounts[0].email);
+  useSelectedAccount(accounts[0], accounts);
   return (
     <>
       {selectedAccount && (

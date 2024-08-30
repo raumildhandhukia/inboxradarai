@@ -5,6 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { BeatLoader } from "react-spinners";
 
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { toast } from "@/components/ui/use-toast";
 
 const Loader = () => {
   return (
@@ -17,6 +19,13 @@ const Loader = () => {
 export const ContactForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  const clearForm = () => {
+    refs.fname.current && (refs.fname.current.value = "");
+    refs.lname.current && (refs.lname.current.value = "");
+    refs.email.current && (refs.email.current.value = "");
+    refs.message.current && (refs.message.current.value = "");
+  };
   type Refs = {
     fname: React.RefObject<HTMLInputElement>;
     lname: React.RefObject<HTMLInputElement>;
@@ -54,6 +63,11 @@ export const ContactForm = () => {
         if (!res.ok) {
           setErrorMessage("An error occurred. Please try again later.");
         }
+        clearForm();
+        toast({
+          title: "Message sent",
+          description: "We will get back to you soon.",
+        });
       } catch (error) {
         setErrorMessage("An error occurred. Please try again later.");
       }
@@ -63,7 +77,7 @@ export const ContactForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col md:items-start">
-        <h3 className="ThemeText text-4xl">Contact</h3>
+        <h3 className="ThemeText text-4xl"></h3>
       </div>
       <div className="flex flex-col md:flex-row md:gap-10 ">
         <div className="mt-5">
@@ -124,6 +138,15 @@ export const ContactForm = () => {
               </Button>
             </div>
           )}
+          <div className="flex items-center justify-center gap-2">
+            <p>Support:</p>
+            <Link
+              href="mailto:inboxradarai@gmail.com"
+              className="underline text-muted-foreground"
+            >
+              inboxradarai@gmail.com
+            </Link>
+          </div>
         </div>
       </div>
     </form>

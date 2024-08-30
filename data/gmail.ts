@@ -1,8 +1,5 @@
 "use server";
-import { db } from "@/lib/db";
-import { authenticate } from "@google-cloud/local-auth";
 import { google } from "googleapis";
-import { auth } from "@/auth";
 import { sidebarItems } from ".";
 import { Email, EmailAnalysis, EmailSearchResultProps } from "@/types";
 import { getAnalysis, getLabelEmails } from "./AIOperations";
@@ -193,6 +190,15 @@ export async function listEmails(
         q: qValue,
         includeSpamTrash: true,
       });
+      if (res.data.messages?.length === 0 && type === "primary") {
+        res = await gmail.users.messages.list({
+          userId: "me",
+          maxResults: 15,
+          pageToken,
+          q: "in:inbox",
+          includeSpamTrash: true,
+        });
+      }
     } catch (e) {
       console.error(pageToken);
     }

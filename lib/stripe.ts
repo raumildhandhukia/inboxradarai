@@ -44,7 +44,9 @@ export async function getUserSubscriptionPlan() {
   );
 
   const plan = isSubscribed
-    ? PLANS.find((plan) => plan.price.priceIds.test === dbUser.stripePriceId)
+    ? PLANS.find(
+        (plan) => plan.price.priceIds.production === dbUser.stripePriceId
+      )
     : null;
 
   let isCanceled = false;
@@ -97,7 +99,8 @@ export async function createStripeSession(userId: string, planSlug: string) {
     billing_address_collection: "auto",
     line_items: [
       {
-        price: PLANS.find((plan) => plan.name === "Pro")?.price.priceIds.test,
+        price: PLANS.find((plan) => plan.name === "Pro")?.price.priceIds
+          .production,
         quantity: 1,
       },
     ],

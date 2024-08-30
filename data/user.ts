@@ -74,6 +74,7 @@ const isUserSubscribed = (user: any) => {
       user.stripeCurrentPeriodEnd.getTime() > Date.now()
   );
 };
+
 export const performCronOperations = async () => {
   try {
     const users = await db.user.findMany();

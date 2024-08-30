@@ -40,22 +40,9 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
     }
   };
 
-  // const handleAccordianClick = async () => {
-  //   setIsOpen(!isOpen);
-  //   if (!isOpen && !cooldown && !isAnalyzing && !emailAnalysis) {
-  //     handleAnalyze(emailId, selectedAccount, true);
-  //     if (emailAnalysis) {
-  //       setEmails((prev) => {
-  //         return prev.map((email) => {
-  //           if (email.id === emailId) {
-  //             return { ...email, analysis: emailAnalysis };
-  //           }
-  //           return email;
-  //         });
-  //       });
-  //     }
-  //   }
-  // };
+  if (!selectedAccount) {
+    return null;
+  }
   return (
     <div>
       <Accordion type="single" collapsible defaultChecked>
@@ -73,7 +60,7 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
               <div className="flex justify-start items-center gap-5 px-2">
                 <LimitExceeded
                   handleAnalyze={() => {
-                    handleAnalyze(emailId, selectedAccount);
+                    handleAnalyze(emailId, selectedAccount.accountId);
                   }}
                   removeCooldown={() => {
                     setCooldown(false);
@@ -89,7 +76,7 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
                   <Button
                     variant="destructive"
                     onClick={() => {
-                      handleAnalyze(emailId, selectedAccount);
+                      handleAnalyze(emailId, selectedAccount.accountId);
                     }}
                   >
                     {emailAnalysis ? "Re-Analyze" : "Analyze"}

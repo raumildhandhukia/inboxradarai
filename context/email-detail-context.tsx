@@ -24,7 +24,7 @@ interface EmailDetailContextType {
   setEmailAnalysis: Dispatch<SetStateAction<EmailAnalysis | null>>;
   handleAnalyze: (
     emailID: string,
-    emailAddress: string,
+    accountId: number,
     findExisting?: boolean
   ) => void;
 }
@@ -63,7 +63,7 @@ const Context: React.FC<EmailDetailContextProviderProps> = ({ children }) => {
 
   const handleAnalyze = async (
     emailID: string,
-    emailAddress: string,
+    accountId: number,
     findExisting?: boolean
   ) => {
     startTransition(async () => {
@@ -74,7 +74,7 @@ const Context: React.FC<EmailDetailContextProviderProps> = ({ children }) => {
         },
         body: JSON.stringify({
           emailIDs: [emailID],
-          emailAddress,
+          accountId: accountId,
           findExisting: !!findExisting,
         }),
       });

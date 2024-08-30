@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SessionProvider } from "next-auth/react";
 import { Suspense } from "react";
+import { Toaster } from "@/components/ui/toaster";
 const poppins = Poppins({
   weight: ["100", "300", "500", "700"],
   subsets: ["latin"],
@@ -38,6 +39,7 @@ export default function RootLayout({
             </div>
           </ThemeProvider>
         </SessionProvider>
+        <Toaster />
       </body>
     </html>
   );

@@ -51,7 +51,7 @@ const Footer = ({ mini }: { mini?: boolean }) => {
               </Button>
 
               <Button variant="link">
-                <Link href="/about" className="text-xs text-muted-foreground">
+                <Link href="/contact" className="text-xs text-muted-foreground">
                   Contact
                 </Link>
               </Button>

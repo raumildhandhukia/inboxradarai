@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { useRouter } from "next/navigation";
 import { Account } from "@/types";
 import { InboxContext } from "@/context/inbox-context";
 import { UserContext } from "@/context/user-context";
@@ -36,8 +36,11 @@ export function AccountSwitcher({
 }: AccountSwitcherProps) {
   const user = useCurrentUser();
   const { selectedAccount } = React.useContext(InboxContext);
-  const setAccount = useSelectedAccount(accounts[0].email);
-  const plan = PLANS.find((p) => p.price.priceIds.test === user?.stripePriceId);
+  const router = useRouter();
+  const setAccount = useSelectedAccount(accounts[0], accounts);
+  const plan = PLANS.find(
+    (p) => p.price.priceIds.production === user?.stripePriceId
+  );
 
   if (!selectedAccount) {
     return null;
@@ -48,8 +51,19 @@ export function AccountSwitcher({
     });
   };
 
+  const setAccountUsingEmail = (email: string) => {
+    const account = accounts.find((a) => a.email === email);
+    if (account) {
+      setAccount(account);
+    }
+    router.push(`/inbox?type=primary`);
+  };
+
   return (
-    <Select defaultValue={selectedAccount} onValueChange={setAccount}>
+    <Select
+      defaultValue={selectedAccount.email}
+      onValueChange={setAccountUsingEmail}
+    >
       <SelectTrigger
         className={cn(
           "flex items-center gap-2 [&>span]:line-clamp-1 [&>span]:flex [&>span]:w-full [&>span]:items-center [&>span]:gap-1 [&>span]:truncate [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0",
@@ -61,7 +75,7 @@ export function AccountSwitcher({
         <SelectValue placeholder="Select an account">
           <SiGmail />
           <span className={cn("ml-2", isCollapsed && "hidden")}>
-            {selectedAccount}
+            {selectedAccount.email}
           </span>
         </SelectValue>
       </SelectTrigger>

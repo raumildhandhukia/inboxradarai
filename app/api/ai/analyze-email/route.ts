@@ -21,6 +21,8 @@ import {
 } from "@/types";
 import { auth } from "@/auth";
 
+import { verifyAccount, getAccountById } from "@/data/account";
+
 export async function POST(req: Request) {
   try {
     const session = await auth();
@@ -32,12 +34,17 @@ export async function POST(req: Request) {
     const {
       emailIDs,
       findExisting,
-      emailAddress,
-    }: { emailIDs: string[]; findExisting: boolean; emailAddress: string } =
+      accountId,
+    }: { emailIDs: string[]; findExisting: boolean; accountId: number } =
       reqBody;
-    if (!emailAddress) {
-      return new Response("Email is required", { status: 400 });
+    if (!accountId || !(await verifyAccount(accountId, user.id!))) {
+      return new Response("Unauthorized", { status: 400 });
     }
+    const account = await getAccountById(accountId);
+    if (!account) {
+      return new Response("Account not found", { status: 404 });
+    }
+    const emailAddress = account.email!;
     const labels: Label[] = await getAILabels(user.id!);
     let doneEmailIDs: string[] = [];
     let doneAnalysis: AnalysisResponseType[] = [];

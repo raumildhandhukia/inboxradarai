@@ -17,17 +17,31 @@ import { useCookies } from "react-cookie";
 const features = [
   {
     image: "/inboxradarai.png",
-    title: "AI Email Writing Assistant",
+    title: (
+      <p className="text-[2.5rem] font-semibold">
+        <span className="text-[#5046e6]">AI</span> Email Writing Assistant
+      </p>
+    ),
     bgColor: "bg-gradient-to-b from-indigo-50 to-red-300",
     description: (
       <div className="flex flex-col gap-y-4">
-        <span>Integrated with your email editor.</span>
+        <h2 className="mt-[.5rem] text-[1.3rem] ">
+          Featuring{" "}
+          <span className="text-[#5046e6]">
+            AI Suggestions & Autocompletion
+          </span>
+        </h2>
 
-        <span>
-          <strong>InboxRadarAI</strong> helps you write emails faster and more
-          effectively.
-        </span>
-        <span>
+        <div className="mt-[1.5rem] ">
+          <p className="text-[2rem]">
+            -&gt; Integrated with your email editor.
+            <br />
+            -&gt; <strong>InboxRadarAI</strong> helps you write emails faster
+            and more effectively. <br />
+          </p>
+        </div>
+
+        <span className="text-[1.1rem]">
           Keep your responses clean and concise by using AI assistant.
         </span>
       </div>
@@ -35,32 +49,50 @@ const features = [
   },
   {
     image: "/inboxradarai.png",
-    title: "AI Email Insights",
+    title: (
+      <p className="text-[2.5rem] font-semibold">
+        <span className="text-[#5046e6]">AI</span> Email Insights
+      </p>
+    ),
     bgColor: "bg-gradient-to-b from-red-300 to-green-300",
     description: (
-      <div className="flex flex-col gap-y-6">
-        <span>No more wasting time reading lengthy emails.</span>
-        <span>
-          <strong>InboxRadarAI</strong> summarizes and provides insights into
-          your emails, saving you time and effort.
-        </span>
+      <div className="mt-[1.5rem] ">
+        <p className="text-[1.6rem]">
+          -&gt; No more wasting time reading lengthy emails.
+          <br />
+          -&gt; <strong>InboxRadarAI</strong> summarizes and provides insights
+          into your emails, saving your time and effort. <br />
+        </p>
       </div>
     ),
   },
   {
     image: "/Label.gif",
-    title: "AI Labels",
+    title: (
+      <p className="text-[2.5rem] font-semibold">
+        <span className="text-[#5046e6]">AI</span> Email Labeling
+      </p>
+    ),
     bgColor: "bg-gradient-to-b from-green-300 to-yellow-50",
     description: (
       <div className="flex flex-col gap-y-4">
-        <span>Tired of manually labelling your emails?</span>
-        <span>
-          <strong>InboxRadarAI</strong> automatically labels your emails, so you
-          can focus on what matters.
-        </span>
-        <span>
-          Create custom labels for your emails for one time and let{" "}
-          <strong>AI</strong> handle the rest.
+        <h2 className="mt-[.5rem] text-[1.3rem] ">
+          You Describe Your Label,{" "}
+          <span className="text-[#5046e6]">AI labels it for you.</span>
+        </h2>
+
+        <div className="mt-[1.5rem] ">
+          <p className="text-[1.5rem]">
+            -&gt; Create custom labels for your emails for one time and let{" "}
+            <strong>AI</strong> handle the rest.
+            <br />
+            -&gt; <strong>InboxRadarAI</strong> automatically labels your
+            emails, so you can focus on what matters.
+          </p>
+        </div>
+
+        <span className="text-[1.1rem]">
+          Tired of manually labelling your emails?
         </span>
       </div>
     ),

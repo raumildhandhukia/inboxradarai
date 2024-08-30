@@ -1,7 +1,7 @@
 import { getInboxData } from "@/data/email";
 import { Email } from "@/types";
 import { auth } from "@/auth";
-
+import { verifyAccount, getAccountById } from "@/data/account";
 interface ReturnType {
   emails: Email[];
   nextPageToken: string | null | undefined;
@@ -17,10 +17,15 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const page = searchParams.get("page");
     const type = searchParams.get("type");
-    const email = searchParams.get("email");
-    if (!email) {
+    const accountId = searchParams.get("accountId");
+    if (!accountId || !(await verifyAccount(parseInt(accountId), user.id!))) {
       return new Response("No Email Provided", { status: 404 });
     }
+    const account = await getAccountById(parseInt(accountId));
+    if (!account) {
+      return new Response("Account not found", { status: 404 });
+    }
+    const email = account.email!;
     const labelId = searchParams.get("label");
     const data: ReturnType | null = await getInboxData(
       page,

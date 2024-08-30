@@ -52,7 +52,7 @@ const Message: React.FC<MessageProps> = ({
   useEffect(() => {
     if (user) {
       const plan = PLANS.find((p) =>
-        p.price.priceIds.test.includes(user.stripePriceId)
+        p.price.priceIds.production.includes(user.stripePriceId)
       );
       if (plan?.contentAi) {
         setIsAIselected(true);
@@ -66,7 +66,7 @@ const Message: React.FC<MessageProps> = ({
     } else {
       if (user) {
         const plan = PLANS.find((p) =>
-          p.price.priceIds.test.includes(user.stripePriceId)
+          p.price.priceIds.production.includes(user.stripePriceId)
         );
         if (plan?.contentAi) {
           setIsAIselected(true);
@@ -82,6 +82,9 @@ const Message: React.FC<MessageProps> = ({
 
   const handleSendMessage = () => {
     const send = async () => {
+      if (!selectedAccount) {
+        return;
+      }
       const res = await fetch("/api/mail/send", {
         method: "POST",
         body: JSON.stringify({
@@ -91,7 +94,7 @@ const Message: React.FC<MessageProps> = ({
           bcc,
           subject,
           message,
-          account: selectedAccount,
+          accountId: selectedAccount.accountId,
         }),
         headers: {
           "Content-Type": "application/json",

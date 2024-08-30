@@ -31,7 +31,7 @@ export const getUserPlan = async () => {
       };
     }
     const plan = PLANS.find(
-      (plan) => plan.price.priceIds.test === dbUser.stripePriceId
+      (plan) => plan.price.priceIds.production === dbUser.stripePriceId
     );
     return {
       plan: { ...plan } as Plan,
