@@ -1,18 +1,9 @@
 import React from "react";
-import fs from "fs";
-import path from "path";
+
+import TermsServices from "./terms-services";
 
 const Policy = () => {
-  const policyHtml = fs.readFileSync(
-    path.join(process.cwd(), "app/terms/terms.html"),
-    "utf-8"
-  );
-
-  return (
-    <>
-      <div dangerouslySetInnerHTML={{ __html: policyHtml }} />
-    </>
-  );
+  return <TermsServices />;
 };
 
 export default Policy;
