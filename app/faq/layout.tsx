@@ -7,7 +7,7 @@ const AboutLayout = ({ children }: { children: React.ReactNode }) => {
     <div>
       <Nav />
       {children}
-      <Footer />
+      <Footer mini />
     </div>
   );
 };

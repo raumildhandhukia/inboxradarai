@@ -54,7 +54,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
   useEffect(() => {
     if (user) {
       const plan = PLANS.find((p) =>
-        p.price.priceIds.test.includes(user.stripePriceId)
+        p.price.priceIds.production.includes(user.stripePriceId)
       );
       if (plan?.contentAi) {
         setIsAIselected(true);
@@ -68,7 +68,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
     } else {
       if (user) {
         const plan = PLANS.find((p) =>
-          p.price.priceIds.test.includes(user.stripePriceId)
+          p.price.priceIds.production.includes(user.stripePriceId)
         );
         if (plan?.contentAi) {
           setIsAIselected(true);

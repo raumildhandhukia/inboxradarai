@@ -52,7 +52,7 @@ const Message: React.FC<MessageProps> = ({
   useEffect(() => {
     if (user) {
       const plan = PLANS.find((p) =>
-        p.price.priceIds.test.includes(user.stripePriceId)
+        p.price.priceIds.production.includes(user.stripePriceId)
       );
       if (plan?.contentAi) {
         setIsAIselected(true);
@@ -66,7 +66,7 @@ const Message: React.FC<MessageProps> = ({
     } else {
       if (user) {
         const plan = PLANS.find((p) =>
-          p.price.priceIds.test.includes(user.stripePriceId)
+          p.price.priceIds.production.includes(user.stripePriceId)
         );
         if (plan?.contentAi) {
           setIsAIselected(true);

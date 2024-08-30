@@ -38,7 +38,9 @@ export function AccountSwitcher({
   const { selectedAccount } = React.useContext(InboxContext);
   const router = useRouter();
   const setAccount = useSelectedAccount(accounts[0], accounts);
-  const plan = PLANS.find((p) => p.price.priceIds.test === user?.stripePriceId);
+  const plan = PLANS.find(
+    (p) => p.price.priceIds.production === user?.stripePriceId
+  );
 
   if (!selectedAccount) {
     return null;

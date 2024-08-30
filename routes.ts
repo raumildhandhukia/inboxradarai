@@ -13,6 +13,7 @@ export const publicRoutes = [
   "/terms",
   "/cookie-policy",
   "/faq",
+  "/contact",
   "/api/send-message",
 ];
 
