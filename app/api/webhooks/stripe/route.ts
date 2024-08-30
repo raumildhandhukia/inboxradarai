@@ -87,7 +87,7 @@ export async function POST(request: Request) {
           stripeCurrentPeriodEnd: new Date(),
           lastFreeTierRefillDate: new Date(),
           emailProcessed: 0,
-          changeToFreePlanOnPeriodEnd: true,
+          changeToFreePlanOnPeriodEnd: false,
         },
       });
     } catch (error) {
