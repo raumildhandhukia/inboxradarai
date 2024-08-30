@@ -2,6 +2,7 @@ import { PLANS } from "@/config/app";
 import { db } from "@/lib/db";
 import { auth } from "@/auth";
 import Stripe from "stripe";
+import { getUserPlan } from "@/actions/plan";
 
 const DOMAIN = process.env.DOMAIN_URL ?? "http://localhost:3000";
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
@@ -12,6 +13,17 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
 export async function getUserSubscriptionPlan() {
   const session = await auth();
   const user = session?.user;
+  const userPlan = await getUserPlan();
+  if (!userPlan) {
+    return {
+      ...PLANS[0],
+      isSubscribed: false,
+      isCanceled: false,
+      stripeCurrentPeriodEnd: null,
+    };
+  }
+
+  const { plan, isCanceled, isSubscribed } = userPlan;
 
   if (!user) {
     return {
@@ -21,7 +33,6 @@ export async function getUserSubscriptionPlan() {
       stripeCurrentPeriodEnd: null,
     };
   }
-
   const dbUser = await db.user.findFirst({
     where: {
       id: user.id,
@@ -35,26 +46,6 @@ export async function getUserSubscriptionPlan() {
       isCanceled: false,
       stripeCurrentPeriodEnd: null,
     };
-  }
-
-  const isSubscribed = Boolean(
-    dbUser.stripePriceId &&
-      dbUser.stripeCurrentPeriodEnd && // 86400000 = 1 day
-      dbUser.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now()
-  );
-
-  const plan = isSubscribed
-    ? PLANS.find(
-        (plan) => plan.price.priceIds.production === dbUser.stripePriceId
-      )
-    : null;
-
-  let isCanceled = false;
-  if (isSubscribed && dbUser.stripeSubscriptionId) {
-    const stripePlan = await stripe.subscriptions.retrieve(
-      dbUser.stripeSubscriptionId
-    );
-    isCanceled = stripePlan.cancel_at_period_end;
   }
 
   return {

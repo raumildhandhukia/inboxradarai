@@ -29,7 +29,6 @@ const BillingForm = ({ subscriptionPlan }: BillingFormProps) => {
   if (!user || !user.id) return null;
   const handleSumbit = async () => {
     startTransition(async () => {
-      console.log("user.id", user.id);
       const url = await manageSubscriptions(
         user.id || "",
         subscriptionPlan.name || ""
@@ -60,7 +59,9 @@ const BillingForm = ({ subscriptionPlan }: BillingFormProps) => {
             <CardDescription>
               You are currently on the{" "}
               <strong>{subscriptionPlan.name || "Free"}</strong> plan.
-              {subscriptionPlan.isCanceled &&
+              {subscriptionPlan.stripeCurrentPeriodEnd &&
+                subscriptionPlan.isCanceled &&
+                new Date() < subscriptionPlan.stripeCurrentPeriodEnd &&
                 ` Your plan will be canceled on ${format(
                   subscriptionPlan.stripeCurrentPeriodEnd!,
                   "MMMM.dd.yyyy"
