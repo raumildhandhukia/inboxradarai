@@ -1,27 +1,84 @@
-# Inbox Radar
+# InboxRadarAI
+
+Welcome to **InboxRadarAI**, a revolutionary SaaS AI application designed to automate your email management process. This documentation will guide you through the features, setup, and usage of the app.
 
 ## Overview
-Inbox Radar is an AI-powered email organizer designed specifically for tracking job applications. It intercepts emails from providers such as Gmail, Outlook, and Yahoo, and tags them based on their content. The application provides detailed statistics and insights into your job applications, helping you stay organized and informed throughout your job search process.
 
-## Features
-- **Email Interception**: Seamlessly connect with email providers (Gmail, Outlook, Yahoo) to intercept incoming job-related emails.
-- **Automatic Tagging**: Utilize AI to analyze email content and tag emails with appropriate labels.
-- **Statistics & Insights**: Gain valuable insights into your job application process with detailed statistics and visualizations.
-- **User-friendly Interface**: A clean, modern interface built with Next.js, React, and Tailwind CSS.
+InboxRadarAI integrates seamlessly with your Gmail inbox, utilizing advanced Large Language Model (LLM) technology, **Gemini**, to intercept, process, and categorize your emails with precision.
 
-## Tech Stack
-- **Frontend/Backend**: Next.js, React, TypeScript, Tailwind CSS
-- **Database**: PostgreSQL with Prisma ORM
-- **AI/ML**: Gemini API for content analysis and tagging
+### Key Features
 
-## Usage
+- **Intelligent Email Tagging and Classification**: Automatically tags and classifies emails, allowing for custom label creation and automated labeling.
+- **AI Suggestions and Autocomplete**: Assists in drafting emails with AI-powered suggestions and autocomplete functionality.
+- **AI Insights**: Provides short summary of email content.
+- **Multi-Inbox Support**: Supports managing multiple Gmail inboxes within a single interface.
+- **Email-Client**: Capable of recieving, sending and replying to threads. 
+- **Subscription Tiers**: Offers both free and pro tiers, integrated with Stripe for payment processing.
 
-1. **Connect Your Email**
-   - Upon first use, you will be prompted to connect your email account. Choose your provider and follow the authentication steps.
+## Getting Started
 
-2. **Tagging Emails**
-   - Inbox Radar will automatically start intercepting and tagging incoming job-related emails based on their content.
+## Technology Stack
 
-3. **View Statistics and Insights**
-   - Navigate to the Dashboard to view detailed statistics and insights about your job applications.
+- **Frontend**: 
+  - Next.js
+  - React
+  - TypeScript
+  - TailwindCSS
 
+- **Backend**:
+  - Node.js
+  - TypeScript
+  - Prisma ORM
+
+- **Database**: 
+  - PostgreSQL
+
+- **Authentication**: 
+  - Auth.js (OAuth for Google)
+
+- **AI & APIs**:
+  - Gemini API
+  - Gmail API
+
+- **Payment Integration**: 
+  - Stripe
+
+- **DevOps**: 
+  - Vercel (for deployment)
+
+### Installation
+
+1. **Setup**
+- Clone The Repo
+- Setup stripe product. Save new priceId to config/app.ts
+- Setup gmail API credentials, gemini API credentials
+- Setup postgreSQL database
+- Setup Resend 
+
+2. **Set Environment Variables**
+```
+AUTH_SECRET=
+GOOGLE_API_KEY=
+AUTH_GOOGLE_ID=
+AUTH_GOOGLE_SECRET=
+AUTH_YAHOO_CLIENT_ID=
+AUTH_YAHOO_SECRET=
+SENDER_GMAIL=
+SENDER_GMAIL_APP_PASSWORD=
+RESEND_API_KEY=
+GENAI_API_KEY=
+NEXTAUTH_URL=
+NEXT_PUBLIC_APP_URL=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+REPLICATE_API_TOKEN=
+CRON_KEY=
+```
+3. **Install the packages**
+```
+npm i
+```
+4. **Run**
+```
+npm run dev
+```
