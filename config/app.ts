@@ -53,7 +53,7 @@ export const PLANS: Plan[] = [
       amount: 4.99,
       priceIds: {
         test: "price_1PsWxlJyByQqr4U28Ka1Jp0D",
-        production: "price_1PtO6NJyByQqr4U2JGqFfSCP",
+        production: "price_1PtXWUJyByQqr4U2qAhk7nhn",
       },
     },
   },
