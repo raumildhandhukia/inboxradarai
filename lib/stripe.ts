@@ -87,7 +87,7 @@ export async function createStripeSession(userId: string, planSlug: string) {
   const stripeSession = await stripe.checkout.sessions.create({
     success_url: billingUrl,
     cancel_url: billingUrl,
-    payment_method_types: ["card", "link", "amazon_pay", "klarna", "cashapp"],
+    payment_method_types: ["card"],
     mode: "subscription",
     billing_address_collection: "auto",
     line_items: [
