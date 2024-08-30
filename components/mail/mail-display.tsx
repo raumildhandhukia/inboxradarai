@@ -83,7 +83,12 @@ export function MailDisplay({ mail }: MailDisplayProps) {
   };
   useEffect(() => {
     const getEmail = async () => {
-      const res = await fetch(`/api/mail/${mail?.id}?email=${selectedAccount}`);
+      if (!selectedAccount) {
+        return;
+      }
+      const res = await fetch(
+        `/api/mail/${mail?.id}?accountId=${selectedAccount.accountId}`
+      );
       if (res.ok) {
         const data = await res.json();
         data.body = decodeAndSanitizeHTML(data.body);
@@ -93,7 +98,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
         }
       }
     };
-    if (mail) {
+    if (mail && selectedAccount) {
       startTransitionOfFetchingEmail(async () => {
         await getEmail();
       });
@@ -101,12 +106,12 @@ export function MailDisplay({ mail }: MailDisplayProps) {
   }, [mail?.id]);
 
   const handleTrash = async () => {
-    if (!mail) return;
+    if (!mail || !selectedAccount) return;
     const res = await fetch(`/api/mail/trash`, {
       method: "POST",
       body: JSON.stringify({
         emailId: mail.id,
-        account: selectedAccount,
+        accountId: selectedAccount.accountId,
         action: mail.labelIds?.includes("TRASH") ? "UNTRASH" : "TRASH",
       }),
     });
@@ -129,10 +134,14 @@ export function MailDisplay({ mail }: MailDisplayProps) {
 
   const handleSendReply = async () => {
     const send = async () => {
+      if (!selectedAccount) {
+        return;
+      }
       let subject = mail?.subject || "";
       if (subject.length === 0) {
         subject = `Re: ${mail?.snippet?.substring(0, 25)}`;
       }
+
       const res = await fetch("/api/mail/send", {
         method: "POST",
         body: JSON.stringify({
@@ -140,7 +149,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           to: [mail?.from?.split(" <")[1].split(">")[0] || ""],
           subject,
           message: replyMessage,
-          account: selectedAccount,
+          accountId: selectedAccount.accountId,
           threadId: mail?.threadId,
           messageId: mail?.messageId,
         }),

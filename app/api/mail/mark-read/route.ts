@@ -1,6 +1,7 @@
 import { auth as getSession } from "@/auth";
 import { modifyEmail, getGoogleApiHandler } from "@/data/gmail";
 import { getRefresh } from "@/actions/auth/account";
+import { verifyAccount, getAccountById } from "@/data/account";
 
 export async function POST(req: Request) {
   try {
@@ -10,8 +11,16 @@ export async function POST(req: Request) {
       return new Response("Unauthorized", { status: 401 });
     }
     const body = await req.json();
-    const { emailId, label, account } = body;
-    const res = await getRefresh(user.id, account);
+    const { emailId, label, accountId } = body;
+    if (!accountId || !(await verifyAccount(parseInt(accountId), user.id!))) {
+      return new Response("Unauthorized", { status: 404 });
+    }
+    const account = await getAccountById(parseInt(accountId));
+    if (!account) {
+      return new Response("Account not found", { status: 404 });
+    }
+    const email = account.email!;
+    const res = await getRefresh(user.id, email);
     if (!res || !res.refresh_token) {
       return new Response("Unauthorized", { status: 401 });
     }

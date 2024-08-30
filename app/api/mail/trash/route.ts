@@ -1,6 +1,7 @@
 import { auth as getSession } from "@/auth";
 import { getRefresh } from "@/actions/auth/account";
 import { trashEmail, untrashEmail, getGoogleApiHandler } from "@/data/gmail";
+import { verifyAccount, getAccountById } from "@/data/account";
 
 export async function POST(req: Request) {
   try {
@@ -10,7 +11,15 @@ export async function POST(req: Request) {
       return new Response("Unauthorized", { status: 401 });
     }
     const body = await req.json();
-    const { emailId, account, action } = body;
+    const { emailId, accountId, action } = body;
+    if (!accountId || !(await verifyAccount(parseInt(accountId), user.id!))) {
+      return new Response("Unauthorized", { status: 404 });
+    }
+    const account = await getAccountById(parseInt(accountId));
+    if (!account) {
+      return new Response("Account not found", { status: 404 });
+    }
+    const email = account.email!;
     if (action !== "TRASH" && action !== "UNTRASH") {
       return new Response("Invalid Action", { status: 400 });
     }
@@ -20,7 +29,7 @@ export async function POST(req: Request) {
     if (!account) {
       return new Response("Invalid Account", { status: 400 });
     }
-    const refresh = await getRefresh(user.id!, account);
+    const refresh = await getRefresh(user.id!, email);
     if (!refresh) {
       return new Response("Unauthorized", { status: 401 });
     }

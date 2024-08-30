@@ -14,7 +14,7 @@ export const useHandleAnalyze = () => {
 
   const handleAnalyze = async (
     emailID: string,
-    emailAddress: string,
+    accountId: number,
     findExisting?: boolean
   ) => {
     const analyzeEmail = async () => {
@@ -25,7 +25,7 @@ export const useHandleAnalyze = () => {
         },
         body: JSON.stringify({
           emailIDs: [emailID],
-          emailAddress,
+          accountId,
           findExisting: !!findExisting,
         }),
       });

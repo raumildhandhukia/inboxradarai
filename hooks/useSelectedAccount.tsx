@@ -1,26 +1,40 @@
 import { useState, useEffect, useContext } from "react";
 import { InboxContext } from "@/context/inbox-context";
 import Cookies from "js-cookie";
+import { Account } from "@/types";
 
-export const useSelectedAccount = (defaultAccount: string) => {
+export const useSelectedAccount = (
+  defaultAccount: Account,
+  allAccounts: Account[]
+) => {
   const { setSelectedAccount } = useContext(InboxContext);
 
   useEffect(() => {
-    const account = Cookies.get("selectedEmailAccount");
+    const account = Cookies.get("selectedEmailAccountId");
+    debugger;
 
-    if (account) {
-      setSelectedAccount(account);
+    if (
+      account &&
+      allAccounts.find((a) => a.accountId.toString() === account)
+    ) {
+      setSelectedAccount(
+        allAccounts.find((a) => a.accountId.toString() === account)!
+      );
     } else {
       setSelectedAccount(defaultAccount);
 
-      Cookies.set("selectedEmailAccount", defaultAccount);
+      Cookies.set(
+        "selectedEmailAccountId",
+        defaultAccount.accountId.toString()
+      );
     }
-  }, [setSelectedAccount, defaultAccount]);
+  }, [setSelectedAccount, defaultAccount, allAccounts]);
 
-  const setAccount = (account: string) => {
+  const setAccount = (account: Account) => {
+    debugger;
     setSelectedAccount(account);
 
-    Cookies.set("selectedEmailAccount", account);
+    Cookies.set("selectedEmailAccountId", account.accountId.toString());
   };
   return setAccount;
 };

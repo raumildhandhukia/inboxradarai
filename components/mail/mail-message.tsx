@@ -82,6 +82,9 @@ const Message: React.FC<MessageProps> = ({
 
   const handleSendMessage = () => {
     const send = async () => {
+      if (!selectedAccount) {
+        return;
+      }
       const res = await fetch("/api/mail/send", {
         method: "POST",
         body: JSON.stringify({
@@ -91,7 +94,7 @@ const Message: React.FC<MessageProps> = ({
           bcc,
           subject,
           message,
-          account: selectedAccount,
+          accountId: selectedAccount.accountId,
         }),
         headers: {
           "Content-Type": "application/json",

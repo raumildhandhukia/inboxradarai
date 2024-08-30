@@ -1,6 +1,7 @@
 import { auth as getSession } from "@/auth";
 import { getRefresh } from "@/actions/auth/account";
 import { sendEmail, getGoogleApiHandler } from "@/data/gmail";
+import { verifyAccount, getAccountById } from "@/data/account";
 export async function POST(req: Request) {
   try {
     const session = await getSession();
@@ -9,14 +10,22 @@ export async function POST(req: Request) {
       return new Response("Unauthorized", { status: 401 });
     }
     const body = await req.json();
-    const { from, to, cc, bcc, subject, message, account } = body;
+    const { from, to, cc, bcc, subject, message, accountId } = body;
+    if (!accountId || !(await verifyAccount(parseInt(accountId), user.id!))) {
+      return new Response("Unauthorized", { status: 404 });
+    }
+    const account = await getAccountById(parseInt(accountId));
+    if (!account) {
+      return new Response("Account not found", { status: 404 });
+    }
+    const email = account.email!;
     const threadId = body.threadId;
     const messageId = body.messageId;
 
     if (!to || !subject || !message || !account) {
       return new Response("Missing fields", { status: 400 });
     }
-    const refresh = await getRefresh(user.id!, account);
+    const refresh = await getRefresh(user.id!, email);
     if (!refresh) {
       return new Response("Unauthorized", { status: 401 });
     }
@@ -31,7 +40,7 @@ export async function POST(req: Request) {
       subject,
       message,
       handler,
-      account,
+      email,
       threadId,
       messageId
     );

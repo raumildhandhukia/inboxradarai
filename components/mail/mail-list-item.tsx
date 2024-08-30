@@ -49,20 +49,27 @@ const MailListItem = (item: Email, inUnreadTab?: boolean) => {
       (inboxType === "updates" && user.updateUpdates);
     if (shouldAutoUpdateEmail) {
       startTransition(async () => {
-        await handleAnalyze(item.id, selectedAccount);
+        if (!selectedAccount) {
+          return;
+        }
+        await handleAnalyze(item.id, selectedAccount.accountId);
       });
     }
   }, [user.autoUpdate, user.lastAutoUpdate, item?.date]);
 
   const handleEmailClick = async () => {
+    if (!selectedAccount) {
+      return;
+    }
     setComposeMessage(false);
     setSelectedEmail(item);
     setEmailAnalysis(null);
+
     const res = await fetch(`/api/mail/mark-read`, {
       method: "POST",
       body: JSON.stringify({
         emailId: id,
-        account: selectedAccount,
+        accountId: selectedAccount.accountId,
         label: "UNREAD",
       }),
     });
@@ -81,6 +88,7 @@ const MailListItem = (item: Email, inUnreadTab?: boolean) => {
       }
     }
   };
+
   return (
     <button
       key={id}

@@ -1,11 +1,11 @@
-import { Email } from "@/types";
+import { Account, Email } from "@/types";
 import React, { createContext, useState } from "react";
 
 interface InboxContextType {
   emails: any[];
   setEmails: React.Dispatch<React.SetStateAction<any[]>>;
-  selectedAccount: string;
-  setSelectedAccount: React.Dispatch<React.SetStateAction<string>>;
+  selectedAccount: Account | null;
+  setSelectedAccount: React.Dispatch<React.SetStateAction<Account | null>>;
   selectedEmail: Email | null;
   setSelectedEmail: React.Dispatch<React.SetStateAction<Email | null>>;
   query: string;
@@ -19,7 +19,7 @@ interface InboxContextType {
 const InboxContextDefault: InboxContextType = {
   emails: [],
   setEmails: () => {},
-  selectedAccount: "",
+  selectedAccount: null,
   setSelectedAccount: () => {},
   selectedEmail: null,
   setSelectedEmail: () => {},
@@ -36,7 +36,7 @@ interface InboxContextProviderProps {
 }
 const Context: React.FC<InboxContextProviderProps> = ({ children }) => {
   const [emails, setEmails] = useState<any[]>([]);
-  const [selectedAccount, setSelectedAccount] = useState<string>("");
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [query, setQuery] = useState<string>("");
   const [isMessageBoxOpen, setIsMessageBoxOpen] = useState<boolean>(false);
