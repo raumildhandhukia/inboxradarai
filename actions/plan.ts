@@ -36,7 +36,7 @@ export const getUserPlan = async () => {
     return {
       plan: { ...plan } as Plan,
       isSubscribed,
-      isCanceled: false,
+      isCanceled: dbUser.changeToFreePlanOnPeriodEnd,
     };
   } catch (e) {
     return null;

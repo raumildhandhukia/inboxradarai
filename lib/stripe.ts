@@ -74,6 +74,8 @@ export async function createStripeSession(userId: string, planSlug: string) {
   const subscriptionPlan = await getUserSubscriptionPlan();
 
   if (subscriptionPlan.isSubscribed && dbUser.stripeCustomerId) {
+    // if (dbUser.stripeCustomerId) {
+
     const stripeSession = await stripe.billingPortal.sessions.create({
       customer: dbUser.stripeCustomerId,
       return_url: billingUrl,
@@ -100,6 +102,6 @@ export async function createStripeSession(userId: string, planSlug: string) {
       plan: planSlug,
     },
   });
-
+  console.log("checkout session portal");
   return { url: stripeSession.url };
 }
