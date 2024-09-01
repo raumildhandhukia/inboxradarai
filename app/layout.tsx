@@ -13,10 +13,14 @@ const pro = Anonymous_Pro({
   weight: ["400", "700"],
   subsets: ["greek"],
 });
-
 export const metadata: Metadata = {
-  title: "Inbox Radar AI",
-  description: "AI powered job application tracker",
+  title: "InboxRadarAI",
+  description:
+    "Email Client powered by AI | Seamlessly integrated with Gmail | Get insights on your emails",
+  metadataBase: new URL("https://inboxradarai.vercel.app/"),
+  openGraph: {
+    images: "./opengraph-image.jpg",
+  },
 };
 
 export default function RootLayout({
