@@ -36,6 +36,7 @@ export interface AnalysisSuccess extends AnalysisTypeBase {
 
 export interface AnalysisFailure extends AnalysisTypeBase {
   success: false;
+  errorCode?: number;
   analysis?: undefined;
 }
 

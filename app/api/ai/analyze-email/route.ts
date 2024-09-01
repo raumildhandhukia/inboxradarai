@@ -127,10 +127,18 @@ export async function POST(req: Request) {
                 success: true,
               } as SuccessResponseType;
             } else {
-              return {
-                emailId,
-                success: false,
-              } as FailureResponseType;
+              if ((res as AnalysisFailure).errorCode === 429) {
+                return {
+                  emailId,
+                  success: false,
+                  limitExceeded: true,
+                } as FailureResponseType;
+              } else {
+                return {
+                  emailId,
+                  success: false,
+                } as FailureResponseType;
+              }
             }
           } else {
             return {

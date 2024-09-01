@@ -224,7 +224,7 @@ const Conf: React.FC<ConfProps> = ({ plan }) => {
             <CardFooter className="flex flex-col">
               {error && <div className="text-red-500 text-sm">{error}</div>}
               <div className="flex justify-between w-full mt-2">
-                {planMaxedOut && <FancyButton>Upgrade Plan</FancyButton>}
+                {/* {planMaxedOut && <FancyButton>Upgrade Plan</FancyButton>} */}
                 <div className="flex gap-3 justify-end">
                   {!planMaxedOut && (
                     <Button variant="destructive" onClick={handleAddLabel}>

@@ -4,20 +4,24 @@ import { EditorView } from "@tiptap/pm/view";
 import { minMax } from "@/lib/utils";
 import { Kbd } from "@nextui-org/react";
 import { posToDOMRect } from "@/lib/utils";
-import { min } from "date-fns";
+import { BeatLoader } from "react-spinners";
 const FloatingTips = ({
   editor,
   children,
   editorRef,
+  gettingSuggestions,
 }: {
   editor: Editor;
   children: ReactNode;
   editorRef: React.RefObject<HTMLDivElement>;
+  gettingSuggestions: boolean;
 }) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [tipsRightPos, setTipsRightPos] = useState(0);
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const tipsRef = useRef<HTMLDivElement>(null);
+  const [tipsWidth, setTipsWidth] = useState(0);
 
   useEffect(() => {
     if (!editor) return;
@@ -25,6 +29,10 @@ const FloatingTips = ({
     const updateMenuPosition = () => {
       const from = editor.state.selection.from;
       const to = editor.state.selection.to;
+      const rect = tipsRef.current?.getBoundingClientRect();
+      if (rect) {
+        setTipsWidth(rect.width);
+      }
 
       // const cursor = editor.view.coordsAtPos(from);
       const cords = posToDOMRect(editor.view, from, to);
@@ -43,18 +51,19 @@ const FloatingTips = ({
       editor.off("transaction", updateMenuPosition);
       editor.off("selectionUpdate", updateMenuPosition);
     };
-  }, [editor, editorRef]);
+  }, [editor, editorRef, gettingSuggestions]);
   const getDifference = () => {
     const rect = ref.current?.getBoundingClientRect();
     const editorRect = editorRef.current?.getBoundingClientRect();
     if (rect && editorRect) {
-      const difference = editorRect?.right - rect?.right;
+      console.log("rect", editorRect?.right, rect?.right, tipsWidth);
+      const difference = editorRect?.right - rect?.right - tipsWidth;
       return Math.min(0, difference);
     }
     return 0;
   };
   if (!visible) return null;
-
+  console.log("diff", getDifference());
   return (
     <div
       style={{ top: position.top + 30, left: position.left - 35 }}
@@ -67,14 +76,24 @@ const FloatingTips = ({
         ></div>
         <div
           ref={ref}
-          className="bg-gray-100 px-6 py-2 rounded-2xl flex gap-2 justify-center items-center absolute"
+          className="absolute width"
+          style={{
+            top: 0,
+            left: 0,
+          }}
+        ></div>
+        <div
+          ref={tipsRef}
+          className="bg-gray-100 px-6 py-2 rounded-2xl flex gap-2 justify-center items-center absolute max-w-[20vw]"
           id="floating-tips"
           style={{
             top: 0,
-            left: getDifference() - 20,
+            left: getDifference(),
           }}
         >
-          {children ? (
+          {gettingSuggestions ? (
+            <BeatLoader />
+          ) : children ? (
             <>
               <span className="text-muted-foreground text-sm w-max">
                 {children}

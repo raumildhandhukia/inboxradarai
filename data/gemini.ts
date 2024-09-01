@@ -37,9 +37,9 @@ export const analyze = async (
     "labels": string[] | null
   }
   Instructions:
-  1) Assign the most relevant label to the email from the following list based on the label description. 
-     If no suitable label is found or if the label list is empty, set the value for 'labels' to null.
-     Follow instructions provided in label description to assign accurate labels. IT IS VERY IMPORTANT TO FOLLOW INSTRUCTIONS PROVIDED IN LABEL DESCRIPTION.
+  1) Set labels = null if no label is applicable and email description is not matching the label description. 
+     Assign the accurate label to the email from the following list based on the label description if applicable. 
+     IT IS VERY IMPORTANT TO FOLLOW INSTRUCTIONS PROVIDED IN LABEL DESCRIPTION.
      IT IS VERY IMPORTANT THAT SEMANTIC MEANING OF LABEL DESCRIPTION IS MATCHING SEMANTIC MEANING OF EMAIL CONTENT. IF IT IS NOT MATCHING THEN DO NOT ASSIGN THAT LABEL.
      IT IS TOTALLY ACCEPTABLE IF YOU CAN'T ATTACH ANY LABEL FOR THE EMAIL. DO NOT ATTACH WRONG LABELS.
   [${labelsList}]
@@ -56,6 +56,7 @@ export const analyze = async (
     const result = await JSONModel.generateContent(prompt);
     const response = result.response;
     const text = response.text();
+    // console.log("response", text);
     const textToJson = JSON.parse(text) as APIResponse;
     const analysis = {
       emailId: "",
@@ -68,19 +69,29 @@ export const analyze = async (
       success: true,
       analysis: analysis,
     } as AnalysisType;
-  } catch (e) {
+  } catch (e: any) {
+    if (e && e.status && e.status === 429) {
+      return {
+        success: false,
+        errorCode: 429,
+      } as AnalysisType;
+    }
     return {
       success: false,
     } as AnalysisType;
   }
 };
 
-export async function generateAutocompleteSuggestions(context: string) {
+export async function generateAutocompleteSuggestions(
+  context: string,
+  userInfo: string,
+  emailBody: string
+) {
   try {
     if (!context) {
       context = "";
     }
-    const prompt = `
+    let prompt = `
       
       Instructions:
       1) You are an AI assistant which is used to generate autocomplete suggestions for email composition.
@@ -91,9 +102,12 @@ export async function generateAutocompleteSuggestions(context: string) {
       5) If there is complete sentence at end of the email draft content, give a sentence suggestion 
       which is relavent to email context and is following the context of the email content. 
 
-      This is email content: ${context}
-
+      This is what user has wrote in editor: ${context}
+      Email Sender Info: ${userInfo}
     `;
+    if (emailBody.length > 0) {
+      prompt += `\n This is the email body to which user is replying: ${emailBody}`;
+    }
     const result = await TextModel.generateContent(prompt);
     const response = result.response;
     const text = response.text();

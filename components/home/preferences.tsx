@@ -57,11 +57,11 @@ const Preferences = ({
                 {user.plan}
               </p>
             </div>
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <Switch
                 id="airplane-mode"
                 checked={user.autoUpdate}
-                disabled={user.plan === "FREE"}
+                // disabled={user.plan === "FREE"}
                 onCheckedChange={(e) => {
                   setUser({
                     ...user,
@@ -70,7 +70,7 @@ const Preferences = ({
                 }}
               />
               <Label htmlFor="airplane-mode">Auto Update</Label>
-            </div>
+            </div> */}
             <div className="flex flex-col gap-1 mt-5"></div>
           </div>
 
