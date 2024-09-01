@@ -1,7 +1,7 @@
 "use client";
 import { EmailDetailContext } from "@/context/email-detail-context";
 import { cn } from "@/utils/cn";
-import { BarLoader, BeatLoader, DotLoader } from "react-spinners";
+import { BarLoader } from "react-spinners";
 import React, {
   ComponentProps,
   useContext,
@@ -16,6 +16,8 @@ import { InboxContext } from "@/context/inbox-context";
 import { AILabel, DateTime } from "../home/inbox/email-detail/email";
 import { UserContext } from "@/context/user-context";
 import { useSearchParams } from "next/navigation";
+import { set } from "date-fns";
+import { TimerIcon } from "lucide-react";
 
 const MailListItem = (item: Email, inUnreadTab?: boolean) => {
   const handleAnalyze = useHandleAnalyze();
@@ -31,17 +33,14 @@ const MailListItem = (item: Email, inUnreadTab?: boolean) => {
 
   const inboxType = searchParams.get("type");
   const { user } = useContext(UserContext);
-  const { setEmailAnalysis } = useContext(EmailDetailContext);
+  const { setEmailAnalysis, cooldown } = useContext(EmailDetailContext);
   const [isAnalyzing, startTransition] = useTransition();
+  const [limitExceeded, setLimitExceeded] = useState(false);
 
   useEffect(() => {
     const userLastAutoUpdate = new Date(user.lastAutoUpdate);
     const emailDate = new Date(item?.date || new Date());
-    const shouldAutoUpdateEmail =
-      user.autoUpdate &&
-      !isAnalyzing &&
-      !analysis &&
-      userLastAutoUpdate < emailDate;
+    const shouldAutoUpdateEmail = !isAnalyzing && !analysis;
     const isAutoUpdateInbox =
       (inboxType === "primary" && user.updatePrimary) ||
       (inboxType === "social" && user.updateSocial) ||
@@ -52,7 +51,13 @@ const MailListItem = (item: Email, inUnreadTab?: boolean) => {
         if (!selectedAccount) {
           return;
         }
-        await handleAnalyze(item.id, selectedAccount.accountId);
+        const limitExceeded = await handleAnalyze(
+          item.id,
+          selectedAccount.accountId,
+          false,
+          selectedEmail?.id === item.id ? true : false
+        );
+        setLimitExceeded(limitExceeded);
       });
     }
   }, [user.autoUpdate, user.lastAutoUpdate, item?.date]);
@@ -125,17 +130,24 @@ const MailListItem = (item: Email, inUnreadTab?: boolean) => {
       <div className="text-xs text-muted-foreground overflow-ellipsis line-clamp-2">
         {snippet?.substring(0, 128)}
       </div>
-      {!isAnalyzing &&
-        analysis?.tags?.map((tag) => (
+
+      <div className="flex gap-2">
+        {limitExceeded && (
+          <div className="text-xs text-muted-foreground">
+            <TimerIcon className="w-4 h-4" />
+          </div>
+        )}
+        {isAnalyzing && (
+          <div className="flex items-center gap-2">
+            <BarLoader className="max-w-5 max-h-5" />
+          </div>
+        )}
+        {analysis?.tags?.map((tag) => (
           <div key={tag.id} className="flex items-center gap-2">
             <AILabel bgColor={tag.color}>{tag.label}</AILabel>
           </div>
         ))}
-      {isAnalyzing && (
-        <div className="flex items-center gap-2">
-          <BarLoader className="max-w-5 max-h-5" />
-        </div>
-      )}
+      </div>
     </button>
   );
 };

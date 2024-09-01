@@ -185,7 +185,7 @@ export async function listEmails(
     try {
       res = await gmail.users.messages.list({
         userId: "me",
-        maxResults: 15,
+        maxResults: 10,
         pageToken,
         q: qValue,
         includeSpamTrash: true,

@@ -269,6 +269,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
                   <div className="grid gap-4">
                     <Editor
                       useAI={isAIselected}
+                      emailBody={emailBody}
                       setUseAI={handleAIButtonClick}
                       expandButton
                       handleButtonClick={() => {

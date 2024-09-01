@@ -120,7 +120,7 @@ const Pricing = ({
               </p>
               <div className="text-center mb-6 flex justify-center items-center">
                 <span className="text-4xl font-bold text-black dark:text-neutral-200">
-                  $4.99{" "}
+                  $0
                   <p className="line-through text-gray-700 text-xl">$9.99</p>
                 </span>
                 <span className="text-sm text-neutral-600 dark:text-neutral-400">
@@ -177,7 +177,7 @@ const Pricing = ({
                       {currentPlan !== "Pro" ? "Subscribe" : "Cancel"}
                     </Link>
                   ) : (
-                    <Link href="/auth/login?sub-to-plan=Pro">Subscribe</Link>
+                    <Link href="/auth/login">Get Pro For Free</Link>
                   )}
                 </Button>
               </div>

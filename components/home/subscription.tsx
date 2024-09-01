@@ -68,9 +68,9 @@ const Subscription = ({
                 </div>
                 <Label htmlFor="name">Plan</Label>
               </div>
-              <Button variant="indigo" className="rounded-full ml-2">
+              {/* <Button variant="indigo" className="rounded-full ml-2">
                 <Link href="/billing"> Manage Plan</Link>
-              </Button>
+              </Button> */}
             </div>
             {isCanceled && isSubscribed && (
               <p>

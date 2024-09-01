@@ -11,7 +11,6 @@ export const useSelectedAccount = (
 
   useEffect(() => {
     const account = Cookies.get("selectedEmailAccountId");
-    debugger;
 
     if (
       account &&
@@ -31,7 +30,6 @@ export const useSelectedAccount = (
   }, [setSelectedAccount, defaultAccount, allAccounts]);
 
   const setAccount = (account: Account) => {
-    debugger;
     setSelectedAccount(account);
 
     Cookies.set("selectedEmailAccountId", account.accountId.toString());

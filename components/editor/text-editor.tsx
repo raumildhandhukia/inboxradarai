@@ -1,7 +1,7 @@
 "use client";
 import "./styles.scss";
 import "./dark.scss";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useTransition } from "react";
 import { MenuBar } from "./menu-bar";
 import Highlight from "@tiptap/extension-highlight";
 import Document from "@tiptap/extension-document";
@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { Toolbar } from "./toolbar";
 import FloatingTips from "./floating-tips";
 import { TextSelection } from "prosemirror-state";
+import { start } from "repl";
 
 interface EditorProps {
   useAI?: boolean;
@@ -26,6 +27,7 @@ interface EditorProps {
   expandButton?: boolean;
   handleButtonClick?: () => void;
   placeholderString?: string;
+  emailBody?: string;
 }
 
 export const Editor: React.FC<EditorProps> = ({
@@ -37,10 +39,12 @@ export const Editor: React.FC<EditorProps> = ({
   expandButton,
   handleButtonClick,
   placeholderString,
+  emailBody,
 }) => {
   const [floatingText, setFloatingText] = useState<string | null>(null);
   const [show, setShow] = useState(false);
   const editorRef = useRef(null);
+  const [gettingSuggestions, startTransition] = useTransition();
   const [showFloatingTips, setShowFloatingTips] = useState(false); // State to control floating tips visibility
 
   const handleUpdate = (content: string) => {
@@ -126,20 +130,23 @@ export const Editor: React.FC<EditorProps> = ({
           setShowFloatingTips(false);
           setFloatingText(null);
         } else if (editor && showFloatingTipComponent()) {
-          const res = await fetch("/api/ai/autocomplete", {
-            method: "POST",
-            body: JSON.stringify({
-              context: getPlainTextFromHTML(content),
-            }),
-            headers: {
-              "Content-Type": "application/json",
-            },
+          startTransition(async () => {
+            const res = await fetch("/api/ai/autocomplete", {
+              method: "POST",
+              body: JSON.stringify({
+                context: getPlainTextFromHTML(content),
+                emailBody: getPlainTextFromHTML(emailBody || ""),
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            if (res.ok) {
+              const data = await res.text();
+              setFloatingText(data);
+              setShowFloatingTips(true);
+            }
           });
-          if (res.ok) {
-            const data = await res.text();
-            setFloatingText(data);
-            setShowFloatingTips(true);
-          }
         }
       }
       if (event.key === "Escape") {
@@ -185,7 +192,11 @@ export const Editor: React.FC<EditorProps> = ({
         </div>
       </div>
       {useAI && showFloatingTipComponent() && (
-        <FloatingTips editor={editor} editorRef={editorRef}>
+        <FloatingTips
+          editor={editor}
+          editorRef={editorRef}
+          gettingSuggestions={gettingSuggestions}
+        >
           {floatingText}
         </FloatingTips>
       )}
