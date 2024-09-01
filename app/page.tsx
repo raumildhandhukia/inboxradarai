@@ -251,9 +251,9 @@ export default function Home() {
                 <Pricing noHeading showFooter />
               </div>
             </motion.div>
+            {showCookie && <CookieConsent />}
           </>
         )}
-        {showCookie && <CookieConsent />}
       </main>
     </div>
   );
