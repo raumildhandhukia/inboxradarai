@@ -21,8 +21,14 @@ export async function POST(req: Request) {
       return new Response("Upgrade Your Plan, Sir !!!", { status: 401 });
     }
     const body = await req.json();
-    const { context } = body;
-    const response = await generateAutocompleteSuggestions(context);
+    const { context, emailBody } = body;
+
+    const userInfo = `Name:${user.name} Email:${user.email}`;
+    const response = await generateAutocompleteSuggestions(
+      context,
+      userInfo,
+      emailBody
+    );
     return new Response(response, { status: 200 });
   } catch (e) {
     return new Response("Internal Server Error", {

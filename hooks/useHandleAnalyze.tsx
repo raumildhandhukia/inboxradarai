@@ -15,8 +15,10 @@ export const useHandleAnalyze = () => {
   const handleAnalyze = async (
     emailID: string,
     accountId: number,
-    findExisting?: boolean
+    findExisting?: boolean,
+    shouldSetEmailAnalysis?: boolean
   ) => {
+    let limitExceeded: boolean;
     const analyzeEmail = async () => {
       const res = await fetch(`/api/ai/analyze-email`, {
         method: "POST",
@@ -34,7 +36,7 @@ export const useHandleAnalyze = () => {
         const data = await res.json();
         const emailAnalysis = data[0];
         if (emailAnalysis.success) {
-          setEmailAnalysis(emailAnalysis.analysis);
+          shouldSetEmailAnalysis && setEmailAnalysis(emailAnalysis.analysis);
           setEmails((emails) => {
             return emails.map((email) => {
               if (email.id === emailID) {
@@ -49,10 +51,11 @@ export const useHandleAnalyze = () => {
         }
 
         if (emailAnalysis.limitExceeded) {
+          limitExceeded = true;
           setEmailAnalysis(null);
           setCooldown(true);
-          setCooldownTime(emailAnalysis.timeLeft);
-          setEmailsLeft(emailAnalysis.emailsLeft > 0);
+          // setCooldownTime(emailAnalysis.timeLeft);
+          setEmailsLeft(true);
           setEmails((prev) => {
             return prev.map((e) => {
               if (e.id === emailID) {
@@ -69,13 +72,15 @@ export const useHandleAnalyze = () => {
           });
         }
       }
+      return limitExceeded;
     };
 
     // Use startTransition to handle the state transition
-    startTransition(async () => {
-      // Call the asynchronous function inside startTransition
-      await analyzeEmail();
-    });
+
+    // Call the asynchronous function inside startTransition
+    limitExceeded = await analyzeEmail();
+
+    return limitExceeded;
   };
 
   return handleAnalyze;

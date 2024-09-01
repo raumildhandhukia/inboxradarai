@@ -4,7 +4,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useTransition } from "react";
 import { EmailDetailContext } from "@/context/email-detail-context";
 import { EmailDetailsSkeleton } from "@/components/home/inbox/skeleton";
 import LimitExceeded from "@/components/home/inbox/limit-exceeded";
@@ -16,7 +16,6 @@ import { useHandleAnalyze } from "@/hooks/useHandleAnalyze";
 
 const AIInsights = ({ emailId }: { emailId: string }) => {
   const {
-    isAnalyzing,
     cooldown,
     cooldownTime,
     setCooldown,
@@ -25,19 +24,31 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
     // handleAnalyze,
   } = useContext(EmailDetailContext);
   const { selectedAccount, setEmails } = useContext(InboxContext);
+  const [limitExceeded, setLimitExceeded] = useState(false);
+  const [isAnalyzing, startTransition] = useTransition();
   const handleAnalyze = useHandleAnalyze();
   const [isOpen, setIsOpen] = useState(true);
   const [value, setValue] = useState("2");
 
   const getAccordianTitle = () => {
-    if (cooldown) {
-      return "Upgrade Your Plan";
-    } else {
-      if (isAnalyzing) {
-        return "Getting your email insights using AI";
-      }
-      return "AI Insights";
+    if (isAnalyzing) {
+      return "Getting your email insights using AI";
     }
+    return "AI Insights";
+  };
+  const handleAnalysis = async () => {
+    if (!selectedAccount) {
+      return;
+    }
+    startTransition(async () => {
+      const res = await handleAnalyze(
+        emailId,
+        selectedAccount.accountId,
+        false,
+        true
+      );
+      setLimitExceeded(res);
+    });
   };
 
   if (!selectedAccount) {
@@ -45,8 +56,13 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
   }
   return (
     <div>
-      <Accordion type="single" collapsible defaultChecked>
-        <AccordionItem value="item-1">
+      <Accordion
+        type="single"
+        collapsible
+        defaultChecked
+        defaultValue="ai-insights"
+      >
+        <AccordionItem value="ai-insights">
           <AccordionTrigger
             className="font-bold text-black text-md w-full p-2"
             // onClick={handleAccordianClick}
@@ -56,12 +72,10 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            {cooldown ? (
+            {limitExceeded ? (
               <div className="flex justify-start items-center gap-5 px-2">
                 <LimitExceeded
-                  handleAnalyze={() => {
-                    handleAnalyze(emailId, selectedAccount.accountId);
-                  }}
+                  handleAnalyze={handleAnalysis}
                   removeCooldown={() => {
                     setCooldown(false);
                   }}
@@ -73,12 +87,7 @@ const AIInsights = ({ emailId }: { emailId: string }) => {
             ) : (
               <div>
                 <div className="mb-5">
-                  <Button
-                    variant="destructive"
-                    onClick={() => {
-                      handleAnalyze(emailId, selectedAccount.accountId);
-                    }}
-                  >
+                  <Button variant="destructive" onClick={handleAnalysis}>
                     {emailAnalysis ? "Re-Analyze" : "Analyze"}
                   </Button>
                 </div>

@@ -86,7 +86,7 @@ model User {
   stripeCustomerId          String?                 @unique @map("stripe_customer_id")
   changeToFreePlanOnPeriodEnd Boolean?            @default(false)  @map("change_to_free_plan_on_period_end")
 
-  autoUpdate              Boolean                @default(false) @map("auto_update")
+  autoUpdate              Boolean                @default(true) @map("auto_update")
   lastAutoUpdate             DateTime            @default(now())   @map("last_updated")
 
   updatePrimary          Boolean                @default(true) @map("update_primary")

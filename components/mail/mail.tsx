@@ -111,6 +111,7 @@ export function Mail({
       disabled={page === 1}
       className={`${page === 1 ? "text-muted-foreground cursor-default" : ""}`}
       onClick={() => {
+        setSelectedEmail(null);
         setPage((prev) => Math.max(prev - 1, 1));
       }}
     >
@@ -127,6 +128,7 @@ export function Mail({
           : ""
       }`}
       onClick={() => {
+        setSelectedEmail(null);
         setPage((prev) => prev + 1);
       }}
     >
