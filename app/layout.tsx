@@ -38,7 +38,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className=" dark:bg-neutral-950">
+            <div className="">
               <Suspense>{children}</Suspense>
             </div>
           </ThemeProvider>

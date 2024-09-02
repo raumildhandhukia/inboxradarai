@@ -51,10 +51,10 @@ export const Nav: React.FC<NavProps> = ({ type }) => {
   }, [isOpen]);
   return (
     <nav
-      className={`border-b fixed top-0 z-10 px-8 py-2 w-[100vw] mx-autoflex flex-col  items-center${
+      className={`border-b-[1px] fixed top-0 z-10 px-8 py-2 w-[100vw] mx-autoflex flex-col  items-center ${
         !isOpen ? "md:min-h-[5rem] min-h-[3rem]" : "min-h-[100vh]"
       }
-      bg-white
+      bg-black
     `}
     >
       <div>
@@ -63,7 +63,7 @@ export const Nav: React.FC<NavProps> = ({ type }) => {
             onClick={() => {
               Router.push("/");
             }}
-            color="black"
+            color="white"
             className="mt-2 md:mt-1 w-20 md:!w-32 cursor-pointer"
           />
 

@@ -8,7 +8,7 @@ import { Suspense } from "react";
 const LoginPage = () => {
   return (
     <Suspense>
-      <div className="flex flex-col gap-5 items-center">
+      <div className="flex flex-col gap-5 items-center ">
         <GridPattern
           width={20}
           height={20}

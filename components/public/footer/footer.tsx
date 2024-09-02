@@ -8,7 +8,7 @@ import Link from "next/link";
 const Footer = ({ mini }: { mini?: boolean }) => {
   if (mini) {
     return (
-      <div className="w-screen h-20 md:px-20 md:py-2">
+      <div className="w-screen h-20 md:px-20 md:py-2 bg-gray-900 ">
         <div className="border-t w-full">
           <div className="flex justify-between items-start px-4 py-2">
             <span className="text-muted-foreground text-[10px] mt-2">

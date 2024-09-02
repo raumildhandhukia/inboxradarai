@@ -11,7 +11,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
       <header className="">
         <Nav />
       </header>
-      <div className="h-[calc(100dvh)] flex items-center justify-center">
+      <div className="h-[calc(100dvh)] flex items-center justify-center bg-gradient-to-b from-black to-gray-900">
         <Suspense>{children}</Suspense>
       </div>
     </main>
