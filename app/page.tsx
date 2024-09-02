@@ -17,7 +17,7 @@ import GradualSpacing from "@/components/ui/gradual-spacing";
 import Footer from "@/components/public/footer/footer";
 import BoxReveal from "@/components/ui/box-reveal";
 
-export const features = [
+const features = [
   {
     image: "/autocomplete.gif",
     header: (
