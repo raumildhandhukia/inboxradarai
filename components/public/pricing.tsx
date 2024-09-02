@@ -54,7 +54,7 @@ const Pricing = ({
               <ul className="text-neutral-600 dark:text-neutral-400 mb-6">
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="gray" />
-                  100 Email Processing
+                  100 Emails Processing
                 </li>
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="gray" />
@@ -64,7 +64,7 @@ const Pricing = ({
                   <BsPatchCheckFill color="grey" />
                   Unlimited Inboxes
                 </li>
-                <li className="mb-2 flex gap-2 leading-[17px]">
+                {/* <li className="mb-2 flex gap-2 leading-[17px]">
                   <AiFillCloseCircle color="red" />
                   No Automated Analysis
                 </li>
@@ -74,7 +74,7 @@ const Pricing = ({
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <AiFillCloseCircle color="red" />
                   Limited Email Processing{" "}
-                </li>
+                </li> */}
               </ul>
 
               {currentPlan !== "FREE" && (
@@ -130,7 +130,7 @@ const Pricing = ({
               <ul className="text-neutral-600 dark:text-neutral-400 mb-6">
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="grey" />
-                  5000 Email Processing
+                  5000 Emails Processing
                 </li>
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="grey" />
@@ -140,10 +140,10 @@ const Pricing = ({
                   <BsPatchCheckFill color="grey" />
                   AI Insights
                 </li>
-                <li className="mb-2 flex gap-2 leading-[17px]">
+                {/* <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="grey" />
                   Context Prompting
-                </li>
+                </li> */}
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="gray" />
                   Automated Analysis
@@ -159,7 +159,7 @@ const Pricing = ({
                 </li>
                 <li className="mb-2 flex gap-2 leading-[17px]">
                   <BsPatchCheckFill color="grey" />
-                  20 Personalized Labels
+                  Personalized AI Labels
                 </li>
               </ul>
 
@@ -181,6 +181,9 @@ const Pricing = ({
                   )}
                 </Button>
               </div>
+              {/* <div className="absolute top-12 right-0 transform rotate-45 bg-blue-600 text-white px-3 py-1 text-xs font-semibold shadow-lg">
+                Payments by Stripe
+              </div> */}
             </div>
           </div>
         </div>

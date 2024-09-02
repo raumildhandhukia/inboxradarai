@@ -1,5 +1,5 @@
 import React from "react";
-
+import { cn } from "@/utils/cn";
 const Logo = ({
   color = "#f00",
   onClick,
@@ -12,7 +12,7 @@ const Logo = ({
   return (
     <svg
       onClick={onClick}
-      className={className}
+      className={cn(className)}
       fill={color}
       xmlns="http://www.w3.org/2000/svg"
       id="svg"

@@ -96,15 +96,15 @@ const Hero = ({ isMobile }: { isMobile?: boolean }) => {
             draggable={true}
           />
         </ContainerScroll> */}
-        <div className="mt-8 px-4">
+        <div className="mt-8 px-10">
           <BoxReveal boxColor={"#5046e6"} duration={0.5}>
-            <p className="text-[2.5rem] font-semibold text-white">
+            <p className="text-[2.4rem] font-semibold text-white">
               InboxRadar<span className="text-[#5046e6]">AI</span>
             </p>
           </BoxReveal>
           <div className="flex flex-col gap-y-4">
             <BoxReveal boxColor={"#5046e6"} duration={0.5}>
-              <h2 className="text-[1.3rem] text-white">
+              <h2 className="text-[1rem] text-white">
                 Featuring{" "}
                 <span className="text-[#5046e6]">
                   Email Client powered by AI
@@ -112,8 +112,8 @@ const Hero = ({ isMobile }: { isMobile?: boolean }) => {
               </h2>
             </BoxReveal>
 
-            <div className="mt-[1.5rem] ">
-              <div className="text-[1.4rem] text-white">
+            <div className="mt-[1.2rem] ">
+              <div className="text-[1.1rem] text-white">
                 <BoxReveal boxColor={"#5046e6"} duration={0.5}>
                   <span>
                     -&gt; Seamlessly integrated with{" "}
@@ -124,15 +124,14 @@ const Hero = ({ isMobile }: { isMobile?: boolean }) => {
                 <BoxReveal boxColor={"#5046e6"} duration={0.5}>
                   <span>
                     -&gt; Explore the power of AI to{" "}
-                    <span className="text-[#5046e6]">organize</span> your
-                    emails.
-                    <span> Create your free account now.</span>
+                    <span className="text-[#5046e6]">organize</span> your emails
+                    <span> & unlimited inboxes.</span>
                   </span>
                 </BoxReveal>
               </div>
             </div>
 
-            <div className="text-[1.4rem] text-purple">
+            <div className="text-[1.3rem] text-purple">
               <BoxReveal boxColor={"purple"} duration={0.7}>
                 <span>-&gt; Get insights on your emails.</span>
               </BoxReveal>
@@ -144,18 +143,18 @@ const Hero = ({ isMobile }: { isMobile?: boolean }) => {
               </BoxReveal>
               <BoxReveal boxColor={"purple"} duration={0.7}>
                 <span>
-                  -&gt; We{" "}
-                  <span className="text-[#5046e6]">don&apos;t store</span> your
-                  private data.
+                  -&gt; User privacy is priority.{" "}
+                  <span className="text-[#5046e6]">No data is stored.</span>
                 </span>
               </BoxReveal>
               <BoxReveal boxColor={"purple"} duration={0.7}>
                 <span>
-                  -&gt; We{" "}
+                  -&gt;
                   <span className="text-[#5046e6]">
-                    filter sensitive information
-                  </span>{" "}
-                  before processing your emails.
+                    {" "}
+                    Sensitive information is filtered before processing your
+                    emails.
+                  </span>
                 </span>
               </BoxReveal>
             </div>
@@ -209,8 +208,8 @@ const Hero = ({ isMobile }: { isMobile?: boolean }) => {
               <BoxReveal boxColor={"#5046e6"} duration={0.5}>
                 <span>
                   -&gt; Explore the power of AI to{" "}
-                  <span className="text-[#5046e6]">organize</span> your emails.
-                  <span> Create your free account now.</span>
+                  <span className="text-[#5046e6]">organize</span> your emails
+                  <span> & unlimited inboxes.</span>
                 </span>
               </BoxReveal>
             </div>
@@ -228,18 +227,18 @@ const Hero = ({ isMobile }: { isMobile?: boolean }) => {
             </BoxReveal>
             <BoxReveal boxColor={"purple"} duration={0.7}>
               <span>
-                -&gt; We{" "}
-                <span className="text-[#5046e6]">don&apos;t store</span> your
-                private data.
+                -&gt; User privacy is priority.{" "}
+                <span className="text-[#5046e6]">No data is stored.</span>
               </span>
             </BoxReveal>
             <BoxReveal boxColor={"purple"} duration={0.7}>
               <span>
-                -&gt; We{" "}
+                -&gt;
                 <span className="text-[#5046e6]">
-                  filter sensitive information
-                </span>{" "}
-                before processing your emails.
+                  {" "}
+                  Sensitive information is filtered before processing your
+                  emails.
+                </span>
               </span>
             </BoxReveal>
           </div>
